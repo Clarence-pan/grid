@@ -69,7 +69,7 @@
 				width: width,
 				dataType: dataType,
 				align: align,
-				dataIndx: i
+				dataIndex: i
 			};
 			colModel.push(obj)
 		});
@@ -155,14 +155,14 @@
 		rPP: 20
 	};
 	fnPG._regional = {
-		strDisplay: "Displaying {0} to {1} of {2} items.",
-		strFirstPage: "First Page",
-		strLastPage: "Last Page",
-		strNextPage: "Next Page",
-		strPage: "Page {0} of {1}",
-		strPrevPage: "Previous Page",
-		strRefresh: "Refresh",
-		strRpp: "Records per page:{0}"
+		strPage:"第 {0} 页（共 {1} 页）",
+		strFirstPage:"第一页",
+		strPrevPage:"上一页",
+		strNextPage:"下一页",
+		strLastPage:"尾页",
+		strRefresh:"刷新",
+		strRpp:"每页记录:",
+		strDisplay:"显示第 {0} 到 {1} 条，总共 {2} 条数据"
 	};
 	$.extend(fnPG.options, fnPG._regional);
 	fnPG._create = function() {
@@ -367,14 +367,14 @@
 			var rPP = options.rPP;
 			var curPage = options.curPage;
 			var totalRecords = options.totalRecords;
-			var begIndx = (curPage - 1) * rPP;
-			var endIndx = curPage * rPP;
-			if (endIndx > totalRecords) {
-				endIndx = totalRecords
+			var begIndex = (curPage - 1) * rPP;
+			var endIndex = curPage * rPP;
+			if (endIndex > totalRecords) {
+				endIndex = totalRecords
 			}
 			var strDisplay = options.strDisplay;
-			strDisplay = strDisplay.replace("{0}", begIndx + 1);
-			strDisplay = strDisplay.replace("{1}", endIndx);
+			strDisplay = strDisplay.replace("{0}", begIndex + 1);
+			strDisplay = strDisplay.replace("{1}", endIndex);
 			strDisplay = strDisplay.replace("{2}", totalRecords);
 			this.$msg.html(strDisplay)
 		} else {
@@ -878,20 +878,20 @@
 			if (!that.tables) {
 				that.tables = []
 			}
-			var indx = -1;
+			var index = -1;
 			for (var l = 0; l < that.tables.length; l++) {
 				var cont = that.tables[l].cont;
 				if (cont == objP.$cont[0]) {
-					indx = l
+					index = l
 				}
 			}
-			if (indx == -1) {
+			if (index == -1) {
 				that.tables.push({
 					$tbl: $tbl,
 					cont: objP.$cont[0]
 				})
 			} else {
-				that.tables[indx].$tbl = $tbl
+				that.tables[index].$tbl = $tbl
 			}
 		} else {
 			that._bufferObj_calcInitFinal();
@@ -982,7 +982,7 @@
 			GMtrue = GM ? true : false,
 			TVM = thisOptions.treeModel,
 			data = (objP && objP.data) ? objP.data : (GMtrue ? that.dataGM : (that.data)),
-			offset = that.rowIndxOffset;
+			offset = that.rowIndexOffset;
 		if (!objP && (init == null || finalRow == null)) {
 			that.$cont.empty();
 			that.$tbl = null;
@@ -1023,7 +1023,7 @@
 					continue
 				}
 				wd = outerWidths[col];
-				buffer.push("<td style='width:" + wd + "px;' pq-top-col-indx=" + col + "></td>")
+				buffer.push("<td style='width:" + wd + "px;' pq-top-col-index=" + col + "></td>")
 			}
 			buffer.push("</tr>")
 		}
@@ -1034,7 +1034,7 @@
 			}
 			var rowObj = data[row],
 				rowData = rowObj,
-				rowIndxPage = GMtrue ? (rowObj.rowIndx - offset) : row,
+				rowIndexPage = GMtrue ? (rowObj.rowIndex - offset) : row,
 				rowHidden = (rowObj) ? rowObj.pq_hidden : false;
 			if (rowHidden) {
 				continue
@@ -1043,8 +1043,8 @@
 			if (freezeRows && that.lastFrozenRow == row) {
 				lastFrozenRow = true
 			}
-			if (this.offsetRow == null && rowIndxPage != null) {
-				that.offsetRow = (row - rowIndxPage)
+			if (this.offsetRow == null && rowIndexPage != null) {
+				that.offsetRow = (row - rowIndexPage)
 			}
 			if (GM && rowObj.groupTitle) {
 				this._generateTitleRow(GM, rowObj, buffer, lastFrozenRow)
@@ -1057,9 +1057,9 @@
 					if (nestedData && nestedData.show) {
 						nestedshow = true
 					}
-					this._generateRow(rowData, rowIndxPage, thisColModel, buffer, objP, lastFrozenRow, nestedshow);
+					this._generateRow(rowData, rowIndexPage, thisColModel, buffer, objP, lastFrozenRow, nestedshow);
 					if (nestedshow) {
-						this._generateDetailRow(rowData, rowIndxPage, thisColModel, buffer, objP, lastFrozenRow)
+						this._generateDetailRow(rowData, rowIndexPage, thisColModel, buffer, objP, lastFrozenRow)
 					}
 				}
 			}
@@ -1074,20 +1074,20 @@
 			if (!that.tables) {
 				that.tables = []
 			}
-			var indx = -1;
+			var index = -1;
 			for (var l = 0; l < that.tables.length; l++) {
 				var cont = that.tables[l].cont;
 				if (cont == objP.$cont[0]) {
-					indx = l
+					index = l
 				}
 			}
-			if (indx == -1) {
+			if (index == -1) {
 				that.tables.push({
 					$tbl: $tbl,
 					cont: objP.$cont[0]
 				})
 			} else {
-				that.tables[indx].$tbl = $tbl
+				that.tables[index].$tbl = $tbl
 			}
 		} else {}
 		return str
@@ -1096,15 +1096,15 @@
 		var that = this.that,
 			options = that.options,
 			DM = options.dataModel,
-			rowIndxPage = objP.rowIndxPage,
-			rowIndx = objP.rowIndx,
+			rowIndexPage = objP.rowIndexPage,
+			rowIndex = objP.rowIndex,
 			rowData = objP.rowData,
-			colIndx = objP.colIndx,
+			colIndex = objP.colIndex,
 			$td = objP.$td,
 			column = objP.column,
 			type = column.type,
-			dataIndx = column.dataIndx,
-			cellData = rowData[dataIndx],
+			dataIndex = column.dataIndex,
+			cellData = rowData[dataIndex],
 			wrap = objP.wrap;
 		if (!rowData) {
 			return
@@ -1124,11 +1124,11 @@
 						dataModel: DM,
 						rowData: rowData,
 						cellData: cellData,
-						rowIndxPage: rowIndxPage,
-						rowIndx: rowIndx,
-						colIndx: colIndx,
+						rowIndexPage: rowIndexPage,
+						rowIndex: rowIndex,
+						colIndex: colIndex,
 						column: column,
-						dataIndx: dataIndx
+						dataIndex: dataIndex
 					})
 				} else {
 					dataCell = cellData
@@ -1143,7 +1143,7 @@
 		}
 		var str = "",
 			TVM;
-		if (objP.tree && (TVM = options.treeModel) && TVM.labelIndx == dataIndx) {
+		if (objP.tree && (TVM = options.treeModel) && TVM.labelIndex == dataIndex) {
 			var isLeaf = rowData.pq_leaf,
 				level = rowData.pq_level,
 				expanded = !rowData.pq_collapse,
@@ -1167,7 +1167,7 @@
 		}
 		return str
 	};
-	_pGenerateView._generateRow = function(rowData, rowIndx, thisColModel, buffer, objP, lastFrozenRow, nestedshow) {
+	_pGenerateView._generateRow = function(rowData, rowIndex, thisColModel, buffer, objP, lastFrozenRow, nestedshow) {
 		var row_cls = "pq-grid-row";
 		if (lastFrozenRow) {
 			row_cls += " pq-last-freeze-row"
@@ -1180,7 +1180,7 @@
 			freezeCols = thisOptions.freezeCols,
 			numberCell = thisOptions.numberCell,
 			TVM = thisOptions.treeModel,
-			tree = TVM.labelIndx ? true : false,
+			tree = TVM.labelIndex ? true : false,
 			columnBorders = thisOptions.columnBorders,
 			wrap = thisOptions.wrap,
 			CMLength = thisColModel.length,
@@ -1195,13 +1195,13 @@
 			const_cls += "pq-wrap-text "
 		}
 		var objRender = {
-			rowIndx: rowIndx + offset,
-			rowIndxPage: rowIndx,
+			rowIndex: rowIndex + offset,
+			rowIndexPage: rowIndex,
 			rowData: rowData,
 			wrap: wrap,
 			customData: customData
 		};
-		if (thisOptions.stripeRows && (rowIndx / 2 == parseInt(rowIndx / 2))) {
+		if (thisOptions.stripeRows && (rowIndex / 2 == parseInt(rowIndex / 2))) {
 			row_cls += " pq-grid-oddRow"
 		}
 		if (rowData.pq_rowselect) {
@@ -1213,9 +1213,9 @@
 		if (pq_rowcls != null) {
 			row_cls += " " + pq_rowcls
 		}
-		buffer.push("<tr pq-row-indx='" + rowIndx + "' class='" + row_cls + "' >");
+		buffer.push("<tr pq-row-index='" + rowIndex + "' class='" + row_cls + "' >");
 		if (numberCell.show) {
-			buffer.push(["<td class='pq-grid-number-cell ui-state-default'>", "<div class='pq-td-div'>", ((objP) ? "&nbsp;" : (rowIndx + 1)), "</div></td>"].join(""))
+			buffer.push(["<td class='pq-grid-number-cell ui-state-default'>", "<div class='pq-td-div'>", ((objP) ? "&nbsp;" : (rowIndex + 1)), "</div></td>"].join(""))
 		}
 		for (var col = 0; col <= finalH; col++) {
 			if (col < initH && col >= freezeCols && (virtualX || objP)) {
@@ -1226,18 +1226,18 @@
 				}
 			}
 			var column = thisColModel[col],
-				dataIndx = column.dataIndx;
+				dataIndex = column.dataIndex;
 			if (column.hidden) {
 				continue
 			}
 			objRender.column = column;
-			objRender.colIndx = col;
-			objRender.dataIndx = dataIndx;
+			objRender.colIndex = col;
+			objRender.dataIndex = dataIndex;
 			var cellSelection = false;
 			if (1 === 1) {
 				var pq_cellselect = rowData.pq_cellselect;
 				if (pq_cellselect) {
-					cellSelection = pq_cellselect[dataIndx]
+					cellSelection = pq_cellselect[dataIndex]
 				}
 			}
 			var strStyle = "";
@@ -1258,18 +1258,18 @@
 				cls = cls + " pq-cell-select ui-state-highlight"
 			}
 			if (pq_cellcls) {
-				var cellClass = pq_cellcls[dataIndx];
+				var cellClass = pq_cellcls[dataIndex];
 				if (cellClass) {
 					cls += " " + cellClass
 				}
 			}
-			var indxStr = "pq-col-indx='" + col + "'";
+			var indexStr = "pq-col-index='" + col + "'";
 			if (objP) {
-				indxStr += " pq-dataIndx='" + dataIndx + "'"
+				indexStr += " pq-dataIndex='" + dataIndex + "'"
 			}
 			var colSpan = "";
 			objRender.tree = tree;
-			var str = ["<td ", colSpan, " class='", cls, "' style='", strStyle, "' ", indxStr, " >", this._renderCell(objRender), "</td>"].join("");
+			var str = ["<td ", colSpan, " class='", cls, "' style='", strStyle, "' ", indexStr, " >", this._renderCell(objRender), "</td>"].join("");
 			buffer.push(str)
 		}
 		buffer.push("</tr>");
@@ -1279,21 +1279,22 @@
 		widgetEventPrefix: "pqgrid"
 	};
 	fn.options = {
-		collapsible: true,
+		collapsible: false,
 		colModel: null,
 		columnBorders: true,
 		customData: null,
 		dataModel: {
 			cache: false,
 			dataType: "JSON",
-			location: "local",
-			sorting: "local",
-			sortDir: "up",
+			location: "remote",
+			sorting: "remote",
+			sortIndex: "id",
+			sortDir: "down",
 			method: "GET"
 		},
 		direction: "",
 		draggable: false,
-		editable: true,
+		editable: false,
 		editModel: {
 			cellBorderWidth: 1,
 			clicksToEdit: 1,
@@ -1309,8 +1310,8 @@
 			icon: "ui-icon-alert",
 			cls: "ui-state-error"
 		},
-		flexHeight: false,
-		flexWidth: false,
+		flexHeight: true,
+		flexWidth: true,
 		freezeCols: 0,
 		freezeRows: 0,
 		getDataIndicesFromColIndices: true,
@@ -1318,16 +1319,17 @@
 		hoverMode: "row",
 		minWidth: 50,
 		numberCell: {
+			show: false,
 			width: 30,
 			title: "",
 			resizable: false,
-			minWidth: 30,
-			show: true
+			minWidth: 30
 		},
 		pageModel: {
+			type: "remote",
 			curPage: 1,
 			totalPages: 0,
-			rPP: 10,
+			rPP: 20,
 			rPPOptions: [10, 20, 50, 100]
 		},
 		resizable: false,
@@ -1341,12 +1343,12 @@
 			theme: false
 		},
 		selectionModel: {
-			type: "row",
+			type: "", // row | cell
 			mode: "range"
 		},
 		showBottom: true,
 		showHeader: true,
-		showTitle: true,
+		showTitle: false,
 		showToolbar: true,
 		showTop: true,
 		sortable: true,
@@ -1355,19 +1357,19 @@
 		title: "&nbsp;",
 		treeModel: null,
 		width: 600,
-		wrap: true
+		wrap: false
 	};
 	fn._regional = {
-		strAdd: "Add",
-		strDelete: "Delete",
-		strEdit: "Edit",
-		strLoading: "Loading",
-		strNextResult: "Next Result",
-		strNoRows: "No rows to display.",
-		strNothingFound: "Nothing found",
-		strPrevResult: "Previous Result",
-		strSearch: "Search",
-		strSelectedmatches: "Selected {0} of {1} match(es)"
+		strLoading: "加载中",
+		strAdd: "加",
+		strEdit: "编辑",
+		strDelete: "删除",
+		strSearch: "搜索",
+		strNothingFound: "暂无结果",
+		strNoRows: "暂无结果",
+		strSelectedmatches:"选择{0}{1}匹配",
+		strPrevResult: "上一结果",
+		strNextResult: "下一结果"
 	};
 	$.extend(fn.options, fn._regional);
 	fn._destroyResizable = function() {
@@ -1411,20 +1413,20 @@
 		var top = evt.pageY - this.$cont.offset().top;
 		var left = evt.pageX - this.$cont.offset().left;
 		var $trs = this.$tbl.find("tr.pq-grid-row");
-		var indx = 0,
-			rowIndxPage = 0,
-			colIndx = 0;
+		var index = 0,
+			rowIndexPage = 0,
+			colIndex = 0;
 		for (var i = 1; i < $trs.length; i++) {
 			if ($trs[i].offsetTop > top) {
 				break
 			} else {
-				indx++
+				index++
 			}
 		}
-		var $tr = $($trs[indx]);
-		rowIndxPage = parseInt($tr.attr("pq-row-indx"));
+		var $tr = $($trs[index]);
+		rowIndexPage = parseInt($tr.attr("pq-row-index"));
 		var $tds = $tr.find("td.pq-grid-cell");
-		var indx = 0,
+		var index = 0,
 			_found = false;
 		for (var i = 0; i < $tds.length; i++) {
 			var td = $tds[i];
@@ -1435,27 +1437,27 @@
 				if (td.offsetLeft > left) {
 					break
 				} else {
-					indx++
+					index++
 				}
 			}
 		}
 		if (!_found) {
 			return null
 		}
-		var $td = $($tds[indx]);
+		var $td = $($tds[index]);
 		if ($td[0].nodeName.toUpperCase() != "TD") {
 			$td = $(evt.target).parent("td")
 		}
-		colIndx = parseInt($td.attr("pq-col-indx"));
-		if (isNaN(colIndx)) {
+		colIndex = parseInt($td.attr("pq-col-index"));
+		if (isNaN(colIndex)) {
 			return null
 		}
 		return {
 			$td: $td,
-			rowIndxPage: rowIndxPage,
-			rowIndx: rowIndxPage + this.rowIndxOffset,
-			colIndx: colIndx,
-			dataIndx: this.colModel[colIndx].dataIndx
+			rowIndexPage: rowIndexPage,
+			rowIndex: rowIndexPage + this.rowIndexOffset,
+			colIndex: colIndex,
+			dataIndex: this.colModel[colIndex].dataIndex
 		}
 	};
 	fn._createSlidingTop = function() {
@@ -1542,6 +1544,12 @@
 			this.$top.css("display", "none")
 		}
 		this.$header = $(".pq-grid-header", this.$grid_right);
+		this.$header.on('keyup', 'input', function(evt){
+			if (evt.keyCode == 13) { // 回车自动刷新表格
+				$(this).blur();
+			}
+		});
+
 		this.$header_left = $(this.$header[0]);
 		this.$header_right = $(this.$header[1]);
 		this.$bottom = $("div.pq-grid-bottom", this.element);
@@ -1779,28 +1787,28 @@
 		var obj = that.getCellIndices({
 			$td: $td
 		});
-		var rowIndxPage = obj.rowIndxPage,
-			offset = that.rowIndxOffset,
-			rowIndx = rowIndxPage + offset,
-			colIndx = obj.colIndx;
-		if (colIndx == null) {
+		var rowIndexPage = obj.rowIndexPage,
+			offset = that.rowIndexOffset,
+			rowIndex = rowIndexPage + offset,
+			colIndex = obj.colIndex;
+		if (colIndex == null) {
 			return
 		}
 		if (that._trigger("cellDblClick", evt, {
 			$td: $td,
-			rowIndxPage: rowIndxPage,
-			rowIndx: rowIndx,
-			colIndx: colIndx,
-			column: that.colModel[colIndx],
-			rowData: that.data[rowIndxPage]
+			rowIndexPage: rowIndexPage,
+			rowIndex: rowIndex,
+			colIndex: colIndex,
+			column: that.colModel[colIndex],
+			rowData: that.data[rowIndexPage]
 		}) == false) {
 			return false
 		}
 		if (that.options.editModel.clicksToEdit > 1 && this.isEditableRow({
-			rowIndx: rowIndx
+			rowIndex: rowIndex
 		}) && this.isEditableCell({
-			colIndx: colIndx,
-			rowIndx: rowIndx
+			colIndex: colIndex,
+			rowIndex: rowIndex
 		})) {
 			that._editCell($td)
 		}
@@ -1811,21 +1819,21 @@
 	fn._onClickRow = function(evt) {
 		var that = this;
 		var $tr = $(evt.currentTarget);
-		var rowIndxPage = parseInt($tr.attr("pq-row-indx")),
-			offset = that.rowIndxOffset,
-			rowIndx = rowIndxPage + offset;
-		if (isNaN(rowIndxPage)) {
+		var rowIndexPage = parseInt($tr.attr("pq-row-index")),
+			offset = that.rowIndexOffset,
+			rowIndex = rowIndexPage + offset;
+		if (isNaN(rowIndexPage)) {
 			return
 		}
 		var objP = {
-			rowIndx: rowIndx,
+			rowIndex: rowIndex,
 			evt: evt
 		}, options = this.options;
 		if (that._trigger("rowClick", evt, {
 			$tr: $tr,
-			rowIndxPage: rowIndxPage,
-			rowIndx: rowIndx,
-			rowData: that.data[rowIndxPage]
+			rowIndexPage: rowIndexPage,
+			rowIndex: rowIndex,
+			rowData: that.data[rowIndexPage]
 		}) == false) {
 			return false
 		}
@@ -1834,18 +1842,18 @@
 	fn._onRightClickRow = function(evt) {
 		var that = this,
 			$tr = $(evt.currentTarget),
-			rowIndxPage = parseInt($tr.attr("pq-row-indx")),
-			offset = that.rowIndxOffset,
-			rowIndx = rowIndxPage + offset;
-		if (isNaN(rowIndxPage)) {
+			rowIndexPage = parseInt($tr.attr("pq-row-index")),
+			offset = that.rowIndexOffset,
+			rowIndex = rowIndexPage + offset;
+		if (isNaN(rowIndexPage)) {
 			return
 		}
 		var options = this.options;
 		if (that._trigger("rowRightClick", evt, {
 			$tr: $tr,
-			rowIndxPage: rowIndxPage,
-			rowIndx: rowIndx,
-			rowData: that.data[rowIndxPage]
+			rowIndexPage: rowIndexPage,
+			rowIndex: rowIndex,
+			rowData: that.data[rowIndexPage]
 		}) == false) {
 			return false
 		}
@@ -1853,14 +1861,14 @@
 	fn._onDblClickRow = function(evt) {
 		var that = this;
 		var $tr = $(evt.currentTarget);
-		var rowIndxPage = parseInt($tr.attr("pq-row-indx")),
-			offset = that.getRowIndxOffset(),
-			rowIndx = rowIndxPage + offset;
+		var rowIndexPage = parseInt($tr.attr("pq-row-index")),
+			offset = that.getRowIndexOffset(),
+			rowIndex = rowIndexPage + offset;
 		if (that._trigger("rowDblClick", evt, {
 			$tr: $tr,
-			rowIndxPage: rowIndxPage,
-			rowIndx: rowIndx,
-			rowData: that.data[rowIndxPage]
+			rowIndexPage: rowIndexPage,
+			rowIndex: rowIndex,
+			rowData: that.data[rowIndexPage]
 		}) == false) {
 			return false
 		}
@@ -1870,7 +1878,7 @@
 			rowData = obj.rowData,
 			value = $.trim(obj.value),
 			column = obj.column,
-			dataIndx = column.dataIndx,
+			dataIndex = column.dataIndex,
 			gValid = this.options.validation,
 			valids = column.validations;
 		if (valids && valids.length > 0) {
@@ -1889,7 +1897,7 @@
 					invalid = {
 						valid: false,
 						msg: msg,
-						dataIndx: dataIndx
+						dataIndex: dataIndex
 					}, reqVal = valid.value;
 				if (type == "minLen" && value.length < reqVal) {
 					_valid = false
@@ -1933,19 +1941,19 @@
 						}
 					}
 				} if (!_valid) {
-					var rowIndx = this.getRowIndx({
+					var rowIndex = this.getRowIndex({
 						rowData: rowData
-					}).rowIndx;
-					if (rowIndx != null) {
+					}).rowIndex;
+					if (rowIndex != null) {
 						this.goToPage({
-							rowIndx: rowIndx
+							rowIndex: rowIndex
 						});
 						this.scrollRow({
-							rowIndx: rowIndx
+							rowIndex: rowIndex
 						});
 						this.editCell({
-							rowIndx: rowIndx,
-							dataIndx: dataIndx
+							rowIndex: rowIndex,
+							dataIndex: dataIndex
 						})
 					}
 					var cell = this.getEditCell();
@@ -1991,8 +1999,8 @@
 	fn.isValid = function(obj) {
 		var rowList = obj.rowList,
 			rowData = this.getRowData(obj),
-			dataIndx = obj.dataIndx;
-		if (dataIndx == null) {
+			dataIndex = obj.dataIndex;
+		if (dataIndex == null) {
 			var CM = this.colModel;
 			for (var i = 0, len = CM.length; i < len; i++) {
 				var column = CM[i],
@@ -2000,8 +2008,8 @@
 				if (hidden) {
 					continue
 				}
-				var dataIndx = column.dataIndx,
-					value = rowData[dataIndx],
+				var dataIndex = column.dataIndex,
+					value = rowData[dataIndex],
 					isValid = this._isValid({
 						rowData: rowData,
 						value: value,
@@ -2013,9 +2021,9 @@
 			}
 		} else {
 			var column = this.getColumn({
-				dataIndx: dataIndx
+				dataIndex: dataIndex
 			}),
-				value = (obj.value === undefined) ? rowData[dataIndx] : obj.value,
+				value = (obj.value === undefined) ? rowData[dataIndex] : obj.value,
 				isValid = this._isValid({
 					rowData: rowData,
 					value: value,
@@ -2034,11 +2042,11 @@
 			gEditable = thisOptions.editable;
 		if (gEditable != null) {
 			if (typeof gEditable == "function") {
-				var rowIndx = objP.rowIndx,
-					rowData = thisOptions.dataModel.data[rowIndx];
+				var rowIndex = objP.rowIndex,
+					rowData = thisOptions.dataModel.data[rowIndex];
 				return gEditable.call(this.element, {
 					rowData: rowData,
-					rowIndx: rowIndx
+					rowIndex: rowIndex
 				})
 			} else {
 				return gEditable
@@ -2048,26 +2056,26 @@
 		}
 	};
 	fn.isEditableCell = function(objP) {
-		var colIndx = objP.colIndx,
-			dataIndx = objP.dataIndx,
-			colIndx = (colIndx == null) ? this.getColIndx({
-				dataIndx: dataIndx
-			}) : colIndx,
-			column = this.colModel[colIndx],
-			dataIndx = (dataIndx == null) ? column.dataIndx : dataIndx,
+		var colIndex = objP.colIndex,
+			dataIndex = objP.dataIndex,
+			colIndex = (colIndex == null) ? this.getColIndex({
+				dataIndex: dataIndex
+			}) : colIndex,
+			column = this.colModel[colIndex],
+			dataIndex = (dataIndex == null) ? column.dataIndex : dataIndex,
 			cEditable = column.editable;
 		if (objP.checkVisible && column.hidden) {
 			return false
 		}
 		if (cEditable != null) {
 			if (typeof cEditable == "function") {
-				var rowIndx = objP.rowIndx,
+				var rowIndex = objP.rowIndex,
 					rowData = this.getRowData(objP);
 				return cEditable.call(this.element, {
-					rowIndx: rowIndx,
+					rowIndex: rowIndex,
 					rowData: rowData,
 					column: column,
-					dataIndx: dataIndx
+					dataIndex: dataIndex
 				})
 			} else {
 				return cEditable
@@ -2076,12 +2084,12 @@
 			return true
 		}
 	};
-	fn._getRowPQData = function(rowIndxPage, key, rowData) {
-		var rowData = (rowData == null) ? this.data[rowIndxPage] : rowData;
+	fn._getRowPQData = function(rowIndexPage, key, rowData) {
+		var rowData = (rowData == null) ? this.data[rowIndexPage] : rowData;
 		return rowData ? rowData[key] : null
 	};
-	fn._setRowPQData = function(rowIndxPage, objP, rowData) {
-		var rowData = (rowData == null) ? this.data[rowIndxPage] : rowData;
+	fn._setRowPQData = function(rowIndexPage, objP, rowData) {
+		var rowData = (rowData == null) ? this.data[rowIndexPage] : rowData;
 		if (!rowData) {
 			return
 		}
@@ -2105,7 +2113,7 @@
 	fn._onRowMouseDown = function(evt) {
 		var that = this;
 		var $tr = $(evt.currentTarget);
-		var objP = that.getRowIndx({
+		var objP = that.getRowIndex({
 			$tr: $tr
 		});
 		objP.$tr = $tr;
@@ -2132,10 +2140,10 @@
 	fn._onRowMouseEnter = function(evt, $this) {
 		var $tr = $this,
 			that = this;
-		var objRI = that.getRowIndx({
+		var objRI = that.getRowIndex({
 			$tr: $tr
 		});
-		var rowIndxPage = objRI.rowIndxPage;
+		var rowIndexPage = objRI.rowIndexPage;
 		if (that._trigger("rowMouseEnter", evt, {
 			$tr: $tr,
 			dataModel: that.options.dataModel
@@ -2143,7 +2151,7 @@
 			return false
 		}
 		if (that.options.hoverMode == "row") {
-			that.highlightRow(rowIndxPage)
+			that.highlightRow(rowIndexPage)
 		}
 		return true
 	};
@@ -2164,10 +2172,10 @@
 	fn._onRowMouseLeave = function(evt, $this) {
 		var $tr = $this,
 			that = this;
-		var objRI = that.getRowIndx({
+		var objRI = that.getRowIndex({
 			$tr: $tr
 		});
-		var rowIndxPage = objRI.rowIndxPage;
+		var rowIndexPage = objRI.rowIndexPage;
 		if (that._trigger("rowMouseLeave", evt, {
 			$tr: $tr,
 			dataModel: that.options.dataModel
@@ -2175,7 +2183,7 @@
 			return false
 		}
 		if (that.options.hoverMode == "row") {
-			that.unHighlightRow(rowIndxPage)
+			that.unHighlightRow(rowIndexPage)
 		}
 		return true
 	};
@@ -2195,7 +2203,7 @@
 	fn._onRowMouseMove = function(evt) {
 		var that = this;
 		var $tr = $(evt.currentTarget);
-		var objP = that.getRowIndx({
+		var objP = that.getRowIndex({
 			$tr: $tr
 		});
 		objP.$tr = $tr;
@@ -2228,34 +2236,34 @@
 		var objP = that.getCellIndices({
 			$td: $td
 		});
-		var rowIndxPage = objP.rowIndxPage,
-			offset = that.rowIndxOffset,
-			rowIndx = rowIndxPage + offset,
-			colIndx = objP.colIndx;
-		objP.rowIndx = rowIndx;
-		if (colIndx == null) {
+		var rowIndexPage = objP.rowIndexPage,
+			offset = that.rowIndexOffset,
+			rowIndex = rowIndexPage + offset,
+			colIndex = objP.colIndex;
+		objP.rowIndex = rowIndex;
+		if (colIndex == null) {
 			return
 		}
-		var column = CM[colIndx],
-			dataIndx = column.dataIndx;
-		objP.dataIndx = dataIndx;
+		var column = CM[colIndex],
+			dataIndex = column.dataIndex;
+		objP.dataIndex = dataIndex;
 		objP.evt = evt;
 		if (that._trigger("cellClick", evt, {
 			$td: $td,
-			rowIndxPage: rowIndxPage,
-			rowIndx: rowIndx,
-			colIndx: colIndx,
-			dataIndx: dataIndx,
+			rowIndexPage: rowIndexPage,
+			rowIndex: rowIndex,
+			colIndex: colIndex,
+			dataIndex: dataIndex,
 			column: column,
-			rowData: that.data[rowIndxPage]
+			rowData: that.data[rowIndexPage]
 		}) == false) {
 			return false
 		}
 		if (EM.clicksToEdit == 1 && this.isEditableRow({
-			rowIndx: rowIndx
+			rowIndex: rowIndex
 		}) && this.isEditableCell({
-			colIndx: colIndx,
-			rowIndx: rowIndx
+			colIndex: colIndex,
+			rowIndex: rowIndex
 		})) {
 			window.setTimeout(function() {
 				that.editCell(objP)
@@ -2269,26 +2277,26 @@
 			$td: $td
 		});
 		var that = this,
-			rowIndxPage = objP.rowIndxPage,
-			offset = this.rowIndxOffset,
-			rowIndx = rowIndxPage + offset,
-			colIndx = objP.colIndx,
+			rowIndexPage = objP.rowIndexPage,
+			offset = this.rowIndexOffset,
+			rowIndex = rowIndexPage + offset,
+			colIndex = objP.colIndex,
 			CM = this.colModel,
 			options = this.options,
 			DM = options.DM;
-		if (colIndx == null) {
+		if (colIndex == null) {
 			return
 		}
-		var column = CM[colIndx],
-			dataIndx = column.dataIndx;
+		var column = CM[colIndex],
+			dataIndex = column.dataIndex;
 		if (this._trigger("cellRightClick", evt, {
 			$td: $td,
-			rowIndxPage: rowIndxPage,
-			rowIndx: rowIndx,
-			colIndx: colIndx,
-			dataIndx: dataIndx,
+			rowIndexPage: rowIndexPage,
+			rowIndex: rowIndex,
+			colIndex: colIndex,
+			dataIndex: dataIndex,
 			column: column,
-			rowData: that.data[rowIndxPage]
+			rowData: that.data[rowIndexPage]
 		}) == false) {
 			return false
 		}
@@ -2302,7 +2310,7 @@
 	fn.highlightRow = function(varr) {
 		if (isNaN(varr)) {} else {
 			var $tr = this.getRow({
-				rowIndxPage: varr
+				rowIndexPage: varr
 			});
 			if ($tr) {
 				$tr.addClass("pq-grid-row-hover ui-state-hover")
@@ -2312,7 +2320,7 @@
 	fn.unHighlightRow = function(varr) {
 		if (isNaN(varr)) {} else {
 			var $tr = this.getRow({
-				rowIndxPage: varr
+				rowIndexPage: varr
 			});
 			if ($tr) {
 				$tr.removeClass("pq-grid-row-hover ui-state-hover")
@@ -2350,8 +2358,8 @@
 		var $td = $targ.closest(".pq-grid-cell");
 		if ($td == null || $td.length == 0) {
 			return {
-				rowIndxPage: null,
-				colIndx: null,
+				rowIndexPage: null,
+				colIndex: null,
 				$td: null
 			}
 		} else {
@@ -2451,7 +2459,7 @@
 			PM = thisOptions.pageModel,
 			DMdata = DM.data,
 			paging = PM.type;
-		this.rowIndxOffset = 0;
+		this.rowIndexOffset = 0;
 		if (DMdata == null || DMdata.length == 0) {
 			if (paging) {
 				PM.curPage = 0;
@@ -2470,12 +2478,12 @@
 			if (PM.curPage < 1 && PM.totalPages > 0) {
 				PM.curPage = 1
 			}
-			var begIndx = (PM.curPage - 1) * PM.rPP;
-			var endIndx = PM.curPage * PM.rPP;
-			if (endIndx > DMdata.length) {
-				endIndx = DMdata.length
+			var begIndex = (PM.curPage - 1) * PM.rPP;
+			var endIndex = PM.curPage * PM.rPP;
+			if (endIndex > DMdata.length) {
+				endIndex = DMdata.length
 			}
-			this.data = DMdata.slice(begIndx, endIndx)
+			this.data = DMdata.slice(begIndex, endIndex)
 		} else {
 			if (paging == "remote") {
 				var totalPages = Math.ceil(PM.totalRecords / PM.rPP);
@@ -2483,16 +2491,16 @@
 				if (totalPages && !PM.curPage) {
 					PM.curPage = 1
 				}
-				var endIndx = PM.rPP;
-				if (endIndx > DMdata.length) {
-					endIndx = DMdata.length
+				var endIndex = PM.rPP;
+				if (endIndex > DMdata.length) {
+					endIndex = DMdata.length
 				}
-				this.data = DMdata.slice(0, endIndx)
+				this.data = DMdata.slice(0, endIndex)
 			} else {
 				this.data = DMdata.slice(0)
 			}
 		} if (paging == "local" || paging == "remote") {
-			this.rowIndxOffset = (PM.rPP * (PM.curPage - 1))
+			this.rowIndexOffset = (PM.rPP * (PM.curPage - 1))
 		}
 	};
 	$.paramquery.filter = function() {
@@ -2659,9 +2667,9 @@
 		if (sql) {
 			for (var i = 0; i < sorters.length; i++) {
 				var sorter = sorters[i],
-					dataIndx = sorter.dataIndx,
+					dataIndex = sorter.dataIndex,
 					dir = sorter.dir == "up" ? "asc" : "desc";
-				sortBy += (i > 0 ? ", " : "") + dataIndx + " " + dir
+				sortBy += (i > 0 ? ", " : "") + dataIndex + " " + dir
 			}
 			return sortBy
 		} else {
@@ -2697,37 +2705,37 @@
 				for (var j = 0; j < arrS.length; j++) {
 					var f = arrS[j],
 						condition = f.condition,
-						dataIndx = f.dataIndx,
+						dataIndex = f.dataIndex,
 						text = $.trim(f.value);
 					if (condition === "contain") {
-						filter.push(dataIndx + " like '%" + text + "%'")
+						filter.push(dataIndex + " like '%" + text + "%'")
 					} else {
 						if (condition === "notcontain") {
-							filter.push(dataIndx + " not like '%" + text + "%'")
+							filter.push(dataIndex + " not like '%" + text + "%'")
 						} else {
 							if (condition === "begin") {
-								filter.push(dataIndx + " like '" + text + "%'")
+								filter.push(dataIndex + " like '" + text + "%'")
 							} else {
 								if (condition === "end") {
-									filter.push(dataIndx + " like '%" + text + "'")
+									filter.push(dataIndex + " like '%" + text + "'")
 								} else {
 									if (condition === "equal") {
-										filter.push(dataIndx + "='" + text + "'")
+										filter.push(dataIndex + "='" + text + "'")
 									} else {
 										if (condition === "notequal") {
-											filter.push(dataIndx + "!='" + text + "'")
+											filter.push(dataIndex + "!='" + text + "'")
 										} else {
 											if (condition === "empty") {
-												filter.push("isnull(" + dataIndx + ",'')=''")
+												filter.push("isnull(" + dataIndex + ",'')=''")
 											} else {
 												if (condition === "notempty") {
-													filter.push("isnull(" + dataIndx + ",'')!=''")
+													filter.push("isnull(" + dataIndex + ",'')!=''")
 												} else {
 													if (condition === "less") {
-														filter.push(dataIndx + "<'" + text + "'")
+														filter.push(dataIndex + "<'" + text + "'")
 													} else {
 														if (condition === "great") {
-															filter.push(dataIndx + ">'" + text + "'")
+															filter.push(dataIndex + ">'" + text + "'")
 														}
 													}
 												}
@@ -2757,6 +2765,14 @@
 			}
 		}
 		return filter
+	};
+	fn.exportFromRemote = function(remoteUrl){
+		remoteUrl = remoteUrl || this.options.dataModel.url;
+
+		var sort = this.getQueryStringSort();
+		var filter = this.getQueryStringFilter();
+
+		return location.href = remoteUrl + (remoteUrl.indexOf('?') >= 0 ? '&' : '?') + 'pq_export=1&pq_filter=' + encodeURIComponent(filter) + '&pq_sort=' + encodeURIComponent(sort);
 	};
 	fn.remoteRequest = function(objP) {
 		if (this.loading) {
@@ -2845,6 +2861,9 @@
 				}
 			},
 			success: function(responseObj, textStatus, jqXHR) {
+				that.hideLoading();
+				that.loading = false;
+
 				if (typeof DM.getData == "function") {
 					var retObj = DM.getData.call(that.element, responseObj, textStatus, jqXHR);
 					DM.data = retObj.data;
@@ -2856,7 +2875,30 @@
 							PM.totalRecords = retObj.totalRecords
 						}
 					}
-				} else {
+				} else if (!responseObj){
+					DM.error.call(that.element, jqXHR, '服务器失去响应', '');
+					return;
+				} else if (!('curPage' in responseObj)){ // 兼容 { success: true, message: "OK", data: { list: [...], count: 123, page: 1}} 的写法
+					if (!responseObj.success){
+						DM.error.call(that.element, jqXHR, responseObj.message || '未知错误', responseObj);
+						return;
+					}
+
+					if (!responseObj.data){
+						DM.error.call(that.element, jqXHR, '服务器返回的数据格式不正确', responseObj.data);
+						return;
+					}
+
+					DM.data = responseObj.data.list;
+					if (PM.type && PM.type == "remote") {
+						if (responseObj.data.page) {
+							PM.curPage = responseObj.data.page;
+						}
+						if (responseObj.data.count) {
+							PM.totalRecords = responseObj.data.count;
+						}
+					}
+				} else { // 原始写法：  { data: [...], totalRecords: 123, curPage: 1}
 					DM.data = responseObj.data;
 					if (PM.type && PM.type == "remote") {
 						if (responseObj.curPage) {
@@ -2867,12 +2909,12 @@
 						}
 					}
 				}
-				that.hideLoading();
-				that.loading = false;
+
 				that._trigger("load", null, {
 					dataModel: DM,
 					colModel: thisColModel
 				});
+
 				if (raiseFilterEvent) {
 					that._trigger("filter", null, {
 						type: "remote",
@@ -2881,6 +2923,7 @@
 						filterModel: FM
 					})
 				}
+
 				if (objP && objP.callback) {
 					objP.callback()
 				}
@@ -2961,8 +3004,8 @@
 			CMLength = CM.length;
 		for (var i = 0; i < CMLength; i++) {
 			var column = CM[i];
-			if (column.dataIndx == null) {
-				column.dataIndx = i
+			if (column.dataIndex == null) {
+				column.dataIndex = i
 			}
 		}
 	};
@@ -3055,21 +3098,21 @@
 	fn._addRowsData = function(obj) {
 		var newdata = obj.data,
 			data = this.options.dataModel.data,
-			rowIndx = obj.rowIndx;
+			rowIndex = obj.rowIndex;
 		if (data == null) {
 			data = []
 		}
-		if (rowIndx == null) {
+		if (rowIndex == null) {
 			for (var i = 0, len = newdata.length; i < len; i++) {
 				var rowData = newdata[i];
 				data.push(rowData)
 			}
 		} else {
-			if (rowIndx < data.length) {
+			if (rowIndex < data.length) {
 				for (var i = 0, len = newdata.length; i < len; i++) {
 					var rowData = newdata[i];
-					data.splice(rowIndx, 0, rowData);
-					rowIndx++
+					data.splice(rowIndex, 0, rowData);
+					rowIndex++
 				}
 			} else {
 				return false
@@ -3100,27 +3143,27 @@
 			this._onDataAvailable(objP)
 		}
 	};
-	fn.getColIndx = function(obj) {
-		var dataIndx = obj.dataIndx;
-		if (dataIndx === undefined) {
-			throw ("dataIndx NA")
+	fn.getColIndex = function(obj) {
+		var dataIndex = obj.dataIndex;
+		if (dataIndex === undefined) {
+			throw ("dataIndex NA")
 		}
 		var thisColModel = this.colModel;
 		for (var i = 0, len = thisColModel.length; i < len; i++) {
-			if (thisColModel[i].dataIndx == dataIndx) {
+			if (thisColModel[i].dataIndex == dataIndex) {
 				return i
 			}
 		}
 	};
 	fn.getColumn = function(obj) {
-		if (obj.dataIndx === undefined) {
-			throw ("dataIndx N/A")
+		if (obj.dataIndex === undefined) {
+			throw ("dataIndex N/A")
 		}
-		var dataIndx = obj.dataIndx;
+		var dataIndex = obj.dataIndex;
 		var thisColModel = this.colModel;
 		for (var i = 0, len = thisColModel.length; i < len; i++) {
 			var column = thisColModel[i];
-			if (column.dataIndx == dataIndx) {
+			if (column.dataIndex == dataIndex) {
 				return column
 			}
 		}
@@ -3290,11 +3333,11 @@
 	fn._generateCellRowOutline = function(obj) {
 		var $td = obj.$td,
 			$tr = obj.$tr,
-			rowIndxStart = obj.rowIndxStart,
+			rowIndexStart = obj.rowIndexStart,
 			cellBW = this.options.editModel.cellBorderWidth,
-			colIndxStart = obj.colIndxStart,
-			rowIndxEnd = obj.rowIndxEnd,
-			colIndxEnd = obj.colIndxEnd,
+			colIndexStart = obj.colIndexStart,
+			rowIndexEnd = obj.rowIndexEnd,
+			colIndexEnd = obj.colIndexEnd,
 			that = this;
 		if ($tr) {
 			var wd = that._calcRightEdgeCol(that.colModel.length - 1);
@@ -3353,17 +3396,17 @@
 			borderWidth: cellBW
 		})
 	};
-	fn._onHeaderCellClick = function(colIndx, evt) {
+	fn._onHeaderCellClick = function(colIndex, evt) {
 		var that = this,
-			column = that.colModel[colIndx],
+			column = that.colModel[colIndex],
 			thisOptions = this.options,
 			DM = thisOptions.dataModel,
-			dataIndx = column.dataIndx,
+			dataIndex = column.dataIndex,
 			dataType = column.dataType;
 		if (that._trigger("headerCellClick", evt, {
 			column: column,
-			colIndx: colIndx,
-			dataIndx: dataIndx
+			colIndex: colIndex,
+			dataIndex: dataIndex
 		}) === false) {
 			return
 		}
@@ -3374,15 +3417,15 @@
 			return
 		}
 		this.sort({
-			colIndx: colIndx,
+			colIndex: colIndex,
 			column: column,
-			dataIndx: dataIndx
+			dataIndex: dataIndex
 		})
 	};
-	fn._selectRow = function(rowIndx, evt) {
-		this.selectRow(rowIndx, evt)
+	fn._selectRow = function(rowIndex, evt) {
+		this.selectRow(rowIndex, evt)
 	};
-	fn._findfirstUnhiddenColIndx = function() {
+	fn._findfirstUnhiddenColIndex = function() {
 		for (var i = 0; i < this.colModel.length; i++) {
 			if (!this.colModel[i].hidden) {
 				return i
@@ -3390,7 +3433,7 @@
 		}
 	};
 	fn.selectRow = function(obj) {
-		var rowIndx = obj.rowIndx,
+		var rowIndex = obj.rowIndex,
 			evt = obj.evt,
 			offset = obj.offset;
 		if (evt && (evt.type == "keydown" || evt.type == "keypress")) {
@@ -3404,10 +3447,10 @@
 		} if (evt != null) {}
 		return true
 	};
-	fn.scrollY = function(rowIndx) {
-		this.$vscroll.pqScrollBar("option", "cur_pos", rowIndx).pqScrollBar("scroll")
+	fn.scrollY = function(rowIndex) {
+		this.$vscroll.pqScrollBar("option", "cur_pos", rowIndex).pqScrollBar("scroll")
 	};
-	fn._get$Tbl = function(rowIndxPage, colIndx) {
+	fn._get$Tbl = function(rowIndexPage, colIndex) {
 		return this.$tbl
 	};
 	fn.scrollCell = function(obj) {
@@ -3415,25 +3458,25 @@
 		this.scrollColumn(obj)
 	};
 	fn.scrollRow = function(obj) {
-		var rowIndxPage = obj.rowIndxPage,
+		var rowIndexPage = obj.rowIndexPage,
 			nested = (this.iHierarchy ? true : false),
-			rowIndx = obj.rowIndx,
+			rowIndex = obj.rowIndex,
 			scrollCurPos = this.scrollCurPos,
-			rowIndxPage = (rowIndxPage == null) ? (rowIndx - this.rowIndxOffset) : rowIndxPage,
+			rowIndexPage = (rowIndexPage == null) ? (rowIndex - this.rowIndexOffset) : rowIndexPage,
 			thisOptions = this.options,
 			freezeRows = parseInt(thisOptions.freezeRows);
-		if (rowIndxPage < freezeRows) {
+		if (rowIndexPage < freezeRows) {
 			return
 		}
-		var calcCurPos = this._calcCurPosFromRowIndxPage(rowIndxPage);
+		var calcCurPos = this._calcCurPosFromRowIndexPage(rowIndexPage);
 		if (calcCurPos == null) {
 			return
 		}
 		if (calcCurPos < scrollCurPos) {
 			this.$vscroll.pqScrollBar("option", "cur_pos", calcCurPos).pqScrollBar("scroll")
 		}
-		var $tbl = this._get$Tbl(rowIndxPage);
-		var $trs = $tbl.children("tbody").children("tr[pq-row-indx=" + rowIndxPage + "]"),
+		var $tbl = this._get$Tbl(rowIndexPage);
+		var $trs = $tbl.children("tbody").children("tr[pq-row-index=" + rowIndexPage + "]"),
 			$tr = $trs.last(),
 			$tr_first = $tr;
 		if ($trs.length > 1) {
@@ -3454,7 +3497,7 @@
 					var diff = td_bottom - (htCont - htSB - marginTop);
 					var $trs = $tbl.children().children("tr");
 					var ht = 0,
-						indx = 0;
+						index = 0;
 					var $tr_next;
 					if (freezeRows) {
 						$tr_next = $trs.filter("tr.pq-last-freeze-row").last().next();
@@ -3470,7 +3513,7 @@
 							break
 						} else {
 							if (!nested || ($tr_next.hasClass("pq-detail-child") == false)) {
-								indx++;
+								index++;
 								if (ht >= diff) {
 									break
 								}
@@ -3482,7 +3525,7 @@
 						}
 						$tr_next = $tr_next.next()
 					} while (1 === 1);
-					var cur_pos = scrollCurPos + indx;
+					var cur_pos = scrollCurPos + index;
 					if (cur_pos > calcCurPos) {
 						cur_pos = calcCurPos
 					}
@@ -3499,17 +3542,17 @@
 		}
 	};
 	fn._bringCellToView = function(objP) {
-		if (objP.rowIndxPage == null || objP.colIndx == null) {
-			throw "rowIndxPage/colIndx NA"
+		if (objP.rowIndexPage == null || objP.colIndex == null) {
+			throw "rowIndexPage/colIndex NA"
 		}
-		var rowIndxPage = objP.rowIndxPage,
-			colIndx = objP.colIndx,
+		var rowIndexPage = objP.rowIndexPage,
+			colIndex = objP.colIndex,
 			tdneedsRefresh = false,
 			freezeCols = this.options.freezeCols;
 		var $td;
-		if (this.hidearrHS[colIndx]) {
-			this.hidearrHS[colIndx] = false;
-			var cur_pos = colIndx - freezeCols - this._calcNumHiddenUnFrozens(colIndx);
+		if (this.hidearrHS[colIndex]) {
+			this.hidearrHS[colIndex] = false;
+			var cur_pos = colIndex - freezeCols - this._calcNumHiddenUnFrozens(colIndex);
 			this.$hscroll.pqScrollBar("option", "cur_pos", cur_pos).pqScrollBar("scroll");
 			tdneedsRefresh = true
 		} else {
@@ -3517,10 +3560,10 @@
 			if ($td == null || $td.length == 0) {
 				return false
 			}
-			var td_right = this._calcRightEdgeCol(colIndx).width;
+			var td_right = this._calcRightEdgeCol(colIndex).width;
 			var wdSB = this._getScollBarVerticalWidth();
 			if (td_right > this.$cont[0].offsetWidth - wdSB) {
-				var diff = calcWidthCols.call(this, -1, colIndx + 1) - (this.$cont[0].offsetWidth - wdSB);
+				var diff = calcWidthCols.call(this, -1, colIndex + 1) - (this.$cont[0].offsetWidth - wdSB);
 				var $tds = $td.parent("tr").children("td");
 				var CM = this.colModel,
 					outerWidths = this.outerWidths,
@@ -3531,7 +3574,7 @@
 					if (!CM[i].hidden) {
 						wd += outerWidths[i]
 					}
-					if (i == colIndx) {
+					if (i == colIndex) {
 						initH = i - freezeCols - this._calcNumHiddenUnFrozens(i);
 						break
 					} else {
@@ -3546,8 +3589,8 @@
 			}
 		} if (tdneedsRefresh) {
 			var $td = this.getCell({
-				rowIndxPage: rowIndxPage,
-				colIndx: colIndx
+				rowIndexPage: rowIndexPage,
+				colIndex: colIndex
 			});
 			return $td
 		} else {
@@ -3555,16 +3598,16 @@
 		}
 	};
 	fn.scrollColumn = function(objP) {
-		var colIndx = objP.colIndx,
-			colIndx = (colIndx == null) ? this.getColIndx({
-				dataIndx: objP.dataIndx
-			}) : colIndx,
+		var colIndex = objP.colIndex,
+			colIndex = (colIndex == null) ? this.getColIndex({
+				dataIndex: objP.dataIndex
+			}) : colIndex,
 			freezeCols = this.options.freezeCols;
-		var td_right = this._calcRightEdgeCol(colIndx).width,
+		var td_right = this._calcRightEdgeCol(colIndex).width,
 			wdSB = this._getScollBarVerticalWidth(),
 			cont_wd = this.$cont[0].offsetWidth;
 		if (td_right > cont_wd - wdSB) {
-			var diff = calcWidthCols.call(this, -1, colIndx + 1) - (cont_wd - wdSB),
+			var diff = calcWidthCols.call(this, -1, colIndex + 1) - (cont_wd - wdSB),
 				CM = this.colModel,
 				outerWidths = this.outerWidths,
 				CMLength = CM.length,
@@ -3574,7 +3617,7 @@
 				if (!CM[i].hidden) {
 					wd += outerWidths[i]
 				}
-				if (i == colIndx) {
+				if (i == colIndex) {
 					initH = i - freezeCols - this._calcNumHiddenUnFrozens(i);
 					break
 				} else {
@@ -3587,9 +3630,9 @@
 			this.$hscroll.pqScrollBar("option", "cur_pos", initH).pqScrollBar("scroll");
 			return true
 		} else {
-			if (this.hidearrHS[colIndx]) {
-				this.hidearrHS[colIndx] = false;
-				var cur_pos = colIndx - freezeCols - this._calcNumHiddenUnFrozens(colIndx);
+			if (this.hidearrHS[colIndex]) {
+				this.hidearrHS[colIndex] = false;
+				var cur_pos = colIndex - freezeCols - this._calcNumHiddenUnFrozens(colIndex);
 				this.$hscroll.pqScrollBar("option", "cur_pos", cur_pos).pqScrollBar("scroll");
 				return true
 			}
@@ -3597,8 +3640,8 @@
 		return false
 	};
 	fn.selection = function(obj) {
-		var rowIndx = obj.rowIndx,
-			colIndx = obj.colIndx,
+		var rowIndex = obj.rowIndex,
+			colIndex = obj.colIndex,
 			method = obj.method,
 			type = obj.type;
 		if (type == "row") {
@@ -3611,16 +3654,16 @@
 		return
 	};
 	fn._bringPageIntoView = function(obj) {
-		var rowIndx = obj.rowIndx,
+		var rowIndex = obj.rowIndex,
 			that = this;
 		var DM = this.options.pageModel;
-		if (DM.type == "local" && rowIndx >= 0) {
+		if (DM.type == "local" && rowIndex >= 0) {
 			var curPage = DM.curPage;
 			var rPP = DM.rPP;
-			var begIndx = (curPage - 1) * rPP;
-			var endIndx = curPage * rPP;
-			if (rowIndx >= begIndx && rowIndx < endIndx) {} else {
-				DM.curPage = Math.ceil((rowIndx + 1) / rPP);
+			var begIndex = (curPage - 1) * rPP;
+			var endIndex = curPage * rPP;
+			if (rowIndex >= begIndex && rowIndex < endIndex) {} else {
+				DM.curPage = Math.ceil((rowIndex + 1) / rPP);
 				this.refreshDataFromDataModel();
 				this._refreshViewAfterDataSort()
 			}
@@ -3629,9 +3672,9 @@
 	fn.goToPage = function(obj) {
 		var DM = this.options.pageModel;
 		if (DM.type == "local" || DM.type == "remote") {
-			var rowIndx = obj.rowIndx,
+			var rowIndex = obj.rowIndex,
 				rPP = DM.rPP,
-				page = (obj.page == null) ? Math.ceil((rowIndx + 1) / rPP) : obj.page,
+				page = (obj.page == null) ? Math.ceil((rowIndex + 1) / rPP) : obj.page,
 				curPage = DM.curPage;
 			if (page != curPage) {
 				DM.curPage = page;
@@ -3655,40 +3698,40 @@
 			return false
 		}
 		var data = this.data,
-			rowIndx, rowIndxPage;
+			rowIndex, rowIndexPage;
 		if (obj.rowData) {
-			var obj2 = this.getRowIndx(obj);
-			rowIndx = obj2.rowIndx
+			var obj2 = this.getRowIndex(obj);
+			rowIndex = obj2.rowIndex
 		} else {
-			var offset = this.rowIndxOffset,
-				rowIndx = obj.rowIndx,
-				rowIndxPage = obj.rowIndxPage,
-				rowIndx = (rowIndx == null) ? rowIndxPage + offset : rowIndx
+			var offset = this.rowIndexOffset,
+				rowIndex = obj.rowIndex,
+				rowIndexPage = obj.rowIndexPage,
+				rowIndex = (rowIndex == null) ? rowIndexPage + offset : rowIndex
 		}
-		var colIndx = (obj.colIndx == null && obj.dataIndx !== undefined) ? this.getColIndx({
-			dataIndx: obj.dataIndx
-		}) : obj.colIndx,
+		var colIndex = (obj.colIndex == null && obj.dataIndex !== undefined) ? this.getColIndex({
+			dataIndex: obj.dataIndex
+		}) : obj.colIndex,
 			evt = obj.evt;
-		if (rowIndx < 0 || colIndx < 0 || colIndx >= this.colModel.length) {
+		if (rowIndex < 0 || colIndex < 0 || colIndex >= this.colModel.length) {
 			return false
 		}
 		if (data == null || data.length == 0) {
 			return false
 		}
-		obj.rowIndx = rowIndx;
-		obj.colIndx = colIndx;
+		obj.rowIndex = rowIndex;
+		obj.colIndex = colIndex;
 		this._bringPageIntoView(obj);
-		rowIndxPage = rowIndx - this.rowIndxOffset;
-		obj.rowIndxPage = rowIndxPage;
+		rowIndexPage = rowIndex - this.rowIndexOffset;
+		obj.rowIndexPage = rowIndexPage;
 		this.scrollRow({
-			rowIndxPage: rowIndxPage
+			rowIndexPage: rowIndexPage
 		});
-		if (colIndx == null) {
+		if (colIndex == null) {
 			return this._selectRow(obj)
 		} else {
 			this._bringCellToView({
-				rowIndxPage: rowIndxPage,
-				colIndx: colIndx
+				rowIndexPage: rowIndexPage,
+				colIndex: colIndex
 			});
 			return this.selectCell(obj)
 		}
@@ -3705,26 +3748,26 @@
 			obj = this.getCellIndices({
 				$td: $td
 			}),
-			offset = this.rowIndxOffset,
-			colIndx = obj.colIndx,
-			rowIndxPage = obj.rowIndxPage,
-			rowIndx = rowIndxPage + offset,
+			offset = this.rowIndexOffset,
+			colIndex = obj.colIndex,
+			rowIndexPage = obj.rowIndexPage,
+			rowIndex = rowIndexPage + offset,
 			thisColModel = this.colModel,
-			column = thisColModel[colIndx],
-			dataIndx = column.dataIndx,
-			rowData = this.data[rowIndxPage],
+			column = thisColModel[colIndex],
+			dataIndex = column.dataIndex,
+			rowData = this.data[rowIndexPage],
 			options = this.options,
 			DM = options.dataModel,
 			oldVal;
 		if (rowData == null) {
 			return
 		} else {
-			oldVal = rowData[dataIndx]
+			oldVal = rowData[dataIndex]
 		}
-		obj.rowIndx = rowIndx;
+		obj.rowIndex = rowIndex;
 		obj.column = column;
-		obj.dataIndx = dataIndx;
-		if (rowIndxPage != null) {
+		obj.dataIndex = dataIndex;
+		if (rowIndexPage != null) {
 			var newVal = this._getEditCellData(obj);
 			if (newVal == "<br>") {
 				newVal = ""
@@ -3733,8 +3776,8 @@
 				newVal = null
 			}
 			var objCell = {
-				rowIndx: rowIndx,
-				dataIndx: dataIndx,
+				rowIndex: rowIndex,
+				dataIndex: dataIndex,
 				column: column,
 				newVal: newVal,
 				value: newVal,
@@ -3746,15 +3789,15 @@
 				return false
 			}
 			if (newVal != oldVal) {
-				rowData[dataIndx] = newVal;
+				rowData[dataIndex] = newVal;
 				this._trigger("cellSave", evt, objCell);
 				if (options.track) {
 					var rowData = this.getRowData({
-						rowIndx: rowIndx
+						rowIndex: rowIndex
 					});
 					this.iUCData.update({
 						rowData: rowData,
-						dataIndx: dataIndx,
+						dataIndex: dataIndex,
 						oldVal: oldVal,
 						newVal: newVal
 					})
@@ -3768,7 +3811,7 @@
 				} else {
 					if (objP) {
 						that.scrollRow({
-							rowIndxPage: rowIndxPage
+							rowIndexPage: rowIndexPage
 						})
 					}
 				}
@@ -3791,18 +3834,18 @@
 	};
 	fn.refreshColumn = function(obj) {
 		var customData = this.options.customData,
-			colIndx = (obj.colIndx == null) ? this.getColIndx({
-				dataIndx: obj.dataIndx
-			}) : obj.colIndx,
-			offset = this.getRowIndxOffset();
-		obj.colIndx = colIndx;
+			colIndex = (obj.colIndex == null) ? this.getColIndex({
+				dataIndex: obj.dataIndex
+			}) : obj.colIndex,
+			offset = this.getRowIndexOffset();
+		obj.colIndex = colIndex;
 		for (var row = this.init; row <= this["final"]; row++) {
-			var rowIndxPage = row;
-			obj.rowIndx = rowIndxPage + offset;
-			obj.rowIndxPage = rowIndxPage;
-			var column = this.colModel[colIndx];
+			var rowIndexPage = row;
+			obj.rowIndex = rowIndexPage + offset;
+			obj.rowIndexPage = rowIndexPage;
+			var column = this.colModel[colIndex];
 			obj.$td = this.getCell(obj);
-			obj.rowData = this.data[rowIndxPage];
+			obj.rowData = this.data[rowIndexPage];
 			obj.customData = customData;
 			obj.column = column;
 			this.iGenerateView._renderCell(obj)
@@ -3812,25 +3855,25 @@
 		if (!this.data) {
 			return
 		}
-		var offset = this.rowIndxOffset,
-			rowIndx = obj.rowIndx,
-			rowIndxPage = obj.rowIndxPage,
-			rowIndx = obj.rowIndx = (rowIndx == null) ? rowIndxPage + offset : rowIndx,
-			rowIndxPage = obj.rowIndxPage = (rowIndxPage == null) ? rowIndx - offset : rowIndxPage,
-			dataIndx = obj.dataIndx,
-			colIndx = obj.colIndx,
-			colIndx = obj.colIndx = (colIndx == null) ? this.getColIndx({
-				dataIndx: dataIndx
-			}) : colIndx,
+		var offset = this.rowIndexOffset,
+			rowIndex = obj.rowIndex,
+			rowIndexPage = obj.rowIndexPage,
+			rowIndex = obj.rowIndex = (rowIndex == null) ? rowIndexPage + offset : rowIndex,
+			rowIndexPage = obj.rowIndexPage = (rowIndexPage == null) ? rowIndex - offset : rowIndexPage,
+			dataIndex = obj.dataIndex,
+			colIndex = obj.colIndex,
+			colIndex = obj.colIndex = (colIndex == null) ? this.getColIndex({
+				dataIndex: dataIndex
+			}) : colIndex,
 			$td = obj.$td = (obj.$td == null) ? this.getCell(obj) : obj.$td,
-			column = obj.column = this.colModel[colIndx],
+			column = obj.column = this.colModel[colIndex],
 			TVM = this.options.treeModel,
-			rowData = this.data[rowIndxPage];
+			rowData = this.data[rowIndexPage];
 		if (!rowData) {
 			return
 		}
 		var objRender = obj;
-		objRender.tree = TVM.labelIndx ? true : false, objRender.rowData = rowData;
+		objRender.tree = TVM.labelIndex ? true : false, objRender.rowData = rowData;
 		objRender.customData = this.options.customData;
 		if ($td && $td.length > 0) {
 			this.iGenerateView._renderCell(objRender)
@@ -3841,19 +3884,19 @@
 			return
 		}
 		var thisOptions = this.options,
-			offset = this.rowIndxOffset,
-			rowIndx = obj.rowIndx,
-			rowIndxPage = obj.rowIndxPage,
-			rowIndx = (rowIndx == null) ? rowIndxPage + offset : rowIndx,
-			rowIndxPage = (rowIndxPage == null) ? rowIndx - offset : rowIndxPage,
+			offset = this.rowIndexOffset,
+			rowIndex = obj.rowIndex,
+			rowIndexPage = obj.rowIndexPage,
+			rowIndex = (rowIndex == null) ? rowIndexPage + offset : rowIndex,
+			rowIndexPage = (rowIndexPage == null) ? rowIndex - offset : rowIndexPage,
 			$trOld = (obj.$tr == null) ? this.getRow(obj) : obj.$tr,
 			CM = this.colModel,
-			rowData = this.data[rowIndxPage];
+			rowData = this.data[rowIndexPage];
 		if (!rowData) {
 			return
 		}
 		var buffer = [];
-		this.iGenerateView._generateRow(rowData, rowIndxPage, CM, buffer, null);
+		this.iGenerateView._generateRow(rowData, rowIndexPage, CM, buffer, null);
 		var trStr = buffer.join("");
 		$trOld.replaceWith(trStr);
 		this._trigger("refresh", null, {
@@ -3861,8 +3904,8 @@
 			dataModel: thisOptions.dataModel,
 			colModel: CM,
 			rowData: rowData,
-			rowIndx: rowIndx,
-			rowIndxPage: rowIndxPage
+			rowIndex: rowIndex,
+			rowIndexPage: rowIndexPage
 		});
 		return
 	};
@@ -3881,7 +3924,7 @@
 		}
 		var $td = old ? this.$td_edit_old : this.$td_edit;
 		if ($td) {
-			var rowIndx, rowIndxPage, colIndx, column, dataIndx, setNull = function() {
+			var rowIndex, rowIndexPage, colIndex, column, dataIndex, setNull = function() {
 					if (old) {
 						that.$td_edit_old = null
 					} else {
@@ -3894,11 +3937,11 @@
 			var obj = this.getCellIndices({
 				$td: $td
 			});
-			if (obj && obj.rowIndx != null) {
-				rowIndx = obj.rowIndx;
-				rowIndxPage = rowIndx - this.offsetRowIndx, colIndx = obj.colIndx;
-				column = this.colModel[colIndx];
-				dataIndx = column.dataIndx
+			if (obj && obj.rowIndex != null) {
+				rowIndex = obj.rowIndex;
+				rowIndexPage = rowIndex - this.offsetRowIndex, colIndex = obj.colIndex;
+				column = this.colModel[colIndex];
+				dataIndex = column.dataIndex
 			} else {
 				setNull();
 				return
@@ -3914,12 +3957,12 @@
 			if (!silent && !old) {
 				this._trigger("quitEditMode", evt, {
 					$td: $td,
-					rowIndx: rowIndx,
-					rowIndxPage: rowIndxPage,
-					colIndx: colIndx,
+					rowIndex: rowIndex,
+					rowIndexPage: rowIndexPage,
+					colIndex: colIndex,
 					column: column,
-					dataIndx: dataIndx,
-					rowData: this.data[rowIndxPage]
+					dataIndex: dataIndex,
+					rowData: this.data[rowIndexPage]
 				})
 			}
 			if (!fireOnly) {
@@ -3931,18 +3974,18 @@
 	fn.getData = function() {
 		return this.data
 	};
-	fn.getViewPortRowsIndx = function() {
+	fn.getViewPortRowsIndex = function() {
 		return {
-			beginIndx: this.init,
-			endIndx: this["final"]
+			beginIndex: this.init,
+			endIndex: this["final"]
 		}
 	};
-	fn.getRowIndxOffset = function() {
-		return this.rowIndxOffset
+	fn.getRowIndexOffset = function() {
+		return this.rowIndexOffset
 	};
 	fn.selectCell = function(obj) {
-		var rowIndx = obj.rowIndx,
-			colIndx = obj.colIndx,
+		var rowIndex = obj.rowIndex,
+			colIndex = obj.colIndex,
 			evt = obj.evt;
 		if (evt && (evt.type == "keydown" || evt.type == "keypress")) {
 			if (this.iCells.replace(obj) == false) {
@@ -3983,16 +4026,16 @@
 			return $td
 		}
 	};
-	fn.getFirstEditableColIndx = function(objP) {
-		if (objP.rowIndx == null) {
-			throw "rowIndx NA"
+	fn.getFirstEditableColIndex = function(objP) {
+		if (objP.rowIndex == null) {
+			throw "rowIndex NA"
 		}
 		if (!this.isEditableRow(objP)) {
 			return -1
 		}
 		var CM = this.colModel;
 		for (var i = 0; i < CM.length; i++) {
-			objP.colIndx = i;
+			objP.colIndex = i;
 			if (!this.isEditableCell(objP)) {
 				continue
 			} else {
@@ -4005,21 +4048,21 @@
 		return -1
 	};
 	fn.editFirstCellInRow = function(objP) {
-		var offset = this.rowIndxOffset,
-			rowIndx = objP.rowIndx,
-			rowIndxPage = objP.rowIndxPage,
-			rowIndx = (rowIndx == null) ? (rowIndxPage + offset) : rowIndx,
-			rowIndxPage = (rowIndxPage == null) ? (rowIndx - offset) : rowIndxPage,
-			colIndx = this.getFirstEditableColIndx({
-				rowIndx: rowIndx
+		var offset = this.rowIndexOffset,
+			rowIndex = objP.rowIndex,
+			rowIndexPage = objP.rowIndexPage,
+			rowIndex = (rowIndex == null) ? (rowIndexPage + offset) : rowIndex,
+			rowIndexPage = (rowIndexPage == null) ? (rowIndex - offset) : rowIndexPage,
+			colIndex = this.getFirstEditableColIndex({
+				rowIndex: rowIndex
 			});
-		if (colIndx != -1) {
+		if (colIndex != -1) {
 			this.scrollRow({
-				rowIndxPage: rowIndxPage
+				rowIndexPage: rowIndexPage
 			});
 			var $td = this._bringCellToView({
-				colIndx: colIndx,
-				rowIndxPage: rowIndxPage
+				colIndex: colIndex,
+				rowIndexPage: rowIndexPage
 			});
 			if ($td && $td.length > 0) {
 				this._editCell($td)
@@ -4031,17 +4074,17 @@
 		var obj = that.getCellIndices({
 			$td: $td
 		});
-		var rowIndxPage = obj.rowIndxPage,
-			offset = this.rowIndxOffset,
-			rowIndx = rowIndxPage + offset,
-			colIndx = obj.colIndx,
-			column = this.colModel[colIndx],
+		var rowIndexPage = obj.rowIndexPage,
+			offset = this.rowIndexOffset,
+			rowIndex = rowIndexPage + offset,
+			colIndex = obj.colIndex,
+			column = this.colModel[colIndex],
 			ceditor = column.editor,
 			geditor = this.options.editor,
 			editor = ceditor ? $.extend({}, geditor, ceditor) : geditor,
-			rowData = that.data[rowIndxPage],
+			rowData = that.data[rowIndexPage],
 			contentEditable = false,
-			dataIndx = column.dataIndx;
+			dataIndex = column.dataIndex;
 		if (this.$td_edit) {
 			if (this.$td_edit[0] == $td[0]) {
 				return false
@@ -4067,7 +4110,7 @@
 			}
 		}
 		var cellWd = $cell.width() - 8,
-			cellData = rowData[dataIndx],
+			cellData = rowData[dataIndex],
 			inp;
 		var edtype = editor.type,
 			edSelect = editor.select,
@@ -4086,7 +4129,7 @@
 				cellData: cellData,
 				rowData: rowData,
 				cls: cls,
-				dataIndx: dataIndx,
+				dataIndex: dataIndex,
 				data: editor.data,
 				column: column
 			})
@@ -4094,7 +4137,7 @@
 			if (edtype == "checkbox") {
 				var subtype = editor.subtype;
 				var checked = cellData ? "checked='checked'" : "";
-				inp = "<input " + checked + " class='" + cls2 + "' " + attr + " " + styleChk + " type=checkbox name='" + dataIndx + "' />";
+				inp = "<input " + checked + " class='" + cls2 + "' " + attr + " " + styleChk + " type=checkbox name='" + dataIndex + "' />";
 				$cell.html(inp);
 				var $ele = $cell.children("input");
 				if (subtype == "triple") {
@@ -4110,7 +4153,7 @@
 			} else {
 				if (edtype == "textarea" || edtype == "select" || edtype == "textbox") {
 					if (edtype == "textarea") {
-						inp = "<textarea class='" + cls2 + "' " + attr + " " + style + " name='" + dataIndx + "' ></textarea>"
+						inp = "<textarea class='" + cls2 + "' " + attr + " " + style + " name='" + dataIndex + "' ></textarea>"
 					} else {
 						if (edtype == "select") {
 							var options = editor.options;
@@ -4121,22 +4164,22 @@
 									rowData: rowData
 								})
 							}
-							var attrSelect = [attr, " class='", cls2, "' ", style, " name='", dataIndx, "'"].join("");
+							var attrSelect = [attr, " class='", cls2, "' ", style, " name='", dataIndex, "'"].join("");
 							inp = $.paramquery.select({
 								options: options,
 								attr: attrSelect,
-								labelIndx: editor.labelIndx,
-								valueIndx: editor.valueIndx,
-								groupIndx: editor.groupIndx
+								labelIndex: editor.labelIndex,
+								valueIndex: editor.valueIndex,
+								groupIndex: editor.groupIndex
 							})
 						} else {
-							inp = "<input class='" + cls2 + "' " + attr + " " + style + " type=text name='" + dataIndx + "' />"
+							inp = "<input class='" + cls2 + "' " + attr + " " + style + " type=text name='" + dataIndex + "' />"
 						}
 					}
 					$cell.html(inp);
 					$cell.children().val(cellData)
 				} else {
-					inp = "<div contenteditable='true' tabindx='0' " + styleCE + " " + attr + " class='pq-grid-editor-default " + cls + "'></div>";
+					inp = "<div contenteditable='true' tabindex='0' " + styleCE + " " + attr + " class='pq-grid-editor-default " + cls + "'></div>";
 					$cell.html(inp);
 					$cell.children().html(cellData);
 					contentEditable = true
@@ -4154,9 +4197,9 @@
 			if (that._trigger("cellEditFocus", null, {
 				$cell: $cell,
 				$editor: $focus,
-				dataIndx: dataIndx,
+				dataIndex: dataIndex,
 				column: column,
-				rowIndx: rowIndx,
+				rowIndex: rowIndex,
 				rowData: rowData
 			}) == false) {
 				return false
@@ -4183,44 +4226,44 @@
 		}
 	};
 	fn.getRow = function(obj) {
-		var rowIndxPage = obj.rowIndxPage,
-			rowIndx = obj.rowIndx,
-			offset = this.rowIndxOffset,
+		var rowIndexPage = obj.rowIndexPage,
+			rowIndex = obj.rowIndex,
+			offset = this.rowIndexOffset,
 			DM = this.options.dataModel;
 		var $tr, $tbl = this.$tbl;
 		if ($tbl != undefined) {
 			var $tbody = $tbl.children("tbody");
-			if (rowIndxPage != null) {
-				$tr = $tbody.children("tr[pq-row-indx=" + rowIndxPage + "]")
+			if (rowIndexPage != null) {
+				$tr = $tbody.children("tr[pq-row-index=" + rowIndexPage + "]")
 			} else {
-				if (rowIndx != null) {
-					$tr = $tbody.children("tr[pq-row-indx=" + (rowIndx - offset) + "]")
+				if (rowIndex != null) {
+					$tr = $tbody.children("tr[pq-row-index=" + (rowIndex - offset) + "]")
 				}
 			}
 		}
 		return $tr
 	};
 	fn.getCell = function(obj) {
-		var rowIndxPage = obj.rowIndxPage,
-			rowIndx = obj.rowIndx,
-			rowIndxPage = (rowIndxPage == null) ? (rowIndx - this.rowIndxOffset) : rowIndxPage,
-			colIndx = obj.colIndx,
-			dataIndx = obj.dataIndx,
-			colIndx = (colIndx == null) ? this.getColIndx({
-				dataIndx: dataIndx
-			}) : colIndx,
+		var rowIndexPage = obj.rowIndexPage,
+			rowIndex = obj.rowIndex,
+			rowIndexPage = (rowIndexPage == null) ? (rowIndex - this.rowIndexOffset) : rowIndexPage,
+			colIndex = obj.colIndex,
+			dataIndex = obj.dataIndex,
+			colIndex = (colIndex == null) ? this.getColIndex({
+				dataIndex: dataIndex
+			}) : colIndex,
 			$tbl = this.$tbl,
 			$td, thisOptions = this.options,
 			freezeCols = thisOptions.freezeCols;
 		if ($tbl != undefined) {
 			if ($tbl.length > 1) {
-				if (colIndx >= freezeCols) {
+				if (colIndex >= freezeCols) {
 					$tbl = $($tbl[1])
 				} else {
 					$tbl = $($tbl[0])
 				}
 			}
-			var $td = $tbl.children().children("tr[pq-row-indx=" + rowIndxPage + "]").children("td[pq-col-indx=" + colIndx + "]")
+			var $td = $tbl.children().children("tr[pq-row-index=" + rowIndexPage + "]").children("td[pq-col-index=" + colIndex + "]")
 		}
 		if ($td.length == 0 || $td[0].style.visibility == "hidden") {
 			return null
@@ -4228,23 +4271,23 @@
 		return $td
 	};
 	fn.getCellHeader = function(obj) {
-		var colIndx = obj.colIndx,
-			dataIndx = obj.dataIndx,
-			colIndx = (colIndx == null) ? this.getColIndx({
-				dataIndx: dataIndx
-			}) : colIndx,
+		var colIndex = obj.colIndex,
+			dataIndex = obj.dataIndex,
+			colIndex = (colIndex == null) ? this.getColIndex({
+				dataIndex: dataIndex
+			}) : colIndex,
 			$tbl = this.$tbl_header,
 			$td, options = this.options,
 			freezeCols = options.freezeCols;
 		if ($tbl != undefined) {
 			if ($tbl.length > 1) {
-				if (colIndx >= freezeCols) {
+				if (colIndex >= freezeCols) {
 					$tbl = $($tbl[1])
 				} else {
 					$tbl = $($tbl[0])
 				}
 			}
-			var $td = $tbl.children().children("tr:last").children("td[pq-col-indx=" + colIndx + "]")
+			var $td = $tbl.children().children("tr:last").children("td[pq-col-index=" + colIndex + "]")
 		}
 		if ($td.length == 0 || $td[0].style.visibility == "hidden") {
 			return null
@@ -4262,26 +4305,26 @@
 		}
 	};
 	fn._getEditCellData = function(obj) {
-		if (obj.colIndx == undefined || obj.rowIndxPage == undefined) {
-			throw ("colIndx, rowIndxpage N/A")
+		if (obj.colIndex == undefined || obj.rowIndexPage == undefined) {
+			throw ("colIndex, rowIndexpage N/A")
 		}
-		var colIndx = obj.colIndx,
-			rowIndxPage = obj.rowIndxPage,
-			rowIndx = (obj.rowIndx != null) ? obj.rowIndx : rowIndxPage + this.rowIndxOffset,
-			column = (obj.column) ? obj.column : this.colModel[colIndx],
+		var colIndex = obj.colIndex,
+			rowIndexPage = obj.rowIndexPage,
+			rowIndex = (obj.rowIndex != null) ? obj.rowIndex : rowIndexPage + this.rowIndexOffset,
+			column = (obj.column) ? obj.column : this.colModel[colIndex],
 			ceditor = column.editor,
 			geditor = this.options.editor,
 			editor = ceditor ? $.extend({}, geditor, ceditor) : geditor,
-			dataIndx = column.dataIndx,
+			dataIndex = column.dataIndex,
 			$cell = (obj.$cell) ? obj.$cell : this.$div_focus,
 			dataCell;
 		var getData = editor.getData;
 		if (typeof getData == "function") {
 			dataCell = editor.getData.call(this.element, {
 				$cell: $cell,
-				dataIndx: dataIndx,
-				rowIndx: rowIndx,
-				rowIndxPage: rowIndxPage,
+				dataIndex: dataIndex,
+				rowIndex: rowIndex,
+				rowIndexPage: rowIndexPage,
 				column: column
 			})
 		} else {
@@ -4297,7 +4340,7 @@
 				if (edtype == "contenteditable") {
 					dataCell = $cell.children().html()
 				} else {
-					var $ed = $cell.find('*[name="' + dataIndx + '"]');
+					var $ed = $cell.find('*[name="' + dataIndex + '"]');
 					if ($ed && $ed.length) {
 						dataCell = $ed.val()
 					} else {
@@ -4315,32 +4358,32 @@
 		var $td = objP.$td;
 		if ($td == null || $td.length == 0 || $td.closest(".pq-grid")[0] != this.element[0]) {
 			return {
-				rowIndxPage: null,
-				colIndx: null
+				rowIndexPage: null,
+				colIndex: null
 			}
 		}
 		var $tr = $td.parent("tr");
-		var rowIndxPage = $tr.attr("pq-row-indx");
-		if (rowIndxPage == null) {
+		var rowIndexPage = $tr.attr("pq-row-index");
+		if (rowIndexPage == null) {
 			return {
-				rowIndxPage: null,
-				colIndx: null
+				rowIndexPage: null,
+				colIndex: null
 			}
 		}
-		rowIndxPage = parseInt(rowIndxPage);
-		var colIndx = $td.attr("pq-col-indx");
-		if (colIndx == null) {
+		rowIndexPage = parseInt(rowIndexPage);
+		var colIndex = $td.attr("pq-col-index");
+		if (colIndex == null) {
 			return {
-				rowIndxPage: rowIndxPage,
-				colIndx: null
+				rowIndexPage: rowIndexPage,
+				colIndex: null
 			}
 		}
-		colIndx = parseInt(colIndx);
+		colIndex = parseInt(colIndex);
 		return {
-			rowIndxPage: rowIndxPage,
-			rowIndx: rowIndxPage + this.rowIndxOffset,
-			colIndx: colIndx,
-			dataIndx: this.colModel[colIndx].dataIndx
+			rowIndexPage: rowIndexPage,
+			rowIndex: rowIndexPage + this.rowIndexOffset,
+			colIndex: colIndex,
+			dataIndex: this.colModel[colIndex].dataIndex
 		}
 	};
 	fn.getRowsByClass = function(obj) {
@@ -4349,7 +4392,7 @@
 			PM = options.pageModel,
 			paging = PM.type,
 			remotePaging = (paging == "remote") ? true : false,
-			offset = this.rowIndxOffset,
+			offset = this.rowIndexOffset,
 			data = DM.data,
 			rows = [];
 		if (data == null) {
@@ -4363,9 +4406,9 @@
 					rowData: rowData
 				};
 				if (remotePaging) {
-					row.rowIndx = (i + offset)
+					row.rowIndex = (i + offset)
 				} else {
-					row.rowIndx = i
+					row.rowIndex = i
 				}
 				rows.push(row)
 			}
@@ -4373,23 +4416,23 @@
 		return rows
 	};
 	fn.addClass = function(objP) {
-		var rowIndx = objP.rowIndx,
-			dataIndx = objP.dataIndx,
+		var rowIndex = objP.rowIndex,
+			dataIndex = objP.dataIndex,
 			objcls = objP.cls,
-			offset = this.rowIndxOffset,
+			offset = this.rowIndexOffset,
 			rowData = this.getRowData(objP);
 		if (!rowData) {
 			return
 		}
-		if (rowIndx == null) {
-			rowIndx = this.getRowIndx({
+		if (rowIndex == null) {
+			rowIndex = this.getRowIndex({
 				rowData: rowData
-			}).rowIndx
+			}).rowIndex
 		}
 		var classes = objcls.split(" ");
 		for (var i = 0; i < classes.length; i++) {
 			var cls = classes[i];
-			if (dataIndx == null && this.hasClass({
+			if (dataIndex == null && this.hasClass({
 				rowData: rowData,
 				cls: cls
 			}) === false) {
@@ -4398,9 +4441,9 @@
 					rowData.pq_rowcls = $.trim(str) + " " + cls
 				} else {
 					rowData.pq_rowcls = cls
-				} if (rowIndx != null && objP.refresh !== false) {
+				} if (rowIndex != null && objP.refresh !== false) {
 					var $tr = this.getRow({
-						rowIndxPage: (rowIndx - offset)
+						rowIndexPage: (rowIndex - offset)
 					});
 					if ($tr) {
 						$tr.addClass(cls)
@@ -4409,25 +4452,25 @@
 			} else {
 				if (this.hasClass({
 					rowData: rowData,
-					dataIndx: dataIndx,
+					dataIndex: dataIndex,
 					cls: cls
 				}) === false) {
 					var objCls = rowData.pq_cellcls;
 					if (objCls) {
-						var oldCls = objCls[dataIndx];
+						var oldCls = objCls[dataIndex];
 						if (oldCls) {
-							objCls[dataIndx] = $.trim(oldCls) + " " + cls
+							objCls[dataIndex] = $.trim(oldCls) + " " + cls
 						} else {
-							objCls[dataIndx] = cls
+							objCls[dataIndex] = cls
 						}
 					} else {
 						var objCls = {};
-						objCls[dataIndx] = cls;
+						objCls[dataIndex] = cls;
 						rowData.pq_cellcls = objCls
-					} if (rowIndx != null && objP.refresh !== false) {
+					} if (rowIndex != null && objP.refresh !== false) {
 						var $td = this.getCell({
-							rowIndxPage: (rowIndx - offset),
-							dataIndx: dataIndx
+							rowIndexPage: (rowIndex - offset),
+							dataIndex: dataIndex
 						});
 						if ($td) {
 							$td.addClass(cls)
@@ -4438,27 +4481,27 @@
 		}
 	};
 	fn.removeClass = function(objP) {
-		var rowIndx = objP.rowIndx,
+		var rowIndex = objP.rowIndex,
 			rowData = this.getRowData(objP),
-			dataIndx = objP.dataIndx,
+			dataIndex = objP.dataIndex,
 			cls = objP.cls,
-			pq_cellcls = (dataIndx != null && rowData) ? rowData.pq_cellcls : null,
+			pq_cellcls = (dataIndex != null && rowData) ? rowData.pq_cellcls : null,
 			rowClass = rowData ? rowData.pq_rowcls : null;
 		if (rowData == null) {
 			return
 		}
-		if (rowIndx == null) {
-			rowIndx = this.getRowIndx({
+		if (rowIndex == null) {
+			rowIndex = this.getRowIndex({
 				rowData: rowData
-			}).rowIndx
+			}).rowIndex
 		}
-		if (dataIndx == null) {
+		if (dataIndex == null) {
 			if (rowClass) {
 				rowData.pq_rowcls = this._removeClass(rowClass, cls)
 			}
-			if (rowIndx != null && objP.refresh !== false) {
+			if (rowIndex != null && objP.refresh !== false) {
 				var $tr = this.getRow({
-					rowIndx: rowIndx
+					rowIndex: rowIndex
 				});
 				if ($tr) {
 					$tr.removeClass(cls)
@@ -4466,14 +4509,14 @@
 			}
 		} else {
 			if (pq_cellcls) {
-				var cellClass = pq_cellcls[dataIndx];
+				var cellClass = pq_cellcls[dataIndex];
 				if (cellClass) {
-					rowData.pq_cellcls[dataIndx] = this._removeClass(cellClass, cls)
+					rowData.pq_cellcls[dataIndex] = this._removeClass(cellClass, cls)
 				}
-				if (rowIndx != null && objP.refresh !== false) {
+				if (rowIndex != null && objP.refresh !== false) {
 					var $td = this.getCell({
-						rowIndx: rowIndx,
-						dataIndx: dataIndx
+						rowIndex: rowIndex,
+						dataIndex: dataIndex
 					});
 					if ($td) {
 						$td.removeClass(cls)
@@ -4483,13 +4526,13 @@
 		}
 	};
 	fn.hasClass = function(obj) {
-		var dataIndx = obj.dataIndx,
+		var dataIndex = obj.dataIndex,
 			cls = obj.cls,
 			rowData = this.getRowData(obj),
 			re = new RegExp("\\b" + cls + "\\b"),
 			str;
 		if (rowData) {
-			if (dataIndx == null) {
+			if (dataIndex == null) {
 				str = rowData.pq_rowcls;
 				if (str && re.test(str)) {
 					return true
@@ -4498,7 +4541,7 @@
 				}
 			} else {
 				var objCls = rowData.pq_cellcls;
-				if (objCls && objCls[dataIndx] && re.test(objCls[dataIndx])) {
+				if (objCls && objCls[dataIndex] && re.test(objCls[dataIndex])) {
 					return true
 				} else {
 					return false
@@ -4538,7 +4581,7 @@
 			}
 		}
 	};
-	fn.getRowIndx = function(obj) {
+	fn.getRowIndex = function(obj) {
 		var $tr = obj.$tr,
 			rowData = obj.rowData;
 		if (rowData) {
@@ -4558,12 +4601,12 @@
 				}
 			}
 			if (_found) {
-				var offset = this.rowIndxOffset,
-					rowIndxPage = (remotePaging) ? i : (i - offset),
-					rowIndx = (remotePaging) ? (i + offset) : i;
+				var offset = this.rowIndexOffset,
+					rowIndexPage = (remotePaging) ? i : (i - offset),
+					rowIndex = (remotePaging) ? (i + offset) : i;
 				return {
-					rowIndxPage: rowIndxPage,
-					rowIndx: rowIndx
+					rowIndexPage: rowIndexPage,
+					rowIndex: rowIndex
 				}
 			} else {
 				return {}
@@ -4571,19 +4614,19 @@
 		} else {
 			if ($tr == null || $tr.length == 0) {
 				return {
-					rowIndxPage: null
+					rowIndexPage: null
 				}
 			}
-			var rowIndxPage = $tr.attr("pq-row-indx");
-			if (rowIndxPage == null) {
+			var rowIndexPage = $tr.attr("pq-row-index");
+			if (rowIndexPage == null) {
 				return {
-					rowIndxPage: null
+					rowIndexPage: null
 				}
 			}
-			rowIndxPage = parseInt(rowIndxPage);
+			rowIndexPage = parseInt(rowIndexPage);
 			return {
-				rowIndxPage: rowIndxPage,
-				rowIndx: rowIndxPage + this.rowIndxOffset
+				rowIndexPage: rowIndexPage,
+				rowIndex: rowIndexPage + this.rowIndexOffset
 			}
 		}
 	};
@@ -4597,41 +4640,41 @@
 		})
 	};
 	var _pKeyNav = cKeyNav.prototype;
-	_pKeyNav._incrRowIndx = function(rowIndxPage, noRows) {
+	_pKeyNav._incrRowIndex = function(rowIndexPage, noRows) {
 		var that = this.that,
-			newRowIndx = rowIndxPage,
+			newRowIndex = rowIndexPage,
 			noRows = (noRows == null) ? 1 : noRows,
 			data = that.data,
 			counter = 0;
-		for (var i = rowIndxPage + 1, len = data.length; i < len; i++) {
+		for (var i = rowIndexPage + 1, len = data.length; i < len; i++) {
 			var hidden = data[i].pq_hidden;
 			if (!hidden) {
 				counter++;
-				newRowIndx = i;
+				newRowIndex = i;
 				if (counter == noRows) {
-					return newRowIndx
+					return newRowIndex
 				}
 			}
 		}
-		return newRowIndx
+		return newRowIndex
 	};
-	_pKeyNav._decrRowIndx = function(rowIndxPage, noRows) {
+	_pKeyNav._decrRowIndex = function(rowIndexPage, noRows) {
 		var that = this.that,
-			newRowIndx = rowIndxPage,
+			newRowIndex = rowIndexPage,
 			data = that.data,
 			noRows = (noRows == null) ? 1 : noRows,
 			counter = 0;
-		for (var i = rowIndxPage - 1; i >= 0; i--) {
+		for (var i = rowIndexPage - 1; i >= 0; i--) {
 			var hidden = data[i].pq_hidden;
 			if (!hidden) {
 				counter++;
-				newRowIndx = i;
+				newRowIndex = i;
 				if (counter == noRows) {
-					return newRowIndx
+					return newRowIndex
 				}
 			}
 		}
-		return newRowIndx
+		return newRowIndex
 	};
 	fn.addColumn = function(column, columnData) {
 		var thisOptions = this.options,
@@ -4649,227 +4692,227 @@
 			type: "row",
 			method: "getSelection"
 		}),
-			rowIndx, rowIndxPage, offset = this.rowIndxOffset;
+			rowIndex, rowIndexPage, offset = this.rowIndexOffset;
 		if (sel && sel[0]) {
-			rowIndx = sel[0].rowIndx;
-			rowIndxPage = rowIndx - offset;
-			rowIndxPage = this.iKeyNav._incrRowIndx(rowIndxPage)
+			rowIndex = sel[0].rowIndex;
+			rowIndexPage = rowIndex - offset;
+			rowIndexPage = this.iKeyNav._incrRowIndex(rowIndexPage)
 		}
-		if (rowIndxPage != null) {
+		if (rowIndexPage != null) {
 			this.setSelection(null);
 			this._setSelection({
-				rowIndxPage: rowIndxPage
+				rowIndexPage: rowIndexPage
 			})
 		}
-		return rowIndxPage
+		return rowIndexPage
 	};
 	fn.rowPrevSelect = function() {
 		var sel = this.selection({
 			type: "row",
 			method: "getSelection"
 		}),
-			rowIndx, rowIndxPage, offset = this.rowIndxOffset;
+			rowIndex, rowIndexPage, offset = this.rowIndexOffset;
 		if (sel && sel[0]) {
-			rowIndx = sel[0].rowIndx;
-			rowIndxPage = rowIndx - offset;
-			rowIndxPage = this.iKeyNav._decrRowIndx(rowIndxPage)
+			rowIndex = sel[0].rowIndex;
+			rowIndexPage = rowIndex - offset;
+			rowIndexPage = this.iKeyNav._decrRowIndex(rowIndexPage)
 		}
-		if (rowIndxPage != null) {
+		if (rowIndexPage != null) {
 			this.setSelection(null);
 			this.setSelection({
-				rowIndxPage: rowIndxPage
+				rowIndexPage: rowIndexPage
 			})
 		}
-		return rowIndxPage
+		return rowIndexPage
 	};
-	_pKeyNav._incrIndx = function(rowIndxPage, colIndx) {
+	_pKeyNav._incrIndex = function(rowIndexPage, colIndex) {
 		var that = this.that,
-			lastRowIndxPage = that._getLastVisibleRowIndxPage(that.data),
+			lastRowIndexPage = that._getLastVisibleRowIndexPage(that.data),
 			CM = that.colModel,
 			CMLength = CM.length;
-		if (colIndx == null) {
-			if (rowIndxPage == lastRowIndxPage) {
+		if (colIndex == null) {
+			if (rowIndexPage == lastRowIndexPage) {
 				return null
 			}
-			rowIndxPage = this._incrRowIndx(rowIndxPage);
+			rowIndexPage = this._incrRowIndex(rowIndexPage);
 			return {
-				rowIndxPage: rowIndxPage
+				rowIndexPage: rowIndexPage
 			}
 		}
 		var column;
 		do {
-			colIndx++;
-			if (colIndx >= CMLength) {
-				if (rowIndxPage == lastRowIndxPage) {
+			colIndex++;
+			if (colIndex >= CMLength) {
+				if (rowIndexPage == lastRowIndexPage) {
 					return null
 				}
-				rowIndxPage = this._incrRowIndx(rowIndxPage);
-				colIndx = 0
+				rowIndexPage = this._incrRowIndex(rowIndexPage);
+				colIndex = 0
 			}
-			column = CM[colIndx]
+			column = CM[colIndex]
 		} while (column && column.hidden);
 		return {
-			rowIndxPage: rowIndxPage,
-			colIndx: colIndx
+			rowIndexPage: rowIndexPage,
+			colIndex: colIndex
 		}
 	};
-	_pKeyNav._decrIndx = function(rowIndxPage, colIndx) {
+	_pKeyNav._decrIndex = function(rowIndexPage, colIndex) {
 		var that = this.that,
 			CM = that.colModel,
 			CMLength = CM.length,
-			firstRowIndxPage = that._getFirstVisibleRowIndxPage(that.data);
-		if (colIndx == null) {
-			if (rowIndxPage == firstRowIndxPage) {
+			firstRowIndexPage = that._getFirstVisibleRowIndexPage(that.data);
+		if (colIndex == null) {
+			if (rowIndexPage == firstRowIndexPage) {
 				return null
 			}
-			rowIndxPage = this._decrRowIndx(rowIndxPage);
+			rowIndexPage = this._decrRowIndex(rowIndexPage);
 			return {
-				rowIndxPage: rowIndxPage
+				rowIndexPage: rowIndexPage
 			}
 		}
 		var column;
 		do {
-			colIndx--;
-			if (colIndx < 0) {
-				if (rowIndxPage == firstRowIndxPage) {
+			colIndex--;
+			if (colIndex < 0) {
+				if (rowIndexPage == firstRowIndexPage) {
 					return null
 				}
-				rowIndxPage = this._decrRowIndx(rowIndxPage);
-				colIndx = CMLength - 1
+				rowIndexPage = this._decrRowIndex(rowIndexPage);
+				colIndex = CMLength - 1
 			}
-			column = CM[colIndx]
+			column = CM[colIndex]
 		} while (column && column.hidden);
 		return {
-			rowIndxPage: rowIndxPage,
-			colIndx: colIndx
+			rowIndexPage: rowIndexPage,
+			colIndex: colIndex
 		}
 	};
-	_pKeyNav._incrEditIndx = function(rowIndxPage, colIndx) {
+	_pKeyNav._incrEditIndex = function(rowIndexPage, colIndex) {
 		var that = this.that,
 			CM = that.colModel,
 			CMLength = CM.length,
-			column, offset = that.rowIndxOffset,
-			lastRowIndxPage = that._getLastVisibleRowIndxPage(that.data);
+			column, offset = that.rowIndexOffset,
+			lastRowIndexPage = that._getLastVisibleRowIndexPage(that.data);
 		do {
-			colIndx++;
-			if (colIndx >= CMLength) {
-				if (rowIndxPage == lastRowIndxPage) {
+			colIndex++;
+			if (colIndex >= CMLength) {
+				if (rowIndexPage == lastRowIndexPage) {
 					return null
 				}
 				do {
-					rowIndxPage = this._incrRowIndx(rowIndxPage);
-					var rowIndx = rowIndxPage + offset,
+					rowIndexPage = this._incrRowIndex(rowIndexPage);
+					var rowIndex = rowIndexPage + offset,
 						isEditableRow = that.isEditableRow({
-							rowIndx: rowIndx
+							rowIndex: rowIndex
 						});
-					if (rowIndxPage == lastRowIndxPage && isEditableRow == false) {
+					if (rowIndexPage == lastRowIndexPage && isEditableRow == false) {
 						return null
 					}
 				} while (isEditableRow == false);
-				colIndx = 0
+				colIndex = 0
 			}
-			column = CM[colIndx];
-			var rowIndx = rowIndxPage + offset,
+			column = CM[colIndex];
+			var rowIndex = rowIndexPage + offset,
 				isEditableCell = that.isEditableCell({
-					rowIndx: rowIndx,
-					colIndx: colIndx,
+					rowIndex: rowIndex,
+					colIndex: colIndex,
 					checkVisible: true
 				})
 		} while (column && (column.hidden || isEditableCell == false));
 		return {
-			rowIndxPage: rowIndxPage,
-			colIndx: colIndx
+			rowIndexPage: rowIndexPage,
+			colIndex: colIndex
 		}
 	};
-	_pKeyNav._decrEditIndx = function(rowIndxPage, colIndx) {
+	_pKeyNav._decrEditIndex = function(rowIndexPage, colIndex) {
 		var that = this.that,
 			CM = that.colModel,
 			CMLength = CM.length,
-			column, offset = that.rowIndxOffset,
-			firstRowIndxPage = that._getFirstVisibleRowIndxPage(that.data);
+			column, offset = that.rowIndexOffset,
+			firstRowIndexPage = that._getFirstVisibleRowIndexPage(that.data);
 		do {
-			colIndx--;
-			if (colIndx < 0) {
-				if (rowIndxPage == firstRowIndxPage) {
+			colIndex--;
+			if (colIndex < 0) {
+				if (rowIndexPage == firstRowIndexPage) {
 					return null
 				}
 				do {
-					rowIndxPage = this._decrRowIndx(rowIndxPage);
-					var rowIndx = rowIndxPage + offset,
+					rowIndexPage = this._decrRowIndex(rowIndexPage);
+					var rowIndex = rowIndexPage + offset,
 						isEditableRow = that.isEditableRow({
-							rowIndx: rowIndx
+							rowIndex: rowIndex
 						});
-					if (rowIndxPage == firstRowIndxPage && isEditableRow == false) {
+					if (rowIndexPage == firstRowIndexPage && isEditableRow == false) {
 						return null
 					}
 				} while (isEditableRow == false);
-				colIndx = CMLength - 1
+				colIndex = CMLength - 1
 			}
-			column = CM[colIndx];
-			var rowIndx = rowIndxPage + offset,
+			column = CM[colIndex];
+			var rowIndex = rowIndexPage + offset,
 				isEditableCell = that.isEditableCell({
-					rowIndx: rowIndx,
-					colIndx: colIndx,
+					rowIndex: rowIndex,
+					colIndex: colIndex,
 					checkVisible: true
 				})
 		} while (column && (column.hidden || isEditableCell == false));
 		return {
-			rowIndxPage: rowIndxPage,
-			colIndx: colIndx
+			rowIndexPage: rowIndexPage,
+			colIndex: colIndex
 		}
 	};
-	_pKeyNav._incrEditRowIndx = function(rowIndxPage, colIndx) {
+	_pKeyNav._incrEditRowIndex = function(rowIndexPage, colIndex) {
 		var that = this.that,
-			offset = that.rowIndxOffset,
-			lastRowIndxPage = that._getLastVisibleRowIndxPage(that.data);
-		if (rowIndxPage == lastRowIndxPage) {
+			offset = that.rowIndexOffset,
+			lastRowIndexPage = that._getLastVisibleRowIndexPage(that.data);
+		if (rowIndexPage == lastRowIndexPage) {
 			return null
 		}
 		do {
-			rowIndxPage = this._incrRowIndx(rowIndxPage);
-			var rowIndx = rowIndxPage + offset,
+			rowIndexPage = this._incrRowIndex(rowIndexPage);
+			var rowIndex = rowIndexPage + offset,
 				isEditableRow = that.isEditableRow({
-					rowIndx: rowIndx
+					rowIndex: rowIndex
 				}),
 				isEditableCell = that.isEditableCell({
-					rowIndx: rowIndx,
-					colIndx: colIndx
+					rowIndex: rowIndex,
+					colIndex: colIndex
 				}),
 				isEditable = (isEditableRow && isEditableCell);
-			if (rowIndxPage == lastRowIndxPage && !isEditable) {
+			if (rowIndexPage == lastRowIndexPage && !isEditable) {
 				return null
 			}
 		} while (!isEditable);
 		return {
-			rowIndxPage: rowIndxPage,
-			colIndx: colIndx
+			rowIndexPage: rowIndexPage,
+			colIndex: colIndex
 		}
 	};
-	_pKeyNav._decrEditRowIndx = function(rowIndxPage, colIndx) {
+	_pKeyNav._decrEditRowIndex = function(rowIndexPage, colIndex) {
 		var that = this.that,
-			offset = that.rowIndxOffset,
-			firstRowIndxPage = that._getFirstVisibleRowIndxPage(that.data);
-		if (rowIndxPage == firstRowIndxPage) {
+			offset = that.rowIndexOffset,
+			firstRowIndexPage = that._getFirstVisibleRowIndexPage(that.data);
+		if (rowIndexPage == firstRowIndexPage) {
 			return null
 		}
 		do {
-			rowIndxPage = this._decrRowIndx(rowIndxPage);
-			var rowIndx = rowIndxPage + offset,
+			rowIndexPage = this._decrRowIndex(rowIndexPage);
+			var rowIndex = rowIndexPage + offset,
 				isEditableRow = that.isEditableRow({
-					rowIndx: rowIndx
+					rowIndex: rowIndex
 				}),
 				isEditableCell = that.isEditableCell({
-					rowIndx: rowIndx,
-					colIndx: colIndx
+					rowIndex: rowIndex,
+					colIndex: colIndex
 				}),
 				isEditable = (isEditableRow && isEditableCell);
-			if (rowIndxPage == firstRowIndxPage && !isEditable) {
+			if (rowIndexPage == firstRowIndexPage && !isEditable) {
 				return null
 			}
 		} while (!isEditable);
 		return {
-			rowIndxPage: rowIndxPage,
-			colIndx: colIndx
+			rowIndexPage: rowIndexPage,
+			colIndex: colIndex
 		}
 	};
 	fn._onKeyPressDown = function(evt) {
@@ -4908,37 +4951,37 @@
 			evt.preventDefault();
 			return false
 		}
-		var rowIndxPage = obj.rowIndxPage,
-			colIndx = obj.colIndx;
+		var rowIndexPage = obj.rowIndexPage,
+			colIndex = obj.colIndex;
 		if (SM.type == "row") {
 			that.setSelection(null);
 			that.setSelection({
-				rowIndxPage: rowIndxPage
+				rowIndexPage: rowIndexPage
 			});
 			that._bringCellToView({
-				rowIndxPage: rowIndxPage,
-				colIndx: colIndx
+				rowIndexPage: rowIndexPage,
+				colIndex: colIndex
 			})
 		} else {
 			if (SM.type == "cell") {
 				that.setSelection(null);
 				that.setSelection({
-					rowIndxPage: rowIndxPage,
-					colIndx: colIndx
+					rowIndexPage: rowIndexPage,
+					colIndex: colIndex
 				})
 			} else {
 				that.scrollRow({
-					rowIndxPage: rowIndxPage
+					rowIndexPage: rowIndexPage
 				});
 				that._bringCellToView({
-					rowIndxPage: rowIndxPage,
-					colIndx: colIndx
+					rowIndexPage: rowIndexPage,
+					colIndex: colIndex
 				})
 			}
 		}
 		var $td2 = that.getCell({
-			rowIndxPage: rowIndxPage,
-			colIndx: colIndx
+			rowIndexPage: rowIndexPage,
+			colIndex: colIndex
 		});
 		if ($td2 && $td2.length > 0) {
 			that._editCell($td2)
@@ -4952,7 +4995,7 @@
 			return
 		}
 		var thisOptions = this.options,
-			offset = that.rowIndxOffset,
+			offset = that.rowIndexOffset,
 			keyCodes = $.ui.keyCode,
 			CM = that.colModel,
 			gEM = thisOptions.editModel,
@@ -4960,20 +5003,20 @@
 			obj = that.getCellIndices({
 				$td: $td
 			}),
-			rowIndxPage = obj.rowIndxPage,
-			rowIndx = rowIndxPage + offset,
-			colIndx = obj.colIndx,
-			column = CM[colIndx],
+			rowIndexPage = obj.rowIndexPage,
+			rowIndex = rowIndexPage + offset,
+			colIndex = obj.colIndex,
+			column = CM[colIndex],
 			cEM = column.editModel,
 			EM = cEM ? $.extend({}, gEM, cEM) : gEM;
 		if (that._trigger("cellEditKeyDown", evt, {
-			rowData: that.data[rowIndxPage],
+			rowData: that.data[rowIndexPage],
 			$cell: that.$div_focus,
-			rowIndx: rowIndx,
-			rowIndxPage: rowIndxPage,
-			colIndx: colIndx,
+			rowIndex: rowIndex,
+			rowIndexPage: rowIndexPage,
+			colIndex: colIndex,
 			$td: $td,
-			dataIndx: column.dataIndx,
+			dataIndex: column.dataIndex,
 			column: column
 		}) == false) {
 			return false
@@ -4981,14 +5024,14 @@
 		if (evt.keyCode == keyCodes.TAB) {
 			var obj;
 			if (evt.shiftKey) {
-				obj = this._decrEditIndx(rowIndxPage, colIndx)
+				obj = this._decrEditIndex(rowIndexPage, colIndex)
 			} else {
-				obj = this._incrEditIndx(rowIndxPage, colIndx)
+				obj = this._incrEditIndex(rowIndexPage, colIndex)
 			}
 			return this._saveAndMove(obj, evt)
 		} else {
 			if (evt.keyCode == EM.saveKey) {
-				var obj = this._incrEditIndx(rowIndxPage, colIndx);
+				var obj = this._incrEditIndex(rowIndexPage, colIndex);
 				return this._saveAndMove(obj, evt)
 			} else {
 				if (evt.keyCode == keyCodes.ESCAPE) {
@@ -5004,11 +5047,11 @@
 					} else {
 						if (EM.keyUpDown) {
 							if (evt.keyCode == keyCodes.DOWN) {
-								var obj = this._incrEditRowIndx(rowIndxPage, colIndx);
+								var obj = this._incrEditRowIndex(rowIndexPage, colIndex);
 								return this._saveAndMove(obj, evt)
 							} else {
 								if (evt.keyCode == keyCodes.UP) {
-									var obj = this._decrEditRowIndx(rowIndxPage, colIndx);
+									var obj = this._decrEditRowIndex(rowIndexPage, colIndex);
 									return this._saveAndMove(obj, evt)
 								}
 							}
@@ -5051,36 +5094,36 @@
 	};
 	_pKeyNav.select = function(objP) {
 		var that = this.that,
-			rowIndx = objP.rowIndx,
-			colIndx = objP.colIndx,
+			rowIndex = objP.rowIndex,
+			colIndex = objP.colIndex,
 			SM = that.options.selectionModel,
 			evt = objP.evt;
 		if (evt.shiftKey && SM.mode != "single") {
 			if (SM.type == "row") {
 				that.scrollRow({
-					rowIndx: rowIndx
+					rowIndex: rowIndex
 				});
 				that.iRows.extendSelection({
-					rowIndx: rowIndx,
+					rowIndex: rowIndex,
 					evt: evt
 				})
 			} else {
 				if (SM.type == "cell") {
 					that.scrollCell({
-						rowIndx: rowIndx,
-						colIndx: colIndx
+						rowIndex: rowIndex,
+						colIndex: colIndex
 					});
 					that.iCells.extendSelection({
-						rowIndx: rowIndx,
-						colIndx: colIndx,
+						rowIndex: rowIndex,
+						colIndex: colIndex,
 						evt: evt
 					})
 				}
 			}
 		} else {
 			that.setSelection({
-				rowIndx: rowIndx,
-				colIndx: colIndx,
+				rowIndex: rowIndex,
+				colIndex: colIndex,
 				evt: evt,
 				setFirst: true
 			})
@@ -5095,11 +5138,11 @@
 	_pKeyNav._bodyKeyPressDown = function(evt) {
 		var that = this.that,
 			self = this,
-			cellLastSel, rowLastSel, offset = that.rowIndxOffset,
+			cellLastSel, rowLastSel, offset = that.rowIndexOffset,
 			thisOptions = this.options,
 			CM = that.colModel,
 			SM = thisOptions.selectionModel,
-			rowIndx, colIndx;
+			rowIndex, colIndex;
 		var keyCodes = $.ui.keyCode;
 		if (that.$td_edit) {
 			that.$td_edit.find(".pq-cell-focus").focus();
@@ -5117,15 +5160,15 @@
 				} if (rowLastSel == null) {
 					return
 				}
-				var rowIndx = rowLastSel.rowIndx,
-					rowIndxPage = rowIndx - offset;
-				if (rowIndx == null) {
+				var rowIndex = rowLastSel.rowIndex,
+					rowIndexPage = rowIndex - offset;
+				if (rowIndex == null) {
 					return
 				}
 				if (that._trigger("rowKeyDown", evt, {
-					rowData: that.data[rowIndxPage],
-					rowIndx: rowIndx,
-					rowIndxPage: rowIndxPage
+					rowData: that.data[rowIndexPage],
+					rowIndex: rowIndex,
+					rowIndexPage: rowIndexPage
 				}) == false) {
 					return false
 				}
@@ -5143,22 +5186,22 @@
 						return
 					}
 					var obj = cellLastSel,
-						rowIndx = obj.rowIndx,
-						rowIndxPage = rowIndx - offset,
-						dataIndx = obj.dataIndx,
-						colIndx = that.getColIndx({
-							dataIndx: dataIndx
+						rowIndex = obj.rowIndex,
+						rowIndexPage = rowIndex - offset,
+						dataIndex = obj.dataIndex,
+						colIndex = that.getColIndex({
+							dataIndex: dataIndex
 						});
-					if (rowIndx == null || colIndx == null) {
+					if (rowIndex == null || colIndex == null) {
 						return
 					}
 					if (that._trigger("cellKeyDown", evt, {
-						rowData: that.data[rowIndxPage],
-						rowIndx: rowIndx,
-						rowIndxPage: rowIndxPage,
-						colIndx: colIndx,
-						dataIndx: dataIndx,
-						column: CM[colIndx]
+						rowData: that.data[rowIndexPage],
+						rowIndex: rowIndex,
+						rowIndexPage: rowIndexPage,
+						colIndex: colIndex,
+						dataIndex: dataIndex,
+						column: CM[colIndex]
 					}) == false) {
 						return false
 					}
@@ -5170,12 +5213,12 @@
 				}
 			}
 		} if (evt.keyCode == keyCodes.LEFT) {
-			var obj = this._decrIndx(rowIndxPage, colIndx);
+			var obj = this._decrIndex(rowIndexPage, colIndex);
 			if (obj) {
-				rowIndx = obj.rowIndxPage + offset;
+				rowIndex = obj.rowIndexPage + offset;
 				this.select({
-					rowIndx: rowIndx,
-					colIndx: obj.colIndx,
+					rowIndex: rowIndex,
+					colIndex: obj.colIndex,
 					evt: evt
 				})
 			}
@@ -5183,12 +5226,12 @@
 			return
 		} else {
 			if (evt.keyCode == keyCodes.RIGHT) {
-				var obj = this._incrIndx(rowIndxPage, colIndx);
+				var obj = this._incrIndex(rowIndexPage, colIndex);
 				if (obj) {
-					rowIndx = obj.rowIndxPage + offset;
+					rowIndex = obj.rowIndexPage + offset;
 					this.select({
-						rowIndx: rowIndx,
-						colIndx: obj.colIndx,
+						rowIndex: rowIndex,
+						colIndex: obj.colIndex,
 						evt: evt
 					})
 				}
@@ -5196,12 +5239,12 @@
 				return
 			} else {
 				if (evt.keyCode == keyCodes.UP) {
-					rowIndxPage = this._decrRowIndx(rowIndxPage);
-					if (rowIndxPage != null) {
-						rowIndx = rowIndxPage + offset;
+					rowIndexPage = this._decrRowIndex(rowIndexPage);
+					if (rowIndexPage != null) {
+						rowIndex = rowIndexPage + offset;
 						this.select({
-							rowIndx: rowIndx,
-							colIndx: colIndx,
+							rowIndex: rowIndex,
+							colIndex: colIndex,
 							evt: evt
 						})
 					}
@@ -5209,12 +5252,12 @@
 					return
 				} else {
 					if (evt.keyCode == keyCodes.DOWN) {
-						rowIndxPage = this._incrRowIndx(rowIndxPage);
-						if (rowIndxPage != null) {
-							rowIndx = rowIndxPage + offset;
+						rowIndexPage = this._incrRowIndex(rowIndexPage);
+						if (rowIndexPage != null) {
+							rowIndex = rowIndexPage + offset;
 							this.select({
-								rowIndx: rowIndx,
-								colIndx: colIndx,
+								rowIndex: rowIndex,
+								colIndex: colIndex,
 								evt: evt
 							})
 						}
@@ -5224,12 +5267,12 @@
 						if (evt.keyCode == keyCodes.PAGE_DOWN || evt.keyCode == keyCodes.SPACE) {
 							var objPageDown = this.pageDown();
 							if (objPageDown) {
-								rowIndxPage = objPageDown.rowIndxPage;
-								if (rowIndxPage != null) {
-									rowIndx = rowIndxPage + offset;
+								rowIndexPage = objPageDown.rowIndexPage;
+								if (rowIndexPage != null) {
+									rowIndex = rowIndexPage + offset;
 									this.select({
-										rowIndx: rowIndx,
-										colIndx: colIndx,
+										rowIndex: rowIndex,
+										colIndex: colIndex,
 										evt: evt
 									})
 								}
@@ -5240,12 +5283,12 @@
 							if (evt.keyCode == keyCodes.PAGE_UP) {
 								var objPageUp = this.pageUp();
 								if (objPageUp) {
-									rowIndxPage = objPageUp.rowIndxPage;
-									if (rowIndxPage != null) {
-										rowIndx = rowIndxPage + offset;
+									rowIndexPage = objPageUp.rowIndexPage;
+									if (rowIndexPage != null) {
+										rowIndex = rowIndexPage + offset;
 										this.select({
-											rowIndx: rowIndx,
-											colIndx: colIndx,
+											rowIndex: rowIndex,
+											colIndex: colIndex,
 											evt: evt
 										})
 									}
@@ -5255,18 +5298,18 @@
 							} else {
 								if (evt.keyCode == keyCodes.HOME) {
 									if (SM.type == "row" || evt.ctrlKey) {
-										rowIndx = that._getFirstVisibleRowIndxPage(that.data) + offset;
+										rowIndex = that._getFirstVisibleRowIndexPage(that.data) + offset;
 										this.select({
-											rowIndx: rowIndx,
-											colIndx: colIndx,
+											rowIndex: rowIndex,
+											colIndex: colIndex,
 											evt: evt
 										})
 									} else {
 										if (SM.type == "cell") {
-											colIndx = that._getFirstVisibleColIndx();
+											colIndex = that._getFirstVisibleColIndex();
 											this.select({
-												rowIndx: rowIndx,
-												colIndx: colIndx,
+												rowIndex: rowIndex,
+												colIndex: colIndex,
 												evt: evt
 											})
 										}
@@ -5276,18 +5319,18 @@
 								} else {
 									if (evt.keyCode == keyCodes.END) {
 										if (SM.type == "row" || evt.ctrlKey) {
-											rowIndx = that._getLastVisibleRowIndxPage(that.data) + offset;
+											rowIndex = that._getLastVisibleRowIndexPage(that.data) + offset;
 											this.select({
-												rowIndx: rowIndx,
-												colIndx: colIndx,
+												rowIndex: rowIndex,
+												colIndex: colIndex,
 												evt: evt
 											})
 										} else {
 											if (SM.type == "cell") {
-												colIndx = that._getLastVisibleColIndx();
+												colIndex = that._getLastVisibleColIndex();
 												this.select({
-													rowIndx: rowIndx,
-													colIndx: colIndx,
+													rowIndex: rowIndex,
+													colIndex: colIndex,
 													evt: evt
 												})
 											}
@@ -5300,23 +5343,23 @@
 												var $tr, $td;
 												if (rowLastSel != null) {
 													that.editFirstCellInRow({
-														rowIndx: rowIndxPage + offset
+														rowIndex: rowIndexPage + offset
 													})
 												}
 											} else {
 												if (cellLastSel != null) {
 													var $td = that.getCell({
-														rowIndxPage: rowIndxPage,
-														colIndx: colIndx
+														rowIndexPage: rowIndexPage,
+														colIndex: colIndex
 													});
 													if ($td && $td.length > 0) {
-														var rowIndx = rowIndxPage + offset,
+														var rowIndex = rowIndexPage + offset,
 															isEditableRow = that.isEditableRow({
-																rowIndx: rowIndx
+																rowIndex: rowIndex
 															}),
 															isEditableCell = that.isEditableCell({
-																rowIndx: rowIndx,
-																colIndx: colIndx
+																rowIndex: rowIndex,
+																colIndex: colIndex
 															});
 														if (isEditableRow && isEditableCell) {
 															that._editCell($td)
@@ -5366,17 +5409,17 @@
 				break
 			}
 		}
-		var rowIndxPage = that.getRowIndx({
+		var rowIndexPage = that.getRowIndex({
 			$tr: $(tr)
-		}).rowIndxPage;
+		}).rowIndexPage;
 		return {
-			rowIndxPage: rowIndxPage
+			rowIndexPage: rowIndexPage
 		}
 	};
 	_pKeyNav.pageDown = function() {
 		var that = this.that,
-			rowIndxPage = this.incrPageSize().rowIndxPage,
-			calcCurPos = that._calcCurPosFromRowIndxPage(rowIndxPage);
+			rowIndexPage = this.incrPageSize().rowIndexPage,
+			calcCurPos = that._calcCurPosFromRowIndexPage(rowIndexPage);
 		if (calcCurPos == null) {
 			return
 		}
@@ -5387,14 +5430,14 @@
 			that.$vscroll.pqScrollBar("option", "cur_pos", calcCurPos).pqScrollBar("scroll")
 		}
 		return {
-			rowIndxPage: rowIndxPage,
+			rowIndexPage: rowIndexPage,
 			curPos: calcCurPos
 		}
 	};
 	_pKeyNav.pageUp = function() {
 		var that = this.that,
-			rowIndxPage = this.decrPageSize().rowIndxPage,
-			calcCurPos = that._calcCurPosFromRowIndxPage(rowIndxPage);
+			rowIndexPage = this.decrPageSize().rowIndexPage,
+			calcCurPos = that._calcCurPosFromRowIndexPage(rowIndexPage);
 		if (calcCurPos == null) {
 			return
 		}
@@ -5405,7 +5448,7 @@
 			that.$vscroll.pqScrollBar("option", "cur_pos", calcCurPos).pqScrollBar("scroll")
 		}
 		return {
-			rowIndxPage: rowIndxPage,
+			rowIndexPage: rowIndexPage,
 			curPos: calcCurPos
 		}
 	};
@@ -5414,7 +5457,7 @@
 			$tbl = that.$tbl,
 			$trs = $tbl.children("tbody").children("tr.pq-grid-row").not(".pq-group-row,.pq-summary-row"),
 			freezeRows = that.options.freezeRows,
-			rowIndxPage = 0;
+			rowIndexPage = 0;
 		if ($trs.length) {
 			var $tr, tr;
 			if (freezeRows) {
@@ -5427,17 +5470,17 @@
 					$tr = $($trs[1])
 				}
 			} if ($tr && $tr.length) {
-				var rowIndxPage = that.getRowIndx({
+				var rowIndexPage = that.getRowIndex({
 					$tr: $tr
-				}).rowIndxPage;
-				rowIndxPage = rowIndxPage - that.pageSize + 4;
-				if (rowIndxPage < 0) {
-					rowIndxPage = 0
+				}).rowIndexPage;
+				rowIndexPage = rowIndexPage - that.pageSize + 4;
+				if (rowIndexPage < 0) {
+					rowIndexPage = 0
 				}
 			}
 		}
 		return {
-			rowIndxPage: rowIndxPage
+			rowIndexPage: rowIndexPage
 		}
 	};
 	fn._calcNumHiddenFrozens = function() {
@@ -5450,10 +5493,10 @@
 		}
 		return num_hidden
 	};
-	fn._calcNumHiddenUnFrozens = function(colIndx) {
+	fn._calcNumHiddenUnFrozens = function(colIndex) {
 		var num_hidden = 0,
 			freezeCols = this.options.freezeCols;
-		var len = (colIndx != null) ? colIndx : this.colModel.length;
+		var len = (colIndex != null) ? colIndex : this.colModel.length;
 		for (var i = freezeCols; i < len; i++) {
 			if (this.colModel[i].hidden) {
 				num_hidden++
@@ -5609,7 +5652,7 @@
 		}
 		return num_eles
 	};
-	fn._getFirstVisibleRowIndxPage = function(data) {
+	fn._getFirstVisibleRowIndexPage = function(data) {
 		for (var i = 0, len = data.length; i < len; i++) {
 			var hidden = data[i].pq_hidden;
 			if (!hidden) {
@@ -5617,7 +5660,7 @@
 			}
 		}
 	};
-	fn._getLastVisibleRowIndxPage = function(data) {
+	fn._getLastVisibleRowIndexPage = function(data) {
 		for (var i = data.length - 1; i >= 0; i--) {
 			var hidden = data[i].pq_hidden;
 			if (!hidden) {
@@ -5626,7 +5669,7 @@
 		}
 		return null
 	};
-	fn._getFirstVisibleColIndx = function() {
+	fn._getFirstVisibleColIndex = function() {
 		var CM = this.colModel,
 			CMLength = CM.length;
 		for (var i = 0; i < CMLength; i++) {
@@ -5637,7 +5680,7 @@
 		}
 		return null
 	};
-	fn._getLastVisibleColIndx = function() {
+	fn._getLastVisibleColIndex = function() {
 		var CM = this.colModel,
 			CMLength = CM.length;
 		for (var i = CMLength - 1; i >= 0; i--) {
@@ -5839,12 +5882,12 @@
 		var ht = this.$cont[0].offsetHeight;
 		return Math.ceil(ht / this.rowHeight)
 	};
-	fn._calcCurPosFromRowIndxPage = function(rowIndxPage) {
+	fn._calcCurPosFromRowIndexPage = function(rowIndexPage) {
 		var thisOptions = this.options,
 			GM = thisOptions.groupModel,
 			data = GM ? this.dataGM : this.data,
 			freezeRows = thisOptions.freezeRows;
-		if (rowIndxPage < freezeRows) {
+		if (rowIndexPage < freezeRows) {
 			return 0
 		}
 		var cur_pos = 0,
@@ -5852,7 +5895,7 @@
 		for (var i = freezeRows, len = data.length; i < len; i++) {
 			var rowData = data[i];
 			if (GM && (rowData.groupSummary || rowData.groupTitle)) {} else {
-				if (j == rowIndxPage) {
+				if (j == rowIndexPage) {
 					break
 				}
 				j++
@@ -5908,7 +5951,7 @@
 			flexWidth = options.flexWidth,
 			virtualX = options.virtualX,
 			initH = freezeCols,
-			indx = 0,
+			index = 0,
 			CM = this.colModel,
 			outerWidths = this.outerWidths,
 			CMLength = CM.length;
@@ -5916,11 +5959,11 @@
 			if (CM[i].hidden) {
 				initH++
 			} else {
-				if (indx == cur_pos) {
+				if (index == cur_pos) {
 					break
 				} else {
 					initH++;
-					indx++
+					index++
 				}
 			}
 		}
@@ -5953,14 +5996,14 @@
 			this.finalH = finalH
 		}
 	};
-	var calcWidthCols = function(colIndx1, colIndx2, _direct) {
+	var calcWidthCols = function(colIndex1, colIndex2, _direct) {
 		var wd = 0,
 			options = this.options,
 			columnBorders = options.columnBorders,
 			numberCell = options.numberCell,
 			outerWidths = this.outerWidths,
 			CM = this.colModel;
-		if (colIndx1 == -1) {
+		if (colIndex1 == -1) {
 			if (numberCell.show) {
 				if (_direct) {
 					wd += parseInt(numberCell.width) + 1
@@ -5968,10 +6011,10 @@
 					wd += this.numberCell_outerWidth
 				}
 			}
-			colIndx1 = 0
+			colIndex1 = 0
 		}
 		if (_direct) {
-			for (var i = colIndx1; i < colIndx2; i++) {
+			for (var i = colIndex1; i < colIndex2; i++) {
 				var column = CM[i],
 					hidden = column.hidden;
 				if (!hidden) {
@@ -5979,7 +6022,7 @@
 				}
 			}
 		} else {
-			for (var i = colIndx1; i < colIndx2; i++) {
+			for (var i = colIndex1; i < colIndex2; i++) {
 				if (!CM[i].hidden) {
 					wd += outerWidths[i]
 				}
@@ -5988,15 +6031,15 @@
 		return wd
 	};
 	$.paramquery.pqgrid.calcWidthCols = calcWidthCols;
-	fn._calcHeightRows = function(rowIndx1, rowIndx2) {
+	fn._calcHeightRows = function(rowIndex1, rowIndex2) {
 		var ht = 0;
-		var row = rowIndx1;
+		var row = rowIndex1;
 		do {
-			if (row >= rowIndx2) {
+			if (row >= rowIndex2) {
 				break
 			}
 			var $tr = this.getRow({
-				rowIndxPage: row
+				rowIndexPage: row
 			});
 			if ($tr && $tr[0]) {
 				ht += $tr[0].offsetHeight
@@ -6005,7 +6048,7 @@
 		} while (1 == 1);
 		return ht
 	};
-	fn._calcRightEdgeCol = function(colIndx) {
+	fn._calcRightEdgeCol = function(colIndex) {
 		var wd = 0,
 			cols = 0,
 			CM = this.colModel,
@@ -6016,7 +6059,7 @@
 			wd += this.numberCell_outerWidth;
 			cols++
 		}
-		for (var i = 0; i <= colIndx; i++) {
+		for (var i = 0; i <= colIndex; i++) {
 			if (!CM[i].hidden && hidearrHS[i] == false) {
 				wd += outerWidths[i];
 				cols++
@@ -6053,12 +6096,12 @@
 		var $target = $(evt.currentTarget);
 		this.$cl = $("<div class='pq-grid-drag-bar'></div>").appendTo(this.$grid_inner);
 		this.$clleft = $("<div class='pq-grid-drag-bar'></div>").appendTo(this.$grid_inner);
-		var indx = parseInt($target.attr("pq-grid-col-indx"));
+		var index = parseInt($target.attr("pq-grid-col-index"));
 		var ht = this.$grid_inner.outerHeight();
 		this.$cl.height(ht);
 		this.$clleft.height(ht);
-		var ele = $("td[pq-grid-col-indx=" + indx + "]", this.$header)[0];
-		var lft = ele.offsetLeft + ((indx > this.options.freezeCols) ? parseInt(this.$header[1].offsetLeft) : 0);
+		var ele = $("td[pq-grid-col-index=" + index + "]", this.$header)[0];
+		var lft = ele.offsetLeft + ((index > this.options.freezeCols) ? parseInt(this.$header[1].offsetLeft) : 0);
 		this.$clleft.css({
 			left: lft
 		});
@@ -6067,18 +6110,18 @@
 			left: lft
 		})
 	};
-	fn._setDragLimits = function(indx) {
+	fn._setDragLimits = function(index) {
 		var that = this,
 			thisOptions = this.options,
 			numberCell = thisOptions.numberCell;
 		var $head = that.$header_left;
-		if (indx >= thisOptions.freezeCols) {
+		if (index >= thisOptions.freezeCols) {
 			$head = that.$header_right
 		}
-		var $pQuery_drag = $head.find("div.pq-grid-col-resize-handle[pq-grid-col-indx=" + indx + "]");
-		var $pQuery_col = $head.find("td[pq-grid-col-indx='" + indx + "']");
+		var $pQuery_drag = $head.find("div.pq-grid-col-resize-handle[pq-grid-col-index=" + index + "]");
+		var $pQuery_col = $head.find("td[pq-grid-col-index='" + index + "']");
 		var cont_left = $pQuery_col.offset().left + thisOptions.minWidth;
-		if (indx == -1) {
+		if (index == -1) {
 			cont_left = $pQuery_col.offset().left + numberCell.minWidth
 		}
 		var wdSB = 17;
@@ -6088,12 +6131,12 @@
 		var cont_right = that.$cont.offset().left + that.$cont[0].offsetWidth - wdSB + 20;
 		$pQuery_drag.draggable("option", "containment", [cont_left, 0, cont_right, 0])
 	};
-	fn._getOrderIndx = function(indx) {
+	fn._getOrderIndex = function(index) {
 		var columnOrder = this.options.columnOrder;
 		if (columnOrder != null) {
-			return columnOrder[indx]
+			return columnOrder[index]
 		} else {
-			return indx
+			return index
 		}
 	};
 	fn.nestedCols = function(colMarr, _depth, _hidden) {
@@ -6199,11 +6242,11 @@
 	fn.getDataType = function() {
 		var CM = this.colModel;
 		if (CM && CM[0]) {
-			var dataIndx = CM[0].dataIndx;
-			if (typeof dataIndx == "string") {
+			var dataIndex = CM[0].dataIndex;
+			if (typeof dataIndex == "string") {
 				return "JSON"
 			} else {
-				if (typeof dataIndx == "number") {
+				if (typeof dataIndex == "number") {
 					return "ARRAY"
 				}
 			}
@@ -6267,7 +6310,7 @@
 					if (availWd > 0 || diff < 0) {
 						availWds.push({
 							availWd: availWd,
-							colIndx: i
+							colIndex: i
 						})
 					}
 				}
@@ -6286,9 +6329,9 @@
 			for (var i = 0, len = availWds.length; i < len; i++) {
 				var obj = availWds[i],
 					availWd = obj.availWd,
-					colIndx = obj.colIndx,
+					colIndex = obj.colIndex,
 					part = Math.round(diff / (len - i)),
-					column = CM[colIndx],
+					column = CM[colIndex],
 					colWd = column.width;
 				if (availWd > part) {
 					var wd = colWd - part;
@@ -6348,11 +6391,11 @@
 				var wd1 = calcWidthCols.call(this, -1, freezeCols, true);
 				var rem = wdCont - wd1,
 					_found = false,
-					lastColIndx = this._getLastVisibleColIndx();
-				if (lastColIndx == null) {
+					lastColIndex = this._getLastVisibleColIndex();
+				if (lastColIndex == null) {
 					return
 				}
-				var lastColumn = CM[lastColIndx],
+				var lastColumn = CM[lastColIndex],
 					lastColWd = parseInt(lastColumn.width),
 					lastColMinWidth = lastColumn.minWidth,
 					lastColMinWidth = (lastColMinWidth ? parseInt(lastColMinWidth) : minWidth);
@@ -6436,7 +6479,7 @@
 		for (var row = 0; row < depth; row++) {
 			buffer.push("<tr class='pq-grid-title-row'>");
 			if (row == 0 && numberCell.show) {
-				buffer.push(["<td pq-grid-col-indx='-1' class='pq-grid-number-col' rowspan='", depth, "'>", "<div class='pq-td-div'>", numberCell.title ? numberCell.title : "&nbsp;", "</div></td>"].join(""))
+				buffer.push(["<td pq-grid-col-index='-1' class='pq-grid-number-col' rowspan='", depth, "'>", "<div class='pq-td-div'>", numberCell.title ? numberCell.title : "&nbsp;", "</div></td>"].join(""))
 			}
 			for (var col = 0; col <= finalH; col++) {
 				if (col < initH && col >= freezeCols && virtualX) {
@@ -6478,14 +6521,14 @@
 						cls += " pq-right-col"
 					}
 				}
-				var colIndx = "",
-					dataIndx = "";
+				var colIndex = "",
+					dataIndex = "";
 				if (column.colModel == null || column.colModel.length == 0) {
-					colIndx = "pq-grid-col-indx='" + col + "'"
+					colIndex = "pq-grid-col-index='" + col + "'"
 				}
-				var rowIndxDD = "pq-row-indx=" + row;
-				var colIndxDD = "pq-col-indx=" + col;
-				buffer.push(["<td ", colIndx, " ", colIndxDD, " ", rowIndxDD, " ", dataIndx, " class='", cls, "' rowspan=", column.rowSpan, " colspan=", colSpan, ">                    <div class='pq-td-div'>", title, "<span class='pq-col-sort-icon'>&nbsp;</span></div></td>"].join(""))
+				var rowIndexDD = "pq-row-index=" + row;
+				var colIndexDD = "pq-col-index=" + col;
+				buffer.push(["<td ", colIndex, " ", colIndexDD, " ", rowIndexDD, " ", dataIndex, " class='", cls, "' rowspan=", column.rowSpan, " colspan=", colSpan, ">                    <div class='pq-td-div'>", title, "<span class='pq-col-sort-icon'>&nbsp;</span></div></td>"].join(""))
 			}
 			buffer.push("</tr>")
 		}
@@ -6515,21 +6558,21 @@
 			var $target = $(evt.target),
 				$div = $target.closest(".pq-g-ficon");
 			if ($div.length) {
-				var colIndx = $div.attr("pq-col-indx");
+				var colIndex = $div.attr("pq-col-index");
 				evt.stopImmediatePropagation();
-				return that.iHeaderIconSearch.createDOM(colIndx, $div, evt)
+				return that.iHeaderIconSearch.createDOM(colIndex, $div, evt)
 			}
 			var $td = $target.closest("td.pq-grid-col");
 			if ($td.length) {
 				evt.stopImmediatePropagation();
-				var colIndx = $td.attr("pq-grid-col-indx");
-				if (colIndx == null) {
+				var colIndex = $td.attr("pq-grid-col-index");
+				if (colIndex == null) {
 					return
 				}
 			} else {
 				return
 			}
-			return that._onHeaderCellClick(colIndx, evt)
+			return that._onHeaderCellClick(colIndex, evt)
 		});
 		this._refreshResizeColumn(initH, finalH, thisColModel);
 		this._trigger("refreshHeader", null, null)
@@ -6543,7 +6586,7 @@
 			hd_ht = that.$header.height(),
 			freezeCols = parseInt(options.freezeCols);
 		if (numberCell.show && numberCell.resizable) {
-			var $handle = $("<div pq-grid-col-indx='-1' class='pq-grid-col-resize-handle'>&nbsp;</div>").appendTo(that.$header_left);
+			var $handle = $("<div pq-grid-col-index='-1' class='pq-grid-col-resize-handle'>&nbsp;</div>").appendTo(that.$header_left);
 			var pq_col = that.$header_left.find("td.pq-grid-number-col")[0];
 			lft = parseInt(pq_col.offsetLeft) + (pq_col.offsetWidth - 10);
 			$handle.css({
@@ -6570,12 +6613,12 @@
 				if (i >= freezeCols) {
 					$head = that.$header_right
 				}
-				pq_col = $head.find("td[pq-grid-col-indx=" + i + "]")[0];
+				pq_col = $head.find("td[pq-grid-col-index=" + i + "]")[0];
 				lftCol = parseInt(pq_col.offsetLeft);
 				lft = lftCol + (pq_col.offsetWidth - 5)
 			}
 			if (column.resizable !== false) {
-				var $handle = $("<div pq-grid-col-indx='" + i + "' class='pq-grid-col-resize-handle'>&nbsp;</div>").appendTo($head);
+				var $handle = $("<div pq-grid-col-index='" + i + "' class='pq-grid-col-resize-handle'>&nbsp;</div>").appendTo($head);
 				$handle.css({
 					left: lft,
 					height: hd_ht
@@ -6591,7 +6634,7 @@
 				if ((!column.halign && column.align == "right") || column.halign == "right") {
 					lftIcon = lftCol
 				}
-				$("<div class='" + icon + " pq-g-ficon' pq-col-indx='" + i + "' tabindex=1><div class='ui-icon ui-icon-search'></div></div>").css({
+				$("<div class='" + icon + " pq-g-ficon' pq-col-index='" + i + "' tabindex=1><div class='ui-icon ui-icon-search'></div></div>").css({
 					left: lftIcon,
 					height: hd_ht
 				}).appendTo($head)
@@ -6602,8 +6645,8 @@
 			axis: "x",
 			helper: function(evt, ui) {
 				var $target = $(evt.target);
-				var indx = parseInt($target.attr("pq-grid-col-indx"));
-				that._setDragLimits(indx);
+				var index = parseInt($target.attr("pq-grid-col-index"));
+				that._setDragLimits(index);
 				that._getDragHelper(evt, ui);
 				return $target
 			},
@@ -6630,45 +6673,45 @@
 		var drag_new_left = ui.position.left;
 		var dx = (drag_new_left - drag_left);
 		var $target = $(ui.helper),
-			colIndx = parseInt($target.attr("pq-grid-col-indx")),
+			colIndex = parseInt($target.attr("pq-grid-col-index")),
 			column;
-		if (colIndx == -1) {
+		if (colIndex == -1) {
 			column = null;
 			var oldWidth = parseInt(numberCell.width);
 			var newWidth = oldWidth + dx;
 			numberCell.width = newWidth
 		} else {
-			column = model[colIndx];
+			column = model[colIndex];
 			var oldWidth = parseInt(column.width);
 			var newWidth = oldWidth + dx;
 			column.width = newWidth
 		}
 		that._refresh();
 		that._trigger("columnResize", evt, {
-			colIndx: colIndx,
+			colIndex: colIndex,
 			column: column,
-			dataIndx: (column ? column.dataIndx : null),
+			dataIndex: (column ? column.dataIndex : null),
 			oldWidth: oldWidth,
 			newWidth: column ? column.width : numberCell.width
 		})
 	};
 	fn._refreshHeaderSortIcons = function() {
 		var DM = this.options.dataModel;
-		if (DM.sortIndx == undefined) {
+		if (DM.sortIndex == undefined) {
 			return
 		}
 		var $header = this.$header;
 		var $pQuery_cols = $header.find(".pq-grid-col");
 		$pQuery_cols.removeClass("pq-col-sort-asc pq-col-sort-desc ui-state-active");
 		$header.find(".pq-col-sort-icon").removeClass("ui-icon ui-icon-triangle-1-n ui-icon-triangle-1-s");
-		var sortIndx = DM.sortIndx;
-		var colIndx = this.getColIndx({
-			dataIndx: sortIndx
+		var sortIndex = DM.sortIndex;
+		var colIndex = this.getColIndex({
+			dataIndex: sortIndex
 		});
 		var addClass = "ui-state-active pq-col-sort-" + (DM.sortDir == "up" ? "asc" : "desc");
 		var cls2 = "ui-icon ui-icon-triangle-1-" + (DM.sortDir == "up" ? "n" : "s");
-		$header.find(".pq-grid-col[pq-grid-col-indx=" + colIndx + "]").addClass(addClass);
-		$header.find(".pq-grid-col[pq-grid-col-indx=" + colIndx + "] .pq-col-sort-icon").addClass(cls2)
+		$header.find(".pq-grid-col[pq-grid-col-index=" + colIndex + "]").addClass(addClass);
+		$header.find(".pq-grid-col[pq-grid-col-index=" + colIndex + "] .pq-col-sort-icon").addClass(cls2)
 	};
 	fn.createTable = function(objP) {
 		this.iGenerateView.generateView(objP)
@@ -6685,16 +6728,16 @@
 				$tr = $tbl.find("tr:first");
 			for (var col = 0; col < noColumns; col++) {
 				var column = thisColModel[col],
-					dataIndx = column.dataIndx;
+					dataIndex = column.dataIndex;
 				if (column.hidden) {
-					var $td = $tr.find("td[pq-dataIndx='" + dataIndx + "']");
+					var $td = $tr.find("td[pq-dataIndex='" + dataIndex + "']");
 					if ($td.length > 1) {
-						var $tds = $tbl.find("td[pq-dataIndx='" + dataIndx + "']").remove();
+						var $tds = $tbl.find("td[pq-dataIndex='" + dataIndex + "']").remove();
 						tblObj.$tds.add($tds)
 					}
 				} else {
 					if (this.hidearrHS[col]) {
-						var $td = $tr.find("td[pq-dataIndx='" + dataIndx + "']");
+						var $td = $tr.find("td[pq-dataIndex='" + dataIndex + "']");
 						if ($td.css("visibility") != "hidden") {}
 					}
 				}
@@ -6715,14 +6758,14 @@
 				if (cellSelection) {
 					cls = cls + " pq-cell-select"
 				}
-				var str = "<td class='" + cls + "' style='" + strStyle + "' pq-col-indx='" + col + "'>				" + this.iGenerateView._renderCell(objRender) + "</td>";
+				var str = "<td class='" + cls + "' style='" + strStyle + "' pq-col-index='" + col + "'>				" + this.iGenerateView._renderCell(objRender) + "</td>";
 				buffer.push(str)
 			}
 			for (var k = 0; k < hidearrHS1.length; k++) {
 				var col = hidearrHS1[k];
 				var column = thisColModel[col];
 				objRender.column = column;
-				objRender.colIndx = col;
+				objRender.colIndex = col;
 				var strStyle = "";
 				strStyle += "visibility:hidden;";
 				var cls = const_cls;
@@ -6733,7 +6776,7 @@
 						cls += " pq-align-center"
 					}
 				}
-				var str = "<td class='" + cls + "' style='" + strStyle + "' pq-col-indx='" + col + "'>				" + this.iGenerateView._renderCell(objRender) + "</td>";
+				var str = "<td class='" + cls + "' style='" + strStyle + "' pq-col-index='" + col + "'>				" + this.iGenerateView._renderCell(objRender) + "</td>";
 				buffer.push(str)
 			}
 		}
@@ -6833,7 +6876,7 @@
 		if (objFE && objFE.$grid) {
 			var $ae = objFE.$ae;
 			if ($ae.hasClass("pq-grid-row")) {
-				var obj = that.getRowIndx({
+				var obj = that.getRowIndex({
 					$tr: $ae
 				});
 				this.lastFocus = obj
@@ -6852,7 +6895,7 @@
 			objLF = this.lastFocus,
 			$tdr;
 		if (objLF) {
-			if (objLF.dataIndx != null) {
+			if (objLF.dataIndex != null) {
 				$tdr = that.getCell(objLF)
 			} else {
 				$tdr = that.getRow(objLF)
@@ -6867,21 +6910,21 @@
 	};
 	_pMouseSelection._onCellMouseDown = function(evt, ui) {
 		var that = this.that,
-			rowIndx = ui.rowIndx,
-			colIndx = ui.colIndx,
+			rowIndex = ui.rowIndex,
+			colIndex = ui.colIndex,
 			SM = that.options.selectionModel,
 			type = SM.type,
 			mode = SM.mode;
 		if (type != "cell") {
 			return
 		}
-		if (colIndx == null) {
+		if (colIndex == null) {
 			return
 		}
 		if (evt.shiftKey) {
 			that.iCells.extendSelection({
-				rowIndx: rowIndx,
-				colIndx: colIndx,
+				rowIndex: rowIndex,
+				colIndex: colIndex,
 				mode: mode,
 				evt: evt
 			});
@@ -6889,28 +6932,28 @@
 		} else {
 			if (evt.ctrlKey && mode != "single") {
 				if (that.iCells.isSelected({
-					rowIndx: rowIndx,
-					colIndx: colIndx
+					rowIndex: rowIndex,
+					colIndex: colIndex
 				})) {
 					that.iCells.remove({
-						rowIndx: rowIndx,
-						colIndx: colIndx
+						rowIndex: rowIndex,
+						colIndex: colIndex
 					})
 				} else {
 					that.setSelection({
-						rowIndx: rowIndx,
-						colIndx: colIndx
+						rowIndex: rowIndex,
+						colIndex: colIndex
 					})
 				}
 			} else {
 				this.mousedown = {
-					rowIndx: rowIndx,
-					colIndx: colIndx
+					rowIndex: rowIndex,
+					colIndex: colIndex
 				};
 				that.setSelection(null);
 				that.iCells.add({
-					rowIndx: rowIndx,
-					colIndx: colIndx,
+					rowIndex: rowIndex,
+					colIndex: colIndex,
 					setFirst: true
 				})
 			}
@@ -6919,43 +6962,43 @@
 	};
 	_pMouseSelection._onRowMouseDown = function(evt, ui) {
 		var that = this.that,
-			rowIndx = ui.rowIndx,
+			rowIndex = ui.rowIndex,
 			SM = that.options.selectionModel,
 			mode = SM.mode,
 			type = SM.type;
 		if (type != "row") {
 			return
 		}
-		if (rowIndx == null) {
+		if (rowIndex == null) {
 			return
 		}
 		if (evt.shiftKey) {
 			that.iRows.extendSelection({
-				rowIndx: rowIndx,
+				rowIndex: rowIndex,
 				evt: evt
 			});
 			evt.preventDefault()
 		} else {
 			if (evt.ctrlKey && mode != "single") {
 				if (that.iRows.isSelected({
-					rowIndx: rowIndx
+					rowIndex: rowIndex
 				})) {
 					that.iRows.remove({
-						rowIndx: rowIndx
+						rowIndex: rowIndex
 					})
 				} else {
 					that.setSelection({
-						rowIndx: rowIndx
+						rowIndex: rowIndex
 					})
 				}
 			} else {
 				this.mousedown = {
-					r1: rowIndx,
+					r1: rowIndex,
 					y1: evt.pageY
 				};
 				that.setSelection(null);
 				that.iRows.add({
-					rowIndx: rowIndx,
+					rowIndex: rowIndex,
 					setFirst: true
 				})
 			}
@@ -6971,8 +7014,8 @@
 			var mousedown = this.mousedown,
 				r1 = mousedown.r1,
 				c1 = mousedown.c1,
-				r2 = ui.rowIndx,
-				c2 = ui.colIndx;
+				r2 = ui.rowIndex,
+				c2 = ui.colIndex;
 			if (r1 == r2 && c1 == c2) {
 				return
 			} else {
@@ -6984,8 +7027,8 @@
 				}
 			}
 			that.iCells.extendSelection({
-				rowIndx: r2,
-				colIndx: c2,
+				rowIndex: r2,
+				colIndex: c2,
 				evt: evt
 			})
 		}
@@ -7004,8 +7047,8 @@
 				y1 = m.y1,
 				y2 = evt.pageY;
 			if (y2 - y1 > 22 && initV > 0) {
-				var rowIndxPage = that.iKeyNav._decrRowIndx(initV);
-				var calcCurPos = that._calcCurPosFromRowIndxPage(rowIndxPage);
+				var rowIndexPage = that.iKeyNav._decrRowIndex(initV);
+				var calcCurPos = that._calcCurPosFromRowIndexPage(rowIndexPage);
 				if (calcCurPos == null) {
 					return
 				}
@@ -7013,8 +7056,8 @@
 				m.y1 = y2
 			} else {
 				if (y1 - y2 > 22 && cur_pos < num_eles) {
-					var rowIndxPage = that.iKeyNav._incrRowIndx(that.init);
-					var calcCurPos = that._calcCurPosFromRowIndxPage(rowIndxPage);
+					var rowIndexPage = that.iKeyNav._incrRowIndex(that.init);
+					var calcCurPos = that._calcCurPosFromRowIndexPage(rowIndexPage);
 					if (calcCurPos == null) {
 						return
 					}
@@ -7026,7 +7069,7 @@
 			if (type == "row" && this.mousedown) {
 				var m = this.mousedown;
 				var r1 = this.mousedown.r1,
-					r2 = ui.rowIndx;
+					r2 = ui.rowIndex;
 				if (r1 == r2) {
 					return
 				} else {
@@ -7037,7 +7080,7 @@
 					}
 				}
 				that.iRows.extendSelection({
-					rowIndx: r2,
+					rowIndex: r2,
 					evt: evt
 				})
 			}
@@ -7094,8 +7137,8 @@
 		for (var i = 0; i < $trs.length; i++) {
 			var tr = $trs[i],
 				$tr = $(tr),
-				rowIndxPage = $tr.attr("pq-row-indx"),
-				rowData = data[rowIndxPage],
+				rowIndexPage = $tr.attr("pq-row-index"),
+				rowData = data[rowIndexPage],
 				$grid = rowData.pq_detail["child"];
 			if (!$grid) {
 				if (typeof initDetail == "function") {
@@ -7134,12 +7177,12 @@
 		for (var i = 0; i < $trs.length; i++) {
 			var tr = $trs[i],
 				$tr = $(tr),
-				rowIndxPage = $tr.attr("pq-row-indx"),
-				rowData = data[rowIndxPage];
-			if (rowIndxPage == null || rowIndxPage == prevRI) {
+				rowIndexPage = $tr.attr("pq-row-index"),
+				rowData = data[rowIndexPage];
+			if (rowIndexPage == null || rowIndexPage == prevRI) {
 				continue
 			} else {
-				prevRI = rowIndxPage
+				prevRI = rowIndexPage
 			} if (rowData.pq_detail) {
 				$temp = null;
 				htTemp = 0;
@@ -7165,24 +7208,24 @@
 		var that = this.that,
 			column = ui.column,
 			rowData = ui.rowData,
-			rowIndx = ui.rowIndx,
+			rowIndex = ui.rowIndex,
 			type = this.type;
 		if (column && column.type === type) {
-			var dataIndx = "pq_detail";
-			if (rowData[dataIndx] == null) {
+			var dataIndex = "pq_detail";
+			if (rowData[dataIndex] == null) {
 				that.rowExpand({
-					rowIndx: rowIndx,
+					rowIndex: rowIndex,
 					scrollRow: true
 				})
 			} else {
-				if (rowData[dataIndx]["show"] === false) {
+				if (rowData[dataIndex]["show"] === false) {
 					that.rowExpand({
-						rowIndx: rowIndx,
+						rowIndex: rowIndex,
 						scrollRow: true
 					})
 				} else {
 					that.rowCollapse({
-						rowIndx: rowIndx,
+						rowIndex: rowIndex,
 						scrollRow: true
 					})
 				}
@@ -7192,63 +7235,63 @@
 	fn.rowExpand = function(objP) {
 		var rowData = this.getRowData(objP),
 			detM = this.options.detailModel,
-			dataIndx = "pq_detail";
+			dataIndex = "pq_detail";
 		if (rowData == null) {
 			return
 		}
-		if (rowData[dataIndx] == null) {
-			rowData[dataIndx] = {
+		if (rowData[dataIndex] == null) {
+			rowData[dataIndex] = {
 				show: true
 			}
 		} else {
-			if (rowData[dataIndx]["show"] === false) {
-				rowData[dataIndx]["show"] = true
+			if (rowData[dataIndex]["show"] === false) {
+				rowData[dataIndex]["show"] = true
 			}
 		} if (!detM.cache) {
-			var $temp = rowData[dataIndx]["child"];
+			var $temp = rowData[dataIndex]["child"];
 			if ($temp) {
 				$temp.remove();
-				rowData[dataIndx]["child"] = null;
-				rowData[dataIndx]["height"] = 0
+				rowData[dataIndex]["child"] = null;
+				rowData[dataIndex]["height"] = 0
 			}
 		}
 		this.refresh();
 		if (objP.scrollRow) {
-			var rowIndx = objP.rowIndx;
+			var rowIndex = objP.rowIndex;
 			this.scrollRow({
-				rowIndx: rowIndx
+				rowIndex: rowIndex
 			})
 		}
 	};
 	fn.rowInvalidate = function(objP) {
 		var rowData = this.getRowData(objP),
-			dataIndx = "pq_detail";
-		var $temp = rowData[dataIndx]["child"];
+			dataIndex = "pq_detail";
+		var $temp = rowData[dataIndex]["child"];
 		$temp.remove();
-		rowData[dataIndx]["child"] = null
+		rowData[dataIndex]["child"] = null
 	};
 	fn.rowCollapse = function(objP) {
 		var rowData = this.getRowData(objP),
 			detM = this.options.detailModel,
-			dataIndx = "pq_detail";
-		if (rowData == null || rowData[dataIndx] == null) {
+			dataIndex = "pq_detail";
+		if (rowData == null || rowData[dataIndex] == null) {
 			return
 		} else {
-			if (rowData[dataIndx]["show"] === true) {
+			if (rowData[dataIndex]["show"] === true) {
 				if (!detM.cache) {
-					var $temp = rowData[dataIndx]["child"];
+					var $temp = rowData[dataIndex]["child"];
 					if ($temp) {
 						$temp.remove();
-						rowData[dataIndx]["child"] = null;
-						rowData[dataIndx]["height"] = 0
+						rowData[dataIndex]["child"] = null;
+						rowData[dataIndex]["height"] = 0
 					}
 				}
-				rowData[dataIndx]["show"] = false;
+				rowData[dataIndex]["show"] = false;
 				this.refresh();
 				if (objP.scrollRow) {
-					var rowIndx = objP.rowIndx;
+					var rowIndex = objP.rowIndex;
 					this.scrollRow({
-						rowIndx: rowIndx
+						rowIndex: rowIndex
 					})
 				}
 			}
@@ -7275,10 +7318,10 @@
 			}
 		});
 
-		function filter(dataIndx, value, value2) {
+		function filter(dataIndex, value, value2) {
 			that.filter({
 				data: [{
-					dataIndx: dataIndx,
+					dataIndex: dataIndex,
 					value: value,
 					value2: value2
 				}]
@@ -7286,28 +7329,28 @@
 		}
 		this.changeListener = {
 			change: function(evt, ui) {
-				filter(ui.dataIndx, ui.value, ui.value2)
+				filter(ui.dataIndex, ui.value, ui.value2)
 			}
 		};
 		this.keyupListener = {
 			keyup: function(evt, ui) {
-				filter(ui.dataIndx, ui.value, ui.value2)
+				filter(ui.dataIndex, ui.value, ui.value2)
 			}
 		};
 		this.clickListener = {
 			click: function(evt, ui) {
-				filter(ui.dataIndx, ui.value)
+				filter(ui.dataIndex, ui.value)
 			}
 		}
 	};
 	var _pHeaderSearch = cHeaderSearch.prototype = new cClass;
-	_pHeaderSearch.get$Ele = function(colIndx, dataIndx) {
+	_pHeaderSearch.get$Ele = function(colIndex, dataIndex) {
 		var that = this.that,
 			freezeCols = that.options.freezeCols,
 			$tbl_left = $(that.$tbl_header[0]),
-			$inp, selector = ".pq-search-hd-field[name='" + dataIndx + "']",
+			$inp, selector = ".pq-search-hd-field[name='" + dataIndex + "']",
 			$tbl_right = $(that.$tbl_header[(that.$tbl_header.length == 2) ? 1 : 0]);
-		if (colIndx >= freezeCols) {
+		if (colIndex >= freezeCols) {
 			$inp = $tbl_right.find(selector)
 		} else {
 			$inp = $tbl_left.find(selector)
@@ -7320,18 +7363,18 @@
 			keyCodes = $.ui.keyCode,
 			selector;
 		if (keyCode === keyCodes.TAB) {
-			var dataIndx = $this.attr("name"),
-				colIndx = that.getColIndx({
-					dataIndx: dataIndx
+			var dataIndex = $this.attr("name"),
+				colIndex = that.getColIndex({
+					dataIndex: dataIndex
 				}),
 				CM = that.colModel,
 				$inp, shiftKey = evt.shiftKey,
-				column = CM[colIndx];
+				column = CM[colIndex];
 			if (column.filter.condition == "between") {
 				that.scrollColumn({
-					colIndx: colIndx
+					colIndex: colIndex
 				});
-				var $ele = this.get$Ele(colIndx, dataIndx);
+				var $ele = this.get$Ele(colIndex, dataIndex);
 				if ($ele[0] == $this[0]) {
 					if (!shiftKey) {
 						$inp = $ele[1]
@@ -7348,13 +7391,13 @@
 			}
 			do {
 				if (shiftKey) {
-					colIndx--
+					colIndex--
 				} else {
-					colIndx++
-				} if (colIndx < 0 || colIndx >= CM.length) {
+					colIndex++
+				} if (colIndex < 0 || colIndex >= CM.length) {
 					break
 				}
-				var column = CM[colIndx],
+				var column = CM[colIndex],
 					cFilter = column.filter;
 				if (column.hidden) {
 					continue
@@ -7363,10 +7406,10 @@
 					continue
 				}
 				that.scrollColumn({
-					colIndx: colIndx
+					colIndex: colIndex
 				});
-				var $inp, dataIndx = column.dataIndx,
-					$inp = this.get$Ele(colIndx, dataIndx);
+				var $inp, dataIndex = column.dataIndex,
+					$inp = this.get$Ele(colIndex, dataIndex);
 				if (cFilter.condition == "between") {
 					if (shiftKey) {
 						$inp = $($inp[1])
@@ -7392,14 +7435,14 @@
 
 		function handleFocus(e) {
 			var $inp = $(e.target);
-			var dataIndx = $inp.attr("name");
+			var dataIndex = $inp.attr("name");
 			if (that.scrollColumn({
-				dataIndx: dataIndx
+				dataIndex: dataIndex
 			})) {
-				var colIndx = that.getColIndx({
-					dataIndx: dataIndx
+				var colIndex = that.getColIndex({
+					dataIndex: dataIndex
 				});
-				var $ele = self.get$Ele(colIndx, dataIndx);
+				var $ele = self.get$Ele(colIndex, dataIndex);
 				$ele.focus()
 			}
 		}
@@ -7442,8 +7485,8 @@
 		$tbl_left.find(selector).css("visibility", "hidden");
 		for (var i = 0; i < freezeCols; i++) {
 			var column = CM[i];
-			var dIndx = column.dataIndx;
-			var selector = "*[name='" + dIndx + "']";
+			var dIndex = column.dataIndex;
+			var selector = "*[name='" + dIndex + "']";
 			$tbl_left.find(selector).css("visibility", "visible");
 			$tbl_right.find(selector).css("visibility", "hidden")
 		}
@@ -7462,14 +7505,14 @@
 			if (!filter) {
 				continue
 			}
-			var dataIndx = column.dataIndx,
+			var dataIndex = column.dataIndex,
 				$tbl;
 			if (i < freezeCols) {
 				$tbl = $tbl_left
 			} else {
 				$tbl = $tbl_right
 			}
-			var $ele = $tbl.find("*[name='" + dataIndx + "']");
+			var $ele = $tbl.find("*[name='" + dataIndex + "']");
 			if ($ele.length == 0) {
 				continue
 			}
@@ -7492,7 +7535,7 @@
 			var finit = filter.init;
 			if (finit) {
 				finit.call($ele, {
-					dataIndx: dataIndx,
+					dataIndex: dataIndex,
 					column: column
 				})
 			}
@@ -7505,10 +7548,10 @@
 					}
 					for (var event in listener) {
 						var handler = listener[event];
-						(function($ele, handler, dataIndx) {
+						(function($ele, handler, dataIndex) {
 							$ele.bind(event, function(evt) {
 								var column = that.getColumn({
-									dataIndx: dataIndx
+									dataIndex: dataIndex
 								}),
 									filter = column.filter;
 								if (filter.type == "checkbox") {
@@ -7529,12 +7572,12 @@
 								}
 								return handler.call(this, evt, {
 									column: column,
-									dataIndx: dataIndx,
+									dataIndex: dataIndex,
 									value: value,
 									value2: value2
 								})
 							})
-						})($ele, handler, dataIndx)
+						})($ele, handler, dataIndex)
 					}
 				}
 			}
@@ -7559,7 +7602,7 @@
 			numberCell = thisOptions.numberCell;
 		buffer.push("<tr class='pq-grid-header-search'>");
 		if (numberCell.show) {
-			buffer.push(["<td pq-grid-col-indx='-1' class='pq-grid-number-col' rowspan='1'>", "<div class='pq-grid-header-table-div'>&nbsp;</div></td>"].join(""))
+			buffer.push(["<td pq-grid-col-index='-1' class='pq-grid-number-col' rowspan='1'>", "<div class='pq-grid-header-table-div'>&nbsp;</div></td>"].join(""))
 		}
 		for (var i = 0; i <= finalH; i++) {
 			if (i < initH && i >= freezeCols && virtualX) {
@@ -7586,7 +7629,7 @@
 			}
 			var filter = column.filter;
 			if (filter) {
-				var dataIndx = column.dataIndx,
+				var dataIndex = column.dataIndex,
 					type = filter.type,
 					value = filter.value,
 					condition = filter.condition,
@@ -7608,20 +7651,20 @@
 					value = value ? value : "";
 					cls = cls + " ui-corner-all pq-search-txt";
 					if (condition == "between") {
-						strS = this._input(dataIndx, value, wdhalf, cls + " pq-from", style, attr);
-						strS += "-" + this._input(dataIndx, value2, wdhalf, cls + " pq-to", style, attr)
+						strS = this._input(dataIndex, value, wdhalf, cls + " pq-from", style, attr);
+						strS += "-" + this._input(dataIndex, value2, wdhalf, cls + " pq-to", style, attr)
 					} else {
-						strS = this._input(dataIndx, value, wd, cls, style, attr)
+						strS = this._input(dataIndex, value, wd, cls, style, attr)
 					}
 				} else {
 					if (type === "textarea") {
 						value = value ? value : "";
 						cls = cls + " ui-corner-all pq-search-txt";
 						if (condition == "between") {
-							strS = this._textarea(dataIndx, value, wdhalf, cls, style, attr);
-							strS += "-" + this._textarea(dataIndx, value2, wdhalf, cls, style, attr)
+							strS = this._textarea(dataIndex, value, wdhalf, cls, style, attr);
+							strS += "-" + this._textarea(dataIndex, value2, wdhalf, cls, style, attr)
 						} else {
-							strS = this._textarea(dataIndx, value, wd, cls, style, attr)
+							strS = this._textarea(dataIndex, value, wd, cls, style, attr)
 						}
 					} else {
 						if (type === "select") {
@@ -7633,28 +7676,28 @@
 									opts = opts.call(that, {
 										column: column,
 										value: value,
-										dataIndx: dataIndx,
+										dataIndex: dataIndex,
 										cls: cls,
 										style: style,
 										attr: attr
 									})
 								}
 								cls = cls + " ui-corner-all";
-								var attrSelect = ["name='", dataIndx, "' class='", cls, "' style='width:", wd, "px;", style, "' ", attr].join("");
+								var attrSelect = ["name='", dataIndex, "' class='", cls, "' style='width:", wd, "px;", style, "' ", attr].join("");
 								strS = $.paramquery.select({
 									options: opts,
 									attr: attrSelect,
 									prepend: filter.prepend,
-									valueIndx: filter.valueIndx,
-									labelIndx: filter.labelIndx,
-									groupIndx: filter.groupIndx
+									valueIndex: filter.valueIndex,
+									labelIndex: filter.labelIndex,
+									groupIndex: filter.groupIndex
 								});
 								filter.cache = strS
 							}
 						} else {
 							if (type == "checkbox") {
 								var checked = (value == null || value == false) ? "" : "checked=checked";
-								strS = ["<input ", checked, " name='", dataIndx, "' type=checkbox class='" + cls + "' style='" + style + "' " + attr + "/>"].join("")
+								strS = ["<input ", checked, " name='", dataIndex, "' type=checkbox class='" + cls + "' style='" + style + "' " + attr + "/>"].join("")
 							} else {
 								if (typeof type == "string") {
 									strS = type
@@ -7665,7 +7708,7 @@
 											value: value,
 											value2: value2,
 											column: column,
-											dataIndx: dataIndx,
+											dataIndex: dataIndex,
 											cls: cls,
 											attr: attr,
 											style: style
@@ -7683,18 +7726,18 @@
 		}
 		buffer.push("</tr>")
 	};
-	_pHeaderSearch._input = function(dataIndx, value, wd, cls, style, attr) {
-		return ['<input value="', value, "\" name='", dataIndx, "' type=text style='width:", wd, "px;" + style + "' class='" + cls + "' " + attr + " />"].join("")
+	_pHeaderSearch._input = function(dataIndex, value, wd, cls, style, attr) {
+		return ['<input value="', value, "\" name='", dataIndex, "' type=text style='width:", wd, "px;" + style + "' class='" + cls + "' " + attr + " />"].join("")
 	};
-	_pHeaderSearch._textarea = function(dataIndx, value, wd, cls, style, attr) {
-		return ["<textarea name='", dataIndx, "' style='width:", wd, "px;" + style + "' class='" + cls + "' " + attr + " >", value, "</textarea>"].join("")
+	_pHeaderSearch._textarea = function(dataIndex, value, wd, cls, style, attr) {
+		return ["<textarea name='", dataIndex, "' style='width:", wd, "px;" + style + "' class='" + cls + "' " + attr + " >", value, "</textarea>"].join("")
 	};
 	$.paramquery.select = function(objP) {
 		var attr = objP.attr,
 			opts = objP.options,
-			groupIndx = objP.groupIndx,
-			labelIndx = objP.labelIndx,
-			valueIndx = objP.valueIndx,
+			groupIndex = objP.groupIndex,
+			labelIndex = objP.labelIndex,
+			valueIndex = objP.valueIndex,
 			prepend = objP.prepend,
 			groupV, groupVLast;
 		var buffer = ["<select ", attr, " >"];
@@ -7703,15 +7746,15 @@
 				buffer.push('<option value="', key, '">', prepend[key], "</option>")
 			}
 		}
-		if (groupIndx) {
+		if (groupIndex) {
 			if (opts && opts.length) {
 				for (var i = 0, len = opts.length; i < len; i++) {
 					var option = opts[i],
-						value = option[valueIndx];
+						value = option[valueIndex];
 					if (value == null || value == "") {
 						continue
 					}
-					groupV = option[groupIndx];
+					groupV = option[groupIndex];
 					if (groupVLast != groupV) {
 						if (groupVLast != null) {
 							buffer.push("</optgroup>")
@@ -7719,8 +7762,8 @@
 						buffer.push('<optgroup label="', groupV, '">');
 						groupVLast = groupV
 					}
-					if (valueIndx != labelIndx) {
-						var label = option[labelIndx];
+					if (valueIndex != labelIndex) {
+						var label = option[labelIndex];
 						buffer.push('<option value="', value, '">', label, "</option>")
 					} else {
 						buffer.push("<option>", value, "</option>")
@@ -7732,15 +7775,15 @@
 			if (opts && opts.length) {
 				for (var i = 0, len = opts.length; i < len; i++) {
 					var option = opts[i];
-					if (labelIndx != null && valueIndx != null) {
-						var value = option[valueIndx];
+					if (labelIndex != null && valueIndex != null) {
+						var value = option[valueIndex];
 						if (value == "" || value == null) {
 							continue
 						}
-						if (labelIndx == valueIndx) {
+						if (labelIndex == valueIndex) {
 							buffer.push("<option>", value, "</option>")
 						} else {
-							var label = option[labelIndx];
+							var label = option[labelIndex];
 							buffer.push('<option value="', value, '">', label, "</option>")
 						}
 					} else {
@@ -7806,7 +7849,7 @@
 			groupTitle = rowObj.groupTitle,
 			GMTitle = GM.title,
 			groupLevel = rowObj.level,
-			GMRowIndx = rowObj.GMRowIndx,
+			GMRowIndex = rowObj.GMRowIndex,
 			GMIcon = GM.icon,
 			GMIcon = GMIcon ? GMIcon[groupLevel] : null,
 			GMIcon = (GMIcon && GMIcon.length && GMIcon.length == 2 && typeof GMIcon.push === "function") ? GMIcon : ["ui-icon-minus", "ui-icon-plus"];
@@ -7819,7 +7862,7 @@
 		} else {
 			groupTitle = groupTitle + " - " + rowObj.items + " item(s)"
 		}
-		buffer.push(["<tr class='pq-group-row pq-grid-row", (lastFrozenRow ? " pq-last-freeze-row" : ""), "' title=\"", rowObj.groupTitle, "\" level='", groupLevel, "' GMRowIndx='", GMRowIndx, "'>"].join(""));
+		buffer.push(["<tr class='pq-group-row pq-grid-row", (lastFrozenRow ? " pq-last-freeze-row" : ""), "' title=\"", rowObj.groupTitle, "\" level='", groupLevel, "' GMRowIndex='", GMRowIndex, "'>"].join(""));
 		if (numberCell.show) {
 			buffer.push("<td class='pq-grid-number-cell ui-state-default'><div class='pq-td-div'></div></td>")
 		}
@@ -7856,7 +7899,7 @@
 				}
 			}
 			var column = thisColModel[col],
-				dataIndx = column.dataIndx;
+				dataIndex = column.dataIndex;
 			if (column.hidden) {
 				continue
 			}
@@ -7874,14 +7917,14 @@
 			if (column.cls) {
 				cls = cls + " " + column.cls
 			}
-			var valCell = (rowData[dataIndx] == null) ? "&nbsp;" : rowData[dataIndx];
+			var valCell = (rowData[dataIndex] == null) ? "&nbsp;" : rowData[dataIndex];
 			var str = ["<td class='", cls, "' style='", strStyle, "' >", "<div class='pq-td-div'>", valCell, "</div></td>"].join("");
 			buffer.push(str)
 		}
 		buffer.push("</tr>");
 		return buffer
 	};
-	_pGenerateView._generateDetailRow = function(rowData, rowIndx, thisColModel, buffer, objP, lastFrozenRow) {
+	_pGenerateView._generateDetailRow = function(rowData, rowIndex, thisColModel, buffer, objP, lastFrozenRow) {
 		var row_cls = "pq-grid-row pq-detail-child";
 		if (lastFrozenRow) {
 			row_cls += " pq-last-freeze-row"
@@ -7895,7 +7938,7 @@
 		if (!thisOptions.wrap || objP) {
 			const_cls += "pq-wrap-text "
 		}
-		if (thisOptions.stripeRows && (rowIndx / 2 == parseInt(rowIndx / 2))) {
+		if (thisOptions.stripeRows && (rowIndex / 2 == parseInt(rowIndex / 2))) {
 			row_cls += " pq-grid-oddRow"
 		}
 		if (rowData.pq_rowselect) {
@@ -7905,7 +7948,7 @@
 		if (pq_rowcls != null) {
 			row_cls += " " + pq_rowcls
 		}
-		buffer.push("<tr pq-row-indx='" + rowIndx + "' class='" + row_cls + "' >");
+		buffer.push("<tr pq-row-index='" + rowIndex + "' class='" + row_cls + "' >");
 		if (numberCell.show) {
 			buffer.push(["<td class='pq-grid-number-cell ui-state-default'>", "<div class='pq-td-div'>&nbsp;</div></td>"].join(""))
 		}
@@ -7927,11 +7970,11 @@
 			return self.onClickGroupRow(evt)
 		})
 	};
-	_pGroupView.showHideRows = function(initIndx, level, hide) {
+	_pGroupView.showHideRows = function(initIndex, level, hide) {
 		var arr = [],
 			that = this.that,
 			data = that.dataGM;
-		for (var i = initIndx, len = data.length; i < len; i++) {
+		for (var i = initIndex, len = data.length; i < len; i++) {
 			var rowObj = data[i],
 				rowData = rowObj;
 			if (rowData.groupSummary) {
@@ -7944,7 +7987,7 @@
 				if (rowData.groupTitle) {
 					if (rowObj.collapsed) {
 						arr.push({
-							indx: i,
+							index: i,
 							level: rowObj.level
 						})
 					}
@@ -7964,10 +8007,10 @@
 		var $tr = $(evt.currentTarget),
 			that = this.that;
 		var level = parseInt($tr.attr("level")),
-			GMRowIndx = parseInt($tr.attr("GMRowIndx")),
+			GMRowIndex = parseInt($tr.attr("GMRowIndex")),
 			data = that.dataGM,
 			collapsed = true,
-			rowObj = data[GMRowIndx];
+			rowObj = data[GMRowIndex];
 		if (!rowObj.collapsed) {
 			rowObj.collapsed = true;
 			collapsed = true
@@ -7975,13 +8018,13 @@
 			rowObj.collapsed = false;
 			collapsed = false
 		} if (collapsed) {
-			this.showHideRows(GMRowIndx + 1, level, true)
+			this.showHideRows(GMRowIndex + 1, level, true)
 		} else {
-			var arr = this.showHideRows(GMRowIndx + 1, level, false);
+			var arr = this.showHideRows(GMRowIndex + 1, level, false);
 			for (var j = 0; j < arr.length; j++) {
-				var indx = arr[j].indx;
+				var index = arr[j].index;
 				var level = arr[j].level;
-				this.showHideRows(indx + 1, level, true)
+				this.showHideRows(index + 1, level, true)
 			}
 		}
 		that._refresh()
@@ -8082,8 +8125,8 @@
 			CM = that.colModel,
 			rowOffset = (PM.type) ? ((PM.curPage - 1) * PM.rPP) : 0,
 			CMLength = CM.length,
-			GMdataIndx = GM.dataIndx,
-			GMLength = GMdataIndx.length,
+			GMdataIndex = GM.dataIndex,
+			GMLength = GMdataIndex.length,
 			GMcollapsed = GM.collapsed,
 			groupSummaryShow = [];
 		for (var u = 0; u < GMLength; u++) {
@@ -8106,7 +8149,7 @@
 		}
 		if (GM && data && data.length > 0) {
 			var dataGM = [],
-				titleIndx = [],
+				titleIndex = [],
 				groupVal = [],
 				prevGroupVal = [],
 				cols = [];
@@ -8118,14 +8161,14 @@
 			for (var i = 0, len = data.length; i <= len; i++) {
 				var rowData = data[i];
 				var changeGroup = false,
-					changeGroupIndx = null;
+					changeGroupIndex = null;
 				for (var u = 0; u < GMLength; u++) {
-					groupVal[u] = (i < len) ? $.trim(rowData[GMdataIndx[u]]) : "";
+					groupVal[u] = (i < len) ? $.trim(rowData[GMdataIndex[u]]) : "";
 					if (prevGroupVal[u] != groupVal[u]) {
 						changeGroup = true
 					}
-					if (changeGroup && changeGroupIndx == null) {
-						changeGroupIndx = u
+					if (changeGroup && changeGroupIndex == null) {
+						changeGroupIndex = u
 					}
 				}
 				if (changeGroup) {
@@ -8133,7 +8176,7 @@
 						prevGroupVal[l] = groupVal[l]
 					}
 					if (i > 0) {
-						for (var u = GMLength - 1; u >= changeGroupIndx; u--) {
+						for (var u = GMLength - 1; u >= changeGroupIndex; u--) {
 							if (groupSummaryShow[u]) {
 								var groupRowData = [];
 								for (var f = 0; f < CMLength; f++) {
@@ -8141,19 +8184,19 @@
 										summary = column.summary,
 										summaryType = (summary) ? (summary.type ? summary.type[u] : null) : null;
 									if (summaryType) {
-										var dataIndx = column.dataIndx,
+										var dataIndex = column.dataIndex,
 											summaryCellData = "",
 											summaryTitle = summary.title ? summary.title[u] : null,
 											sText = "{0}";
 										if (typeof summaryType == "function") {
-											summaryCellData = summaryType(cols[u][dataIndx], column.dataType)
+											summaryCellData = summaryType(cols[u][dataIndex], column.dataType)
 										} else {
 											sText = summaryType + ": {0}";
-											summaryCellData = this[summaryType](cols[u][dataIndx], column.dataType)
+											summaryCellData = this[summaryType](cols[u][dataIndex], column.dataType)
 										} if (summaryTitle) {
 											sText = summaryTitle
 										}
-										groupRowData[dataIndx] = sText.replace("{0}", summaryCellData)
+										groupRowData[dataIndex] = sText.replace("{0}", summaryCellData)
 									}
 								}
 								dataGM.push({
@@ -8163,37 +8206,37 @@
 								})
 							}
 						}
-						for (var m = changeGroupIndx; m < GMLength; m++) {
-							dataGM[titleIndx[m]].items = cols[m][CM[0].dataIndx].length
+						for (var m = changeGroupIndex; m < GMLength; m++) {
+							dataGM[titleIndex[m]].items = cols[m][CM[0].dataIndex].length
 						}
 					}
 					if (i == len) {
 						break
 					}
-					for (var z = GMLength - 1; z >= changeGroupIndx; z--) {
+					for (var z = GMLength - 1; z >= changeGroupIndex; z--) {
 						for (var e = 0; e < CMLength; e++) {
 							var column = CM[e];
-							cols[z][column.dataIndx] = []
+							cols[z][column.dataIndex] = []
 						}
 					}
-					for (var m = changeGroupIndx; m < GMLength; m++) {
+					for (var m = changeGroupIndex; m < GMLength; m++) {
 						dataGM.push({
 							groupTitle: groupVal[m],
 							level: m,
-							GMRowIndx: dataGM.length,
+							GMRowIndex: dataGM.length,
 							collapsed: (GMcollapsed && (GMcollapsed[m] != null)) ? GMcollapsed[m] : false
 						});
-						titleIndx[m] = dataGM.length - 1
+						titleIndex[m] = dataGM.length - 1
 					}
 				}
-				rowData.rowIndx = i + rowOffset;
+				rowData.rowIndex = i + rowOffset;
 				rowData.pq_hidden = false;
 				dataGM.push(rowData);
 				for (var k = 0; k < CMLength; k++) {
 					var column = CM[k],
-						dataIndx = column.dataIndx;
+						dataIndex = column.dataIndex;
 					for (var u = 0; u < GMLength; u++) {
-						cols[u][dataIndx].push(rowData[dataIndx])
+						cols[u][dataIndex].push(rowData[dataIndex])
 					}
 				}
 			}
@@ -8318,10 +8361,10 @@
 				self.status = "helper";
 				self._setupDroppables($this);
 				that.$header.find(".pq-grid-col-resize-handle").hide();
-				var colIndx = $this.attr("pq-col-indx");
-				var rowIndx = $this.attr("pq-row-indx");
+				var colIndex = $this.attr("pq-col-index");
+				var rowIndex = $this.attr("pq-row-index");
 				$this.droppable("destroy");
-				var column = that.headerCells[rowIndx][colIndx];
+				var column = that.headerCells[rowIndex][colIndex];
 				var $drag_helper = $("<div class='pq-col-drag-helper ui-widget-content ui-corner-all' ><span class='pq-drag-icon ui-icon " + rejectIcon + "'></span>" + column.title + "</div>");
 				self.$drag_helper = $drag_helper;
 				return $drag_helper[0]
@@ -8392,29 +8435,29 @@
 				if (that.dropPending) {
 					return
 				}
-				var colIndxDrag = parseInt(ui.draggable.attr("pq-col-indx"), 10);
-				var rowIndxDrag = parseInt(ui.draggable.attr("pq-row-indx"), 10);
-				var colIndxDrop = parseInt($(this).attr("pq-col-indx"), 10);
-				var rowIndxDrop = $(this).attr("pq-row-indx");
+				var colIndexDrag = parseInt(ui.draggable.attr("pq-col-index"), 10);
+				var rowIndexDrag = parseInt(ui.draggable.attr("pq-row-index"), 10);
+				var colIndexDrop = parseInt($(this).attr("pq-col-index"), 10);
+				var rowIndexDrop = $(this).attr("pq-row-index");
 				var optCM = that.options.colModel;
 				var headerCells = that.headerCells;
-				var columnDrag = headerCells[rowIndxDrag][colIndxDrag];
+				var columnDrag = headerCells[rowIndexDrag][colIndexDrag];
 				var colModelDrag, colModelDrop;
-				if (rowIndxDrag == 0) {
+				if (rowIndexDrag == 0) {
 					colModelDrag = optCM
 				} else {
-					colModelDrag = headerCells[rowIndxDrag - 1][colIndxDrag].colModel
-				} if (rowIndxDrop == 0) {
+					colModelDrag = headerCells[rowIndexDrag - 1][colIndexDrag].colModel
+				} if (rowIndexDrop == 0) {
 					colModelDrop = optCM
 				} else {
-					colModelDrop = headerCells[rowIndxDrop - 1][colIndxDrop].colModel
+					colModelDrop = headerCells[rowIndexDrop - 1][colIndexDrop].colModel
 				}
-				var columnDrop = headerCells[rowIndxDrop][colIndxDrop];
-				var indxDrag = self._columnIndexOf(colModelDrag, columnDrag);
-				var column = colModelDrag.splice(indxDrag, 1)[0];
-				var indxDrop = self._columnIndexOf(colModelDrop, columnDrop);
+				var columnDrop = headerCells[rowIndexDrop][colIndexDrop];
+				var indexDrag = self._columnIndexOf(colModelDrag, columnDrag);
+				var column = colModelDrag.splice(indexDrag, 1)[0];
+				var indexDrop = self._columnIndexOf(colModelDrop, columnDrop);
 				var decr = (self.leftDrop) ? 1 : 0;
-				colModelDrop.splice(indxDrop + 1 - decr, 0, column);
+				colModelDrop.splice(indexDrop + 1 - decr, 0, column);
 				that.dropPending = true;
 				window.setTimeout(function() {
 					that._calcThisColModel();
@@ -8435,8 +8478,8 @@
 		});
 		return;
 		var column = that.getHeaderColumnFromTD($td);
-		var dataIndx = column.dataIndx;
-		if (that.getIndxInSorters(dataIndx) != -1) {
+		var dataIndex = column.dataIndex;
+		if (that.getIndexInSorters(dataIndex) != -1) {
 			if (that.$toolbar.hasClass("ui-droppable")) {
 				that.$toolbar.droppable("destroy")
 			}
@@ -8446,27 +8489,27 @@
 			hoverClass: "pq-drop-hover ui-state-highlight",
 			tolerance: "pointer",
 			drop: function(evt, ui) {
-				var colIndxDrag = parseInt(ui.draggable.attr("pq-col-indx"), 10);
-				var rowIndxDrag = parseInt(ui.draggable.attr("pq-row-indx"), 10);
+				var colIndexDrag = parseInt(ui.draggable.attr("pq-col-index"), 10);
+				var rowIndexDrag = parseInt(ui.draggable.attr("pq-row-index"), 10);
 				var optCM = that.options.colModel;
 				var headerCells = that.headerCells;
-				var columnDrag = headerCells[rowIndxDrag][colIndxDrag];
+				var columnDrag = headerCells[rowIndexDrag][colIndexDrag];
 				var colModelDrag;
-				if (rowIndxDrag == 0) {
+				if (rowIndexDrag == 0) {
 					colModelDrag = optCM
 				} else {
-					colModelDrag = headerCells[rowIndxDrag - 1][colIndxDrag].colModel
+					colModelDrag = headerCells[rowIndexDrag - 1][colIndexDrag].colModel
 				}
-				var indxDrag = self._columnIndexOf(colModelDrag, columnDrag);
-				var column = colModelDrag[indxDrag];
-				var dataIndx = column.dataIndx;
+				var indexDrag = self._columnIndexOf(colModelDrag, columnDrag);
+				var column = colModelDrag[indexDrag];
+				var dataIndex = column.dataIndex;
 				var dataType = column.dataType;
 				that.sorters.push({
-					dataIndx: dataIndx,
+					dataIndex: dataIndex,
 					dataType: dataType,
 					dir: "up"
 				});
-				$("<span class='pq-sortable' sorter=\"{dataIndx:" + dataIndx + ",dataType:'" + dataType + "',dir:'up'}\">" + column.title + "</span>").appendTo(that.$toolbar).button({
+				$("<span class='pq-sortable' sorter=\"{dataIndex:" + dataIndex + ",dataType:'" + dataType + "',dir:'up'}\">" + column.title + "</span>").appendTo(that.$toolbar).button({
 					icons: {
 						primary: "ui-icon-triangle-1-n",
 						secondary: "ui-icon-close"
@@ -8508,7 +8551,7 @@
 								}
 							})
 						}
-						var sorterStr = "{dataIndx:" + sorter.dataIndx + ",dataType:'" + sorter.dataType + "',dir:'" + sorter.dir + "'}";
+						var sorterStr = "{dataIndex:" + sorter.dataIndex + ",dataType:'" + sorter.dataType + "',dir:'" + sorter.dir + "'}";
 						$button.attr("sorter", sorterStr);
 						self.refreshSorting()
 					}
@@ -8546,7 +8589,7 @@
 		filterModel: {
 			on: true,
 			mode: "AND",
-			header: false
+			header: true
 		}
 	};
 	fn._create = function() {
@@ -8599,10 +8642,10 @@
 			this.$toolbar = $toolbar
 		}
 	};
-	fn.isLeftOrRight = function(colIndx) {
+	fn.isLeftOrRight = function(colIndex) {
 		var thisOptions = this.options,
 			freezeCols = this.freezeCols;
-		if (colIndx > freezeCols) {
+		if (colIndex > freezeCols) {
 			return "right"
 		} else {
 			return "left"
@@ -8650,7 +8693,7 @@
 						break
 					}
 					var obj = rules[j];
-					if (obj.dataIndx == column.dataIndx) {
+					if (obj.dataIndex == column.dataIndex) {
 						found = true;
 						foundCount++;
 						var filter = column.filter,
@@ -8675,9 +8718,9 @@
 								if (value) {
 									if (typeof value == "string") {
 										var options = filter.options;
-										var firstIndx = value.indexOf('"');
-										var lastIndx = value.lastIndexOf('"');
-										value = value.substr(firstIndx, lastIndx + 1);
+										var firstIndex = value.indexOf('"');
+										var lastIndex = value.lastIndexOf('"');
+										value = value.substr(firstIndex, lastIndex + 1);
 										value = JSON.parse("[" + value + "]");
 										if (options) {
 											for (var k = 0, optLen = options.length; k < optLen; k++) {
@@ -8729,10 +8772,10 @@
 		for (var i = 0, len = CM.length; i < len; i++) {
 			var column = CM[i];
 			if (column.type === "checkBoxSelection") {
-				new $.paramquery.cCheckBoxColumn(this, column.dataIndx)
+				new $.paramquery.cCheckBoxColumn(this, column.dataIndex)
 			} else {
 				if (column.type === "detail") {
-					column.dataIndx = "pq_detail";
+					column.dataIndex = "pq_detail";
 					this.iHierarchy = new cHierarchy(this)
 				}
 			}
@@ -8754,78 +8797,78 @@
 		this.that = that
 	};
 	var _pSort = cSort.prototype;
-	_pSort._refreshSorters = function(pDataIndx) {
+	_pSort._refreshSorters = function(pDataIndex) {
 		var that = this.that,
 			thisOptions = that.options,
 			DM = thisOptions.dataModel,
-			DMsortIndx = DM.sortIndx,
-			multiSort = $.isArray(DMsortIndx),
+			DMsortIndex = DM.sortIndex,
+			multiSort = $.isArray(DMsortIndex),
 			GM = thisOptions.groupModel,
-			GMdataIndx = GM ? GM.dataIndx : null,
+			GMdataIndex = GM ? GM.dataIndex : null,
 			GMDir = GM ? GM.dir : null,
-			foundInGMIndx = -1,
+			foundInGMIndex = -1,
 			sorters = [];
 		if (GM) {
-			for (var i = 0; i < GMdataIndx.length; i++) {
-				var gDataIndx = GMdataIndx[i];
-				if (gDataIndx == pDataIndx) {
-					foundInGMIndx = i
+			for (var i = 0; i < GMdataIndex.length; i++) {
+				var gDataIndex = GMdataIndex[i];
+				if (gDataIndex == pDataIndex) {
+					foundInGMIndex = i
 				}
 				sorters.push({
-					dataIndx: gDataIndx,
+					dataIndex: gDataIndex,
 					dir: (GMDir && GMDir[i]) ? GMDir[i] : "up"
 				})
 			}
 		}
-		if (foundInGMIndx !== -1) {
-			var dir = sorters[foundInGMIndx].dir;
+		if (foundInGMIndex !== -1) {
+			var dir = sorters[foundInGMIndex].dir;
 			var newDir = (dir === "up") ? "down" : "up";
-			sorters[foundInGMIndx].dir = newDir;
-			GMDir[foundInGMIndx] = newDir
+			sorters[foundInGMIndex].dir = newDir;
+			GMDir[foundInGMIndex] = newDir
 		} else {
-			if (pDataIndx != null) {
+			if (pDataIndex != null) {
 				if (multiSort) {
-					var indx = $.inArray(pDataIndx, DM.sortIndx);
-					if (indx != -1) {
-						if (DM.sortDir[indx] == "up") {
-							DM.sortDir[indx] = "down"
+					var index = $.inArray(pDataIndex, DM.sortIndex);
+					if (index != -1) {
+						if (DM.sortDir[index] == "up") {
+							DM.sortDir[index] = "down"
 						} else {
-							if (DMsortIndx.length == 1) {
-								DM.sortDir[indx] = "up"
+							if (DMsortIndex.length == 1) {
+								DM.sortDir[index] = "up"
 							} else {
-								DM.sortIndx.splice(indx, 1);
-								DM.sortDir.splice(indx, 1)
+								DM.sortIndex.splice(index, 1);
+								DM.sortDir.splice(index, 1)
 							}
 						}
 					} else {
-						var len = DM.sortIndx.length;
-						DM.sortIndx[len] = pDataIndx;
+						var len = DM.sortIndex.length;
+						DM.sortIndex[len] = pDataIndex;
 						DM.sortDir[len] = "up"
 					}
 				} else {
-					if (DM.sortIndx == pDataIndx) {
+					if (DM.sortIndex == pDataIndex) {
 						DM.sortDir = (DM.sortDir == "up") ? "down" : "up"
 					} else {
-						DM.sortIndx = pDataIndx;
+						DM.sortIndex = pDataIndex;
 						DM.sortDir = "up"
 					}
 				}
 			}
-		} if (DM.sortIndx != null) {
+		} if (DM.sortIndex != null) {
 			if (multiSort) {
-				for (var i = 0; i < DMsortIndx.length; i++) {
-					var dataIndx = DMsortIndx[i];
-					if (this.inSorters(sorters, dataIndx) == -1) {
+				for (var i = 0; i < DMsortIndex.length; i++) {
+					var dataIndex = DMsortIndex[i];
+					if (this.inSorters(sorters, dataIndex) == -1) {
 						sorters.push({
-							dataIndx: dataIndx,
+							dataIndex: dataIndex,
 							dir: DM.sortDir[i]
 						})
 					}
 				}
 			} else {
-				if (this.inSorters(sorters, DM.sortIndx) == -1) {
+				if (this.inSorters(sorters, DM.sortIndex) == -1) {
 					sorters.push({
-						dataIndx: DM.sortIndx,
+						dataIndex: DM.sortIndex,
 						dir: DM.sortDir
 					})
 				}
@@ -8833,11 +8876,11 @@
 		}
 		this.sorters = sorters
 	};
-	_pSort.inSorters = function(sorters, dataIndx) {
+	_pSort.inSorters = function(sorters, dataIndex) {
 		var found = -1;
 		for (var i = 0; i < sorters.length; i++) {
 			var sorter = sorters[i];
-			if (sorter.dataIndx == dataIndx) {
+			if (sorter.dataIndex == dataIndex) {
 				found = i;
 				break
 			}
@@ -8852,11 +8895,11 @@
 			sorters = this.sorters;
 		for (var i = 0; i < sorters.length; i++) {
 			var sorter = sorters[i],
-				dataIndx = sorter.dataIndx,
-				colIndx = that.getColIndx({
-					dataIndx: dataIndx
+				dataIndex = sorter.dataIndex,
+				colIndex = that.getColIndex({
+					dataIndex: dataIndex
 				}),
-				dataType = CM[colIndx].dataType;
+				dataType = CM[colIndex].dataType;
 			sorter.dataType = dataType
 		}
 		return this.__sortLocalData(sorters, data)
@@ -8869,39 +8912,39 @@
 			return data
 		}
 
-		function sort_integer(obj1, obj2, dataIndx, dir) {
-			var val1 = obj1[dataIndx];
-			var val2 = obj2[dataIndx];
+		function sort_integer(obj1, obj2, dataIndex, dir) {
+			var val1 = obj1[dataIndex];
+			var val2 = obj2[dataIndex];
 			val1 = val1 ? parseInt(val1, 10) : 0;
 			val2 = val2 ? parseInt(val2, 10) : 0;
 			return ((val1 - val2) * dir)
 		}
 
-		function sort_date(obj1, obj2, dataIndx, dir) {
-			var val1 = obj1[dataIndx];
-			var val2 = obj2[dataIndx];
+		function sort_date(obj1, obj2, dataIndex, dir) {
+			var val1 = obj1[dataIndex];
+			var val2 = obj2[dataIndex];
 			val1 = val1 ? Date.parse(val1) : 0;
 			val2 = val2 ? Date.parse(val2) : 0;
 			return ((val1 - val2) * dir)
 		}
 
-		function sort_custom(obj1, obj2, dataIndx, dir, dataType) {
-			var val1 = obj1[dataIndx];
-			var val2 = obj2[dataIndx];
+		function sort_custom(obj1, obj2, dataIndex, dir, dataType) {
+			var val1 = obj1[dataIndex];
+			var val2 = obj2[dataIndex];
 			return (dataType(val1, val2) * dir)
 		}
 
-		function sort_float(obj1, obj2, dataIndx, dir) {
-			var val1 = (obj1[dataIndx] + "").replace(/,/g, "");
-			var val2 = (obj2[dataIndx] + "").replace(/,/g, "");
+		function sort_float(obj1, obj2, dataIndex, dir) {
+			var val1 = (obj1[dataIndex] + "").replace(/,/g, "");
+			var val2 = (obj2[dataIndex] + "").replace(/,/g, "");
 			val1 = val1 ? parseFloat(val1) : 0;
 			val2 = val2 ? parseFloat(val2) : 0;
 			return ((val1 - val2) * dir)
 		}
 
-		function sort_string(obj1, obj2, dataIndx, dir) {
-			var val1 = obj1[dataIndx];
-			var val2 = obj2[dataIndx];
+		function sort_string(obj1, obj2, dataIndex, dir) {
+			var val1 = obj1[dataIndex];
+			var val2 = obj2[dataIndex];
 			val1 = val1 ? val1 : "";
 			val2 = val2 ? val2 : "";
 			var ret = 0;
@@ -8915,9 +8958,9 @@
 			return (ret * dir)
 		}
 
-		function sort_stringi(obj1, obj2, dataIndx, dir) {
-			var val1 = obj1[dataIndx];
-			var val2 = obj2[dataIndx];
+		function sort_stringi(obj1, obj2, dataIndex, dir) {
+			var val1 = obj1[dataIndex];
+			var val2 = obj2[dataIndex];
 			val1 = val1 ? val1.toUpperCase() : "";
 			val2 = val2 ? val2.toUpperCase() : "";
 			var ret = 0;
@@ -8931,9 +8974,9 @@
 			return (ret * dir)
 		}
 
-		function sort_bool(obj1, obj2, dataIndx, dir) {
-			var val1 = obj1[dataIndx];
-			var val2 = obj2[dataIndx];
+		function sort_bool(obj1, obj2, dataIndex, dir) {
+			var val1 = obj1[dataIndex];
+			var val2 = obj2[dataIndex];
 			var ret = 0;
 			if ((val1 && !val2) || (val1 === false && val2 === null)) {
 				ret = 1
@@ -8947,14 +8990,14 @@
 
 		function innerSort() {
 			var arrFn = [],
-				arrDataIndx = [],
+				arrDataIndex = [],
 				arrDir = [],
 				sortersLength = sorters.length;
 
 			function sort_composite(obj1, obj2) {
 				var ret = 0;
 				for (var i = 0; i < sortersLength; i++) {
-					ret = arrFn[i](obj1, obj2, arrDataIndx[i], arrDir[i]);
+					ret = arrFn[i](obj1, obj2, arrDataIndex[i], arrDir[i]);
 					if (ret != 0) {
 						break
 					}
@@ -8963,10 +9006,10 @@
 			}
 			for (var i = 0; i < sortersLength; i++) {
 				var sorter = sorters[i],
-					dataIndx = sorter.dataIndx,
+					dataIndex = sorter.dataIndex,
 					dir = (sorter.dir == "up") ? 1 : -1,
 					dataType = sorter.dataType;
-				arrDataIndx[i] = dataIndx;
+				arrDataIndex[i] = dataIndex;
 				arrDir[i] = dir;
 				if (dataType == "integer") {
 					arrFn[i] = sort_integer
@@ -8976,8 +9019,8 @@
 					} else {
 						if (typeof dataType == "function") {
 							arrFn[i] = (function(dataType) {
-								return function(obj1, obj2, dataIndx, dir) {
-									return sort_custom(obj1, obj2, dataIndx, dir, dataType)
+								return function(obj1, obj2, dataIndex, dir) {
+									return sort_custom(obj1, obj2, dataIndex, dir, dataType)
 								}
 							})(dataType)
 						} else {
@@ -9014,29 +9057,29 @@
 		$header.find(".pq-col-sort-icon").removeClass("ui-icon ui-icon-triangle-1-n ui-icon-triangle-1-s");
 		for (var i = 0; i < sorters.length; i++) {
 			var sorter = sorters[i];
-			var dataIndx = sorter.dataIndx;
-			var colIndx = this.getColIndx({
-				dataIndx: dataIndx
+			var dataIndex = sorter.dataIndex;
+			var colIndex = this.getColIndex({
+				dataIndex: dataIndex
 			});
 			var dir = sorter.dir;
 			var addClass = "ui-state-active pq-col-sort-" + (dir == "up" ? "asc" : "desc");
 			var cls2 = "ui-icon ui-icon-triangle-1-" + (dir == "up" ? "n" : "s");
-			$header.find(".pq-grid-col[pq-grid-col-indx=" + colIndx + "]").addClass(addClass);
-			$header.find(".pq-grid-col[pq-grid-col-indx=" + colIndx + "] .pq-col-sort-icon").addClass(cls2)
+			$header.find(".pq-grid-col[pq-grid-col-index=" + colIndex + "]").addClass(addClass);
+			$header.find(".pq-grid-col[pq-grid-col-index=" + colIndex + "] .pq-col-sort-icon").addClass(cls2)
 		}
 	};
 	fn.getHeaderColumnFromTD = function($td) {
-		var colIndx = $td.attr("pq-grid-col-indx");
-		if (colIndx == null) {
+		var colIndex = $td.attr("pq-grid-col-index");
+		if (colIndex == null) {
 			return
 		}
-		var column = this.colModel[colIndx];
+		var column = this.colModel[colIndex];
 		return column
 	};
-	fn.getIndxInSorters = function(dataIndx) {
+	fn.getIndexInSorters = function(dataIndex) {
 		var sorters = this.sorters;
 		for (var i = 0, len = sorters.length; i < len; i++) {
-			if (sorters[i].dataIndx == dataIndx) {
+			if (sorters[i].dataIndex == dataIndex) {
 				return i
 			}
 		}
@@ -9052,21 +9095,21 @@
 		simulatedEvent.initMouseEvent(simulatedType, true, true, window, 1, touch.screenX, touch.screenY, touch.clientX, touch.clientY, false, false, false, false, 0, null);
 		event.target.dispatchEvent(simulatedEvent)
 	};
-	fn._getTblSingle = function(rowIndxPage, colIndx) {
+	fn._getTblSingle = function(rowIndexPage, colIndex) {
 		var $tbl = this.$tbl,
-			colIndx = (colIndx != null) ? colIndx : 0,
+			colIndex = (colIndex != null) ? colIndex : 0,
 			thisOptions = this.options,
 			freezeCols = thisOptions.freezeCols,
 			freezeRows = thisOptions.freezeRows;
 		if ($tbl != undefined) {
 			if ($tbl.length == 4) {
-				if (rowIndxPage >= freezeRows && colIndx >= freezeCols) {
+				if (rowIndexPage >= freezeRows && colIndex >= freezeCols) {
 					$tbl = $($tbl[3])
 				} else {
-					if (rowIndxPage >= freezeRows && colIndx < freezeCols) {
+					if (rowIndexPage >= freezeRows && colIndex < freezeCols) {
 						$tbl = $($tbl[2])
 					} else {
-						if (rowIndxPage < freezeRows && colIndx >= freezeCols) {
+						if (rowIndexPage < freezeRows && colIndex >= freezeCols) {
 							$tbl = $($tbl[1])
 						} else {
 							$tbl = $($tbl[0])
@@ -9075,7 +9118,7 @@
 				}
 			} else {
 				if ($tbl.length == 2) {
-					if (rowIndxPage >= freezeRows && colIndx >= freezeCols) {
+					if (rowIndexPage >= freezeRows && colIndex >= freezeCols) {
 						$tbl = $($tbl[1])
 					} else {
 						$tbl = $($tbl[0])
@@ -9088,18 +9131,18 @@
 		return $tbl
 	};
 	fn.getLargestRowCol = function(arr) {
-		var rowIndx, colIndx;
+		var rowIndex, colIndex;
 		for (var i = 0; i < arr.length; i++) {
 			var sel = arr[i];
-			var rowIndx2 = sel.rowIndx;
-			if (rowIndx == null) {
-				rowIndx = sel.rowIndx
+			var rowIndex2 = sel.rowIndex;
+			if (rowIndex == null) {
+				rowIndex = sel.rowIndex
 			} else {
-				if (rowIndx2 > rowIndx) {
-					rowIndx = rowIndx2
+				if (rowIndex2 > rowIndex) {
+					rowIndex = rowIndex2
 				}
 			}
-			rowIndx = sel.rowIndx
+			rowIndex = sel.rowIndex
 		}
 	};
 	fn._onLoad = function() {
@@ -9108,11 +9151,11 @@
 	fn._onRefreshSheet = function() {
 		var data = this.$dragSeries.data();
 		if (data) {
-			var rowIndx = data.rowIndx,
-				colIndx = data.colIndx,
+			var rowIndex = data.rowIndex,
+				colIndex = data.colIndex,
 				left = data.left,
 				top = data.top;
-			this.bb(rowIndx, colIndx)
+			this.bb(rowIndex, colIndex)
 		}
 	};
 	fn.bringCellToView = function(obj) {
@@ -9129,7 +9172,7 @@
 		return this.data
 	};
 	fn.getData = function(objP) {
-		var dataIndices = objP.dataIndx,
+		var dataIndices = objP.dataIndex,
 			dILen = dataIndices.length,
 			data = objP.data,
 			DM = this.options.dataModel,
@@ -9141,8 +9184,8 @@
 					var rowData = data[i];
 					var row = {};
 					for (var j = 0; j < dILen; j++) {
-						var dataIndx = dataIndices[j];
-						row[dataIndx] = rowData[dataIndx]
+						var dataIndex = dataIndices[j];
+						row[dataIndex] = rowData[dataIndex]
 					}
 					arr.push(row)
 				}
@@ -9159,12 +9202,12 @@
 		}
 		var sorters = [];
 		for (var j = 0; j < dILen; j++) {
-			var dataIndx = dataIndices[j];
+			var dataIndex = dataIndices[j];
 			var column = this.getColumn({
-				dataIndx: dataIndx
+				dataIndex: dataIndex
 			});
 			sorters.push({
-				dataIndx: dataIndx,
+				dataIndex: dataIndex,
 				dir: "up",
 				dataType: column.dataType
 			})
@@ -9223,7 +9266,7 @@
 			};
 		for (var i = 0; i < CMLength; i++) {
 			var column = CM[i],
-				dataIndx = column.dataIndx,
+				dataIndex = column.dataIndex,
 				dataType = column.dataType,
 				dataType = (!dataType || typeof dataType == "function") ? "string" : dataType,
 				filter = column.filter;
@@ -9246,7 +9289,7 @@
 						}
 					}
 					arrS.push({
-						dataIndx: dataIndx,
+						dataIndex: dataIndex,
 						mode: cMode,
 						dataType: dataType,
 						filters: filters
@@ -9312,7 +9355,7 @@
 							}
 						}
 						arrS.push({
-							dataIndx: dataIndx,
+							dataIndex: dataIndex,
 							value: value,
 							value2: value2,
 							condition: condition,
@@ -9366,14 +9409,14 @@
 			}
 		},
 		end: function(cd, value) {
-			var lastIndx = cd.lastIndexOf(value);
-			if (lastIndx != -1 && (lastIndx + value.length == cd.length)) {
+			var lastIndex = cd.lastIndexOf(value);
+			if (lastIndex != -1 && (lastIndex + value.length == cd.length)) {
 				return true
 			}
 		},
 		notend: function(cd, value) {
-			var lastIndx = cd.lastIndexOf(value);
-			if (lastIndx != -1 && (lastIndx + value.length == cd.length)) {} else {
+			var lastIndex = cd.lastIndexOf(value);
+			if (lastIndex != -1 && (lastIndex + value.length == cd.length)) {} else {
 				return true
 			}
 		},
@@ -9443,13 +9486,13 @@
 		return cd
 	};
 	_pFilterData.isMatchCellSingle = function(s, rowData) {
-		var dataIndx = s.dataIndx,
+		var dataIndex = s.dataIndex,
 			dataType = s.dataType,
 			value = s.value,
 			value2 = s.value2,
 			condition = s.condition,
 			cbFn = s.cbFn,
-			cd = rowData[dataIndx];
+			cd = rowData[dataIndex];
 		if (condition == "regexp") {
 			cd = (cd == null) ? "" : cd
 		} else {
@@ -9459,7 +9502,7 @@
 		return found
 	};
 	_pFilterData.isMatchCellMultiple = function(s, rowData) {
-		var dataIndx = s.dataIndx,
+		var dataIndex = s.dataIndex,
 			dataType = s.dataType,
 			smode = s.mode,
 			filters = s.filters,
@@ -9471,7 +9514,7 @@
 			var f = filters[i],
 				value = f.value,
 				condition = f.condition,
-				cd = rowData[dataIndx],
+				cd = rowData[dataIndex],
 				found = this.isMatchRule(cd, condition, value, dataType);
 			if (smode == "OR" && found) {
 				return true
@@ -9617,32 +9660,32 @@
 	fn.sort = function(obj) {
 		var that = this,
 			options = this.options,
-			colIndx = obj.colIndx,
-			dataIndx = obj.dataIndx,
+			colIndex = obj.colIndex,
+			dataIndex = obj.dataIndex,
 			evt = obj.evt,
 			DM = options.dataModel;
-		if (colIndx == null && dataIndx == null) {
-			dataIndx = DM.sortIndx;
-			if (dataIndx == null) {
+		if (colIndex == null && dataIndex == null) {
+			dataIndex = DM.sortIndex;
+			if (dataIndex == null) {
 				return
 			}
 		}
-		colIndx = (colIndx == null) ? this.getColIndx({
-			dataIndx: dataIndx
-		}) : colIndx;
-		var column = this.colModel[colIndx];
-		dataIndx = (dataIndx == null) ? column.dataIndx : dataIndx;
+		colIndex = (colIndex == null) ? this.getColIndex({
+			dataIndex: dataIndex
+		}) : colIndex;
+		var column = this.colModel[colIndex];
+		dataIndex = (dataIndex == null) ? column.dataIndex : dataIndex;
 		if (that._trigger("beforeSort", evt, {
 			dataModel: DM,
 			column: column,
-			dataIndx: dataIndx
+			dataIndex: dataIndex
 		}) == false) {
 			return
 		}
 		if (that.$td_edit != null) {
 			that.quitEditMode()
 		}
-		this.iSort._refreshSorters(dataIndx);
+		this.iSort._refreshSorters(dataIndex);
 		if (DM.sorting == "local") {
 			this.iSort._sortLocalData(DM.data);
 			this.refreshView()
@@ -9653,7 +9696,7 @@
 						that._trigger("sort", evt, {
 							dataModel: DM,
 							column: column,
-							dataIndx: dataIndx
+							dataIndex: dataIndex
 						});
 						that._onDataAvailable()
 					}
@@ -9709,8 +9752,8 @@
 					for (var j = 0; j < CMLength; j++) {
 						var column = CM[j];
 						if (!column.hidden) {
-							var dataIndx = column.dataIndx;
-							response.push('<Cell><Data ss:Type="String"><![CDATA[' + rowData[dataIndx] + "]]></Data></Cell>")
+							var dataIndex = column.dataIndex;
+							response.push('<Cell><Data ss:Type="String"><![CDATA[' + rowData[dataIndex] + "]]></Data></Cell>")
 						}
 					}
 					response.push("</Row>")
@@ -9741,8 +9784,8 @@
 					for (var j = 0; j < CMLength; j++) {
 						var column = CM[j];
 						if (!column.hidden) {
-							var dataIndx = column.dataIndx;
-							var cellData = rowData[dataIndx] + "";
+							var dataIndex = column.dataIndex;
+							var cellData = rowData[dataIndex] + "";
 							cellData = cellData.replace(/\"/g, '""');
 							response.push('"' + cellData + '"')
 						}
@@ -9804,7 +9847,7 @@
 			recId = that.getRecId({
 				rowData: rowData
 			}),
-			dataIndx = objP.dataIndx,
+			dataIndex = objP.dataIndex,
 			oldVal = objP.oldVal,
 			newVal = objP.newVal,
 			udata = this.udata,
@@ -9814,13 +9857,13 @@
 		}
 		for (var i = 0, len = udata.length; i < len; i++) {
 			var rec = udata[i];
-			if (rec.rowData == rowData && rec.dataIndx == dataIndx) {
+			if (rec.rowData == rowData && rec.dataIndex == dataIndex) {
 				_found = true;
 				if (rec.oldVal == newVal) {
 					udata.splice(i, 1);
 					var obj = {
 						rowData: rowData,
-						dataIndx: dataIndx,
+						dataIndex: dataIndex,
 						cls: "pq-cell-dirty"
 					};
 					that.removeClass(obj)
@@ -9834,14 +9877,14 @@
 			var obj = {
 				rowData: rowData,
 				recId: recId,
-				dataIndx: dataIndx,
+				dataIndex: dataIndex,
 				newVal: newVal,
 				oldVal: oldVal
 			};
 			udata.push(obj);
 			var obj = {
 				rowData: rowData,
-				dataIndx: dataIndx,
+				dataIndex: dataIndex,
 				cls: "pq-cell-dirty"
 			};
 			that.addClass(obj)
@@ -9849,13 +9892,13 @@
 	};
 	_pUCData["delete"] = function(obj) {
 		var that = this.that,
-			rowIndx = obj.rowIndx,
-			rowIndxPage = obj.rowIndxPage,
-			offset = that.rowIndxOffset,
-			rowIndx = (rowIndx == null) ? (rowIndxPage + offset) : rowIndx,
-			rowIndxPage = (rowIndxPage == null) ? (rowIndx - offset) : rowIndxPage,
+			rowIndex = obj.rowIndex,
+			rowIndexPage = obj.rowIndexPage,
+			offset = that.rowIndexOffset,
+			rowIndex = (rowIndex == null) ? (rowIndexPage + offset) : rowIndex,
+			rowIndexPage = (rowIndexPage == null) ? (rowIndex - offset) : rowIndexPage,
 			paging = that.options.pageModel.type,
-			indx = (paging == "remote") ? rowIndxPage : rowIndx,
+			index = (paging == "remote") ? rowIndexPage : rowIndex,
 			adata = this.adata,
 			ddata = this.ddata,
 			rowData = that.getRowData(obj);
@@ -9866,7 +9909,7 @@
 			}
 		}
 		ddata.push({
-			indx: indx,
+			index: index,
 			rowData: rowData
 		})
 	};
@@ -9992,7 +10035,7 @@
 		mydata.deleteList = ddata;
 		return mydata
 	};
-	_pUCData.commitAdd = function(rows, recIndx) {
+	_pUCData.commitAdd = function(rows, recIndex) {
 		var CM = this.that.colModel,
 			CMLength = CM.length,
 			adata = this.adata,
@@ -10007,13 +10050,13 @@
 				for (var k = 0; k < CMLength; k++) {
 					var column = CM[k],
 						hidden = column.hidden,
-						dataIndx = column.dataIndx;
-					if (hidden || (dataIndx == recIndx)) {
+						dataIndex = column.dataIndex;
+					if (hidden || (dataIndex == recIndex)) {
 						continue
 					}
-					var cellData = rowData[dataIndx],
+					var cellData = rowData[dataIndex],
 						cellData = (cellData == null) ? "" : cellData + "",
-						cell = row[dataIndx],
+						cell = row[dataIndex],
 						cell = (cell == null) ? "" : cell + "";
 					if (cellData != cell) {
 						_found = false;
@@ -10021,7 +10064,7 @@
 					}
 				}
 				if (_found) {
-					rowData[recIndx] = row[recIndx];
+					rowData[recIndex] = row[recIndex];
 					foundRowData.push(rowData)
 				}
 			}
@@ -10035,7 +10078,7 @@
 		}
 		this.adata = newadata
 	};
-	_pUCData.commitUpdate = function(rows, recIndx) {
+	_pUCData.commitUpdate = function(rows, recIndex) {
 		var that = this.that,
 			CM = that.colModel,
 			CMLength = CM.length,
@@ -10050,18 +10093,18 @@
 			}
 			for (var j = 0; j < rowLen; j++) {
 				var row = rows[j];
-				if (rowData[recIndx] == row[recIndx]) {
+				if (rowData[recIndex] == row[recIndex]) {
 					foundRowData.push(rowData);
 					for (var k = 0; k < CMLength; k++) {
 						var column = CM[k],
 							hidden = column.hidden,
-							dataIndx = column.dataIndx;
-						if (row[dataIndx] !== undefined) {
-							rowData[dataIndx] = row[dataIndx]
+							dataIndex = column.dataIndex;
+						if (row[dataIndex] !== undefined) {
+							rowData[dataIndex] = row[dataIndex]
 						}
 						that.removeClass({
 							rowData: rowData,
-							dataIndx: dataIndx,
+							dataIndex: dataIndex,
 							cls: "pq-cell-dirty",
 							refresh: false
 						})
@@ -10078,7 +10121,7 @@
 		}
 		this.udata = newudata
 	};
-	_pUCData.commitDelete = function(rows, recIndx) {
+	_pUCData.commitDelete = function(rows, recIndex) {
 		var ddata = this.ddata,
 			ddataLen = ddata.length,
 			rowLen = rows.length,
@@ -10087,7 +10130,7 @@
 			var rowData = ddata[i].rowData;
 			for (var j = 0; j < rowLen; j++) {
 				var row = rows[j];
-				if (rowData[recIndx] == row[recIndx]) {
+				if (rowData[recIndex] == row[recIndex]) {
 					foundRowData.push(rowData)
 				}
 			}
@@ -10106,11 +10149,11 @@
 			udata = this.udata;
 		for (var i = 0, len = udata.length; i < len; i++) {
 			var rec = udata[i],
-				dataIndx = rec.dataIndx,
+				dataIndex = rec.dataIndex,
 				rowData = rec.rowData;
 			that.removeClass({
 				rowData: rowData,
-				dataIndx: dataIndx,
+				dataIndex: dataIndex,
 				cls: "pq-cell-dirty"
 			})
 		}
@@ -10125,7 +10168,7 @@
 	_pUCData.commit = function(objP) {
 		var that = this.that,
 			DM = that.options.dataModel,
-			recIndx = DM.recIndx;
+			recIndex = DM.recIndex;
 		if (objP == null) {
 			this.commitAddAll();
 			this.commitUpdateAll();
@@ -10135,21 +10178,21 @@
 				rows = objP.rows;
 			if (objType == "add") {
 				if (rows) {
-					this.commitAdd(rows, recIndx)
+					this.commitAdd(rows, recIndex)
 				} else {
 					this.commitAddAll()
 				}
 			} else {
 				if (objType == "update") {
 					if (rows) {
-						this.commitUpdate(rows, recIndx)
+						this.commitUpdate(rows, recIndex)
 					} else {
 						this.commitUpdateAll()
 					}
 				} else {
 					if (objType == "delete") {
 						if (rows) {
-							this.commitDelete(rows, recIndx)
+							this.commitDelete(rows, recIndex)
 						} else {
 							this.commitDeleteAll()
 						}
@@ -10182,9 +10225,9 @@
 			paging = PM.type;
 		for (var i = ddata.length - 1; i >= 0; i--) {
 			var rec = ddata[i],
-				indx = rec.indx,
+				index = rec.index,
 				rowData = rec.rowData;
-			data.splice(indx, 0, rowData);
+			data.splice(index, 0, rowData);
 			if (paging == "remote") {
 				PM.totalRecords++
 			}
@@ -10198,14 +10241,14 @@
 			var rec = udata[i],
 				recId = rec.recId,
 				rowData = rec.rowData,
-				dataIndx = rec.dataIndx;
+				dataIndex = rec.dataIndex;
 			if (recId == null) {
 				continue
 			}
-			rowData[dataIndx] = rec.oldVal;
+			rowData[dataIndex] = rec.oldVal;
 			that.removeClass({
 				rowData: rowData,
-				dataIndx: dataIndx,
+				dataIndex: dataIndex,
 				cls: "pq-cell-dirty",
 				refresh: false
 			})
@@ -10260,25 +10303,25 @@
 		this.quitEditMode();
 		this.iUCData.commit(obj)
 	};
-	fnGrid._getRowIndx = function() {
+	fnGrid._getRowIndex = function() {
 		var that = this;
 		var arr = that.selection({
 			type: "row",
 			method: "getSelection"
 		});
 		if (arr && arr.length > 0) {
-			var rowIndx = arr[0].rowIndx,
-				offset = that.rowIndxOffset,
+			var rowIndex = arr[0].rowIndex,
+				offset = that.rowIndexOffset,
 				PM = that.options.pageModel,
 				paging = PM.type,
-				rowIndxPage = rowIndx - offset,
+				rowIndexPage = rowIndex - offset,
 				rPP = PM.rPP;
 			if (paging) {
-				if (rowIndxPage >= 0 && rowIndxPage < rPP) {
-					return rowIndx
+				if (rowIndexPage >= 0 && rowIndexPage < rPP) {
+					return rowIndex
 				}
 			} else {
-				return rowIndx
+				return rowIndex
 			}
 		} else {
 			return null
@@ -10289,32 +10332,32 @@
 			options = that.options,
 			track = options.track,
 			track = (objP.track != null) ? objP.track : track,
-			rowIndx = objP.rowIndx,
+			rowIndex = objP.rowIndex,
 			row = objP.row,
 			requireRefresh = false,
 			rowData = that.getRowData({
-				rowIndx: rowIndx
+				rowIndex: rowIndex
 			});
 		var obj = {
 			rowData: rowData
 		};
-		for (var dataIndx in row) {
-			var oldVal = rowData[dataIndx],
-				newVal = row[dataIndx];
+		for (var dataIndex in row) {
+			var oldVal = rowData[dataIndex],
+				newVal = row[dataIndex];
 			if (newVal !== oldVal) {
 				requireRefresh = true;
 				if (track) {
-					obj.dataIndx = dataIndx;
+					obj.dataIndex = dataIndex;
 					obj.oldVal = oldVal;
 					obj.newVal = newVal;
 					this.iUCData.update(obj)
 				}
-				rowData[dataIndx] = newVal
+				rowData[dataIndex] = newVal
 			}
 		}
 		if (requireRefresh) {
 			that.refreshRow({
-				rowIndx: rowIndx
+				rowIndex: rowIndex
 			})
 		}
 	};
@@ -10325,32 +10368,32 @@
 			paging = PM.type,
 			data = DM.data,
 			CM = that.colModel,
-			offset = that.rowIndxOffset,
-			rowIndxPage = (obj.rowIndxPage == null) ? obj.rowIndx - offset : obj.rowIndxPage,
-			rowIndx = (obj.rowIndx == null) ? rowIndxPage + offset : obj.rowIndx,
-			indx = (paging == "remote") ? rowIndxPage : rowIndx,
-			rowData = data[indx];
+			offset = that.rowIndexOffset,
+			rowIndexPage = (obj.rowIndexPage == null) ? obj.rowIndex - offset : obj.rowIndexPage,
+			rowIndex = (obj.rowIndex == null) ? rowIndexPage + offset : obj.rowIndex,
+			index = (paging == "remote") ? rowIndexPage : rowIndex,
+			rowData = data[index];
 		this.rowData = rowData;
-		this.$crudDialog.dialog("option", "title", "Edit Record (" + (rowIndx + 1) + ")");
+		this.$crudDialog.dialog("option", "title", "Edit Record (" + (rowIndex + 1) + ")");
 		var $frm = this.$crudForm;
 		for (var i = 0; i < CM.length; i++) {
 			var column = CM[i],
-				dataIndx = column.dataIndx,
-				val = rowData[dataIndx];
-			$frm.find("*[name='" + dataIndx + "']").val(val)
+				dataIndex = column.dataIndex,
+				val = rowData[dataIndex];
+			$frm.find("*[name='" + dataIndex + "']").val(val)
 		}
 	};
 	fnGrid.getRecId = function(obj) {
 		var that = this,
 			DM = that.options.dataModel;
-		obj.dataIndx = DM.recIndx;
+		obj.dataIndex = DM.recIndex;
 		var recId = that.getCellData(obj);
 		return recId
 	};
 	fnGrid.getCellData = function(obj) {
 		var rowData = this.getRowData(obj),
-			dataIndx = obj.dataIndx;
-		return rowData[dataIndx]
+			dataIndex = obj.dataIndex;
+		return rowData[dataIndex]
 	};
 	fnGrid.getRowData = function(obj) {
 		var objRowData = obj.rowData;
@@ -10361,49 +10404,49 @@
 			DM = options.dataModel,
 			PM = options.pageModel,
 			paging = PM.type,
-			recIndx = DM.recIndx,
+			recIndex = DM.recIndex,
 			recId = obj.recId,
 			data = DM.data;
 		if (recId != null) {
 			for (var i = 0, len = data.length; i < len; i++) {
 				var rowData = data[i];
-				if (rowData[recIndx] == recId) {
+				if (rowData[recIndex] == recId) {
 					return rowData
 				}
 			}
 		} else {
-			var rowIndx = obj.rowIndx,
-				rowIndxPage = obj.rowIndxPage,
-				offset = this.rowIndxOffset,
-				rowIndx = (rowIndx != null) ? rowIndx : rowIndxPage + offset,
-				rowIndxPage = (rowIndxPage != null) ? rowIndxPage : rowIndx - offset,
-				indx = (paging == "remote") ? rowIndxPage : rowIndx,
-				rowData = data[indx];
+			var rowIndex = obj.rowIndex,
+				rowIndexPage = obj.rowIndexPage,
+				offset = this.rowIndexOffset,
+				rowIndex = (rowIndex != null) ? rowIndex : rowIndexPage + offset,
+				rowIndexPage = (rowIndexPage != null) ? rowIndexPage : rowIndex - offset,
+				index = (paging == "remote") ? rowIndexPage : rowIndex,
+				rowData = data[index];
 			return rowData
 		}
 	};
 	fnGrid.deleteRow = function(obj) {
 		var that = this,
-			rowIndx = obj.rowIndx,
+			rowIndex = obj.rowIndex,
 			effect = obj.effect,
 			options = that.options,
 			DM = options.dataModel,
 			PM = options.pageModel,
 			paging = PM.type;
-		if (rowIndx != null) {
-			var indx = (paging == "remote") ? (rowIndx - this.rowIndxOffset) : rowIndx,
+		if (rowIndex != null) {
+			var index = (paging == "remote") ? (rowIndex - this.rowIndexOffset) : rowIndex,
 				data = DM.data,
 				track = options.track,
 				track = (obj.track != null) ? obj.track : track;
 			if (track) {
 				this.iUCData["delete"]({
-					rowIndx: rowIndx
+					rowIndex: rowIndex
 				})
 			}
 			if (effect) {
 				var that = this,
 					$tr = this.getRow({
-						rowIndx: rowIndx
+						rowIndex: rowIndex
 					});
 				if ($tr) {
 					$tr.effect("fade", null, 350, function() {
@@ -10411,7 +10454,7 @@
 						if (complete && typeof complete == "function") {
 							complete.call(that)
 						}
-						var remArr = data.splice(indx, 1);
+						var remArr = data.splice(index, 1);
 						if (remArr && remArr.length && paging == "remote") {
 							PM.totalRecords--
 						}
@@ -10419,7 +10462,7 @@
 					})
 				}
 			} else {
-				var remArr = data.splice(indx, 1);
+				var remArr = data.splice(index, 1);
 				if (remArr && remArr.length && paging == "remote") {
 					PM.totalRecords--
 				}
@@ -10442,9 +10485,9 @@
 			},
 			text: false
 		}).bind("click", function(evt) {
-			var rowIndxPage = that.rowPrevSelect();
+			var rowIndexPage = that.rowPrevSelect();
 			self._fillForm({
-				rowIndxPage: rowIndxPage
+				rowIndexPage: rowIndexPage
 			})
 		});
 		this.prev.removeClass("ui-corner-all");
@@ -10454,9 +10497,9 @@
 			},
 			text: false
 		}).bind("click", function(evt) {
-			var rowIndxPage = that.rowNextSelect();
+			var rowIndexPage = that.rowNextSelect();
 			self._fillForm({
-				rowIndxPage: rowIndxPage
+				rowIndexPage: rowIndexPage
 			})
 		});
 		this.next.removeClass("ui-corner-all")
@@ -10466,9 +10509,9 @@
 			rowData = {}, CM = that.colModel;
 		for (var i = 0; i < CM.length; i++) {
 			var column = CM[i],
-				dataIndx = column.dataIndx,
-				$fld = $frm.find("*[name='" + dataIndx + "']");
-			rowData[dataIndx] = $fld.val()
+				dataIndex = column.dataIndex,
+				$fld = $frm.find("*[name='" + dataIndex + "']");
+			rowData[dataIndex] = $fld.val()
 		}
 		return rowData
 	};
@@ -10479,8 +10522,8 @@
 	fnGrid._addLocal = function(obj) {
 		var that = this,
 			rowData = obj.rowData,
-			rowIndx = obj.rowIndx,
-			rowIndxPage = obj.rowIndxPage,
+			rowIndex = obj.rowIndex,
+			rowIndexPage = obj.rowIndexPage,
 			thatOptions = that.options,
 			DM = thatOptions.dataModel,
 			PM = thatOptions.pageModel,
@@ -10500,24 +10543,24 @@
 				rowData: rowData
 			})
 		}
-		if (rowIndx == null && rowIndxPage == null) {
+		if (rowIndex == null && rowIndexPage == null) {
 			data.push(rowData)
 		} else {
-			var offset = this.rowIndxOffset,
-				rowIndx = (rowIndx == null) ? (rowIndxPage + offset) : rowIndx,
-				rowIndxPage = (rowIndxPage == null) ? (rowIndx - offset) : rowIndxPage,
-				indx = (paging == "remote") ? rowIndxPage : rowIndx;
-			data.splice(indx, 0, rowData)
+			var offset = this.rowIndexOffset,
+				rowIndex = (rowIndex == null) ? (rowIndexPage + offset) : rowIndex,
+				rowIndexPage = (rowIndexPage == null) ? (rowIndex - offset) : rowIndexPage,
+				index = (paging == "remote") ? rowIndexPage : rowIndex;
+			data.splice(index, 0, rowData)
 		} if (paging == "remote") {
 			PM.totalRecords++
 		}
 		if (!obj.refresh !== false) {
 			this.refreshView()
 		}
-		if (rowIndx == null) {
+		if (rowIndex == null) {
 			return data.length - 1
 		} else {
-			return rowIndx
+			return rowIndex
 		}
 	};
 	fnGrid._addRemote = function(obj) {
@@ -10584,9 +10627,9 @@
 									options: options,
 									attr: " class='" + cls + "' " + attr + " " + style,
 									prepend: item.prepend,
-									groupIndx: item.groupIndx,
-									valueIndx: item.valueIndx,
-									labelIndx: item.labelIndx
+									groupIndex: item.groupIndex,
+									valueIndex: item.valueIndex,
+									labelIndex: item.labelIndex
 								});
 								$ctrl = $(inp).appendTo(element)
 							} else {
@@ -10649,7 +10692,7 @@
 		var that = this.that,
 			lastSel;
 		if ((lastSel = this.focusSelection) && this.isSelected(lastSel)) {
-			var objP = that.getRowIndx(lastSel);
+			var objP = that.getRowIndex(lastSel);
 			objP.rowData = lastSel.rowData;
 			return objP
 		}
@@ -10659,11 +10702,11 @@
 			lastSel;
 		if ((lastSel = this.focusSelection) && this.isSelected(lastSel)) {
 			var rowData = lastSel.rowData;
-			var objP = that.getRowIndx({
+			var objP = that.getRowIndex({
 				rowData: rowData
 			});
 			objP.rowData = rowData;
-			objP.dataIndx = lastSel.dataIndx;
+			objP.dataIndex = lastSel.dataIndex;
 			return objP
 		}
 	};
@@ -10673,7 +10716,7 @@
 		if ($ae && $ae.hasClass("pq-grid-row")) {
 			var $grid = $ae.closest(".pq-grid");
 			if ($grid[0] == that.element[0]) {
-				var objP = that.getRowIndx({
+				var objP = that.getRowIndex({
 					$tr: $ae
 				});
 				objP.$tr = $ae;
@@ -10731,7 +10774,7 @@
 			var that = this.that,
 				rowData = ls.rowData,
 				rowData2 = that.getRowData({
-					rowIndx: rowIndx
+					rowIndex: rowIndex
 				});
 			if (rowData == rowData2 && this.isSelected(ls)) {
 				return ls
@@ -10745,12 +10788,12 @@
 	_pSelection.getLastSelectionCurPage = function() {
 		var ls = this.lastSelection;
 		if (ls && this.isSelected(ls)) {
-			var rowIndx = ls.rowIndx,
+			var rowIndex = ls.rowIndex,
 				PM = this.that.options.pageModel;
 			if (PM.type) {
 				var curPage = PM.curPage,
 					rPP = PM.rPP;
-				if (Math.ceil((rowIndx + 1) / rPP) == curPage) {
+				if (Math.ceil((rowIndex + 1) / rPP) == curPage) {
 					return ls
 				} else {
 					return null
@@ -10778,8 +10821,8 @@
 				rPP = DM.rPP;
 			for (var i = 0; i < selection.length; i++) {
 				var sel = selection[i],
-					rowIndx = sel.rowIndx;
-				if (Math.ceil((rowIndx + 1) / rPP) == curPage) {
+					rowIndex = sel.rowIndex;
+				if (Math.ceil((rowIndex + 1) / rPP) == curPage) {
 					selection2.push(sel)
 				}
 			}
@@ -10805,31 +10848,31 @@
 	var _pR = cRows.prototype = new cSelection;
 	_pR.extendSelection = function(objP) {
 		var that = this.that,
-			rowIndx = objP.rowIndx,
+			rowIndex = objP.rowIndex,
 			mode = that.options.selectionModel.mode,
 			evt = objP.evt;
 		var rowFirstSel = this.getFirstSelection();
 		if (rowFirstSel == null) {
 			that.setSelection({
-				rowIndx: rowIndx
+				rowIndex: rowIndex
 			});
 			return
 		}
 		if (mode != "single") {
-			var rowIndx1 = rowFirstSel.rowIndx,
-				initRowIndx = rowIndx1,
-				finalRowIndx = rowIndx;
-			if (rowIndx1 > rowIndx) {
-				initRowIndx = rowIndx;
-				finalRowIndx = rowIndx1
+			var rowIndex1 = rowFirstSel.rowIndex,
+				initRowIndex = rowIndex1,
+				finalRowIndex = rowIndex;
+			if (rowIndex1 > rowIndex) {
+				initRowIndex = rowIndex;
+				finalRowIndex = rowIndex1
 			}
 			this.selectRange({
-				initRowIndx: initRowIndx,
-				finalRowIndx: finalRowIndx,
+				initRowIndex: initRowIndex,
+				finalRowIndex: finalRowIndex,
 				evt: evt
 			});
 			this.add({
-				rowIndx: rowIndx
+				rowIndex: rowIndex
 			})
 		}
 	};
@@ -10841,7 +10884,7 @@
 			PM = options.pageModel,
 			paging = PM.type,
 			remote = (paging == "remote") ? true : false,
-			offset = that.rowIndxOffset,
+			offset = that.rowIndexOffset,
 			data = DM.data;
 		if (!data) {
 			return
@@ -10849,22 +10892,22 @@
 		for (var i = 0, len = data.length; i < len; i++) {
 			var rowData = data[i];
 			if (rowData.pq_rowselect) {
-				var rowIndx = (remote) ? (i + offset) : i;
+				var rowIndex = (remote) ? (i + offset) : i;
 				this.selection.push({
-					rowIndx: rowIndx,
+					rowIndex: rowIndex,
 					rowData: rowData
 				})
 			}
 		}
 	};
 	_pR.replace = function(obj) {
-		var rowIndx = obj.rowIndx,
-			offset = (obj.offset == null) ? this.that.getRowIndxOffset() : obj.offset,
-			rowIndxPage = rowIndx - offset,
+		var rowIndex = obj.rowIndex,
+			offset = (obj.offset == null) ? this.that.getRowIndexOffset() : obj.offset,
+			rowIndexPage = rowIndex - offset,
 			$tr = obj.$tr,
 			evt = obj.evt;
 		obj.offset = offset;
-		obj.rowIndxPage = rowIndxPage;
+		obj.rowIndexPage = rowIndexPage;
 		this.removeAll({
 			raiseEvent: true
 		});
@@ -10872,10 +10915,10 @@
 	};
 	_pR.indexOf = function(obj) {
 		this.refresh();
-		var rowIndx = obj.rowIndx,
+		var rowIndex = obj.rowIndex,
 			selectedRows = this.selection;
 		for (var i = 0; i < selectedRows.length; i++) {
-			if (selectedRows[i].rowIndx == rowIndx) {
+			if (selectedRows[i].rowIndex == rowIndex) {
 				return i
 			}
 		}
@@ -10887,10 +10930,10 @@
 		return (rowData) ? ((rowData.pq_rowselect == null) ? false : rowData.pq_rowselect) : null
 	};
 	_pR._boundRow = function(obj) {
-		var rowIndxPage = obj.rowIndxPage,
+		var rowIndexPage = obj.rowIndexPage,
 			that = this.that,
 			$tr = (obj.$tr == null) ? that.getRow({
-				rowIndxPage: rowIndxPage
+				rowIndexPage: rowIndexPage
 			}) : obj.$tr;
 		if ($tr == null || $tr.length == 0) {
 			return false
@@ -10900,102 +10943,102 @@
 	};
 	_pR.selectRange = function(objP) {
 		var that = this.that,
-			initRowIndx = objP.initRowIndx,
-			finalRowIndx = objP.finalRowIndx,
+			initRowIndex = objP.initRowIndex,
+			finalRowIndex = objP.finalRowIndex,
 			evt = objP.evt,
 			rowSelection = this.getSelection(),
 			rowSelection2 = rowSelection.slice(0);
 		for (var i = 0; i < rowSelection2.length; i++) {
 			var rowS = rowSelection2[i],
-				row = rowS.rowIndx;
-			if (row < initRowIndx || row > finalRowIndx) {
+				row = rowS.rowIndex;
+			if (row < initRowIndex || row > finalRowIndex) {
 				this.remove({
-					rowIndx: row
+					rowIndex: row
 				})
 			}
 		}
-		if (initRowIndx > finalRowIndx) {
-			var temp = initRowIndx;
-			initRowIndx = finalRowIndx;
-			finalRowIndx = temp
+		if (initRowIndex > finalRowIndex) {
+			var temp = initRowIndex;
+			initRowIndex = finalRowIndex;
+			finalRowIndex = temp
 		}
-		for (var row = initRowIndx; row <= finalRowIndx; row++) {
+		for (var row = initRowIndex; row <= finalRowIndex; row++) {
 			this.add({
-				rowIndx: row,
+				rowIndex: row,
 				focus: false
 			})
 		}
 	};
 	_pC._addToData = function(objP) {
-		var dataIndx = objP.dataIndx,
+		var dataIndex = objP.dataIndex,
 			rowData = this.that.getRowData(objP);
 		if (!rowData.pq_cellselect) {
 			rowData.pq_cellselect = {}
 		}
-		rowData.pq_cellselect[dataIndx] = true
+		rowData.pq_cellselect[dataIndex] = true
 	};
 	_pC.extendSelection = function(objP) {
 		var that = this.that,
 			lastSel = this.getFirstSelection(),
-			rowIndx = objP.rowIndx,
-			colIndx = objP.colIndx,
+			rowIndex = objP.rowIndex,
+			colIndex = objP.colIndex,
 			mode = that.options.selectionModel.mode,
 			evt = objP.evt;
 		if (lastSel == null) {
 			that.setSelection({
-				rowIndx: rowIndx,
-				colIndx: colIndx
+				rowIndex: rowIndex,
+				colIndex: colIndex
 			});
 			return
 		}
-		var rowIndx1 = lastSel.rowIndx,
-			colIndx1 = that.getColIndx({
-				dataIndx: lastSel.dataIndx
+		var rowIndex1 = lastSel.rowIndex,
+			colIndex1 = that.getColIndex({
+				dataIndex: lastSel.dataIndex
 			}),
-			initRowIndx = rowIndx1,
-			finalRowIndx = rowIndx,
-			initColIndx = colIndx1,
-			finalColIndx = colIndx;
-		if (rowIndx1 > rowIndx) {
-			initRowIndx = rowIndx;
-			finalRowIndx = rowIndx1
+			initRowIndex = rowIndex1,
+			finalRowIndex = rowIndex,
+			initColIndex = colIndex1,
+			finalColIndex = colIndex;
+		if (rowIndex1 > rowIndex) {
+			initRowIndex = rowIndex;
+			finalRowIndex = rowIndex1
 		}
 		if (mode == "range") {
-			if (rowIndx1 > rowIndx) {
-				initColIndx = colIndx;
-				finalColIndx = colIndx1
+			if (rowIndex1 > rowIndex) {
+				initColIndex = colIndex;
+				finalColIndex = colIndex1
 			}
-			if (rowIndx == rowIndx1 && colIndx < colIndx1) {
-				initColIndx = colIndx;
-				finalColIndx = colIndx1
+			if (rowIndex == rowIndex1 && colIndex < colIndex1) {
+				initColIndex = colIndex;
+				finalColIndex = colIndex1
 			}
 			this.selectRange({
-				initRowIndx: initRowIndx,
-				initColIndx: initColIndx,
-				finalRowIndx: finalRowIndx,
-				finalColIndx: finalColIndx,
+				initRowIndex: initRowIndex,
+				initColIndex: initColIndex,
+				finalRowIndex: finalRowIndex,
+				finalColIndex: finalColIndex,
 				evt: evt
 			});
 			this.add({
-				rowIndx: rowIndx,
-				colIndx: colIndx
+				rowIndex: rowIndex,
+				colIndex: colIndex
 			})
 		} else {
 			if (mode == "block") {
-				if (colIndx1 > colIndx) {
-					initColIndx = colIndx;
-					finalColIndx = colIndx1
+				if (colIndex1 > colIndex) {
+					initColIndex = colIndex;
+					finalColIndex = colIndex1
 				}
 				this.selectBlock({
-					initRowIndx: initRowIndx,
-					initColIndx: initColIndx,
-					finalRowIndx: finalRowIndx,
-					finalColIndx: finalColIndx,
+					initRowIndex: initRowIndex,
+					initColIndex: initColIndex,
+					finalRowIndex: finalRowIndex,
+					finalColIndex: finalColIndex,
 					evt: evt
 				});
 				this.add({
-					rowIndx: rowIndx,
-					colIndx: colIndx
+					rowIndex: rowIndex,
+					colIndex: colIndex
 				})
 			}
 		}
@@ -11003,7 +11046,7 @@
 	_pC._removeFromData = function(objP) {
 		var rowData = objP.rowData;
 		if (rowData && rowData.pq_cellselect) {
-			delete rowData.pq_cellselect[objP.dataIndx]
+			delete rowData.pq_cellselect[objP.dataIndex]
 		}
 	};
 	_pC.removeAll = function() {
@@ -11021,15 +11064,15 @@
 		var rows = this.selection.slice(0);
 		if (page) {
 			var rows2 = [],
-				offset = that.rowIndxOffset,
+				offset = that.rowIndexOffset,
 				curPageData = that.data,
 				curPageDataLen = curPageData ? curPageData.length : 0;
 			for (var i = 0, len = rows.length; i < len; i++) {
 				var row = rows[i],
-					rowIndx = row.rowIndx,
-					rowIndxPage = rowIndx - offset;
-				if (rowIndxPage >= 0) {
-					if (rowIndxPage < curPageDataLen) {
+					rowIndex = row.rowIndex,
+					rowIndexPage = rowIndex - offset;
+				if (rowIndexPage >= 0) {
+					if (rowIndexPage < curPageDataLen) {
 						rows2.push(row)
 					} else {
 						break
@@ -11049,13 +11092,13 @@
 	_pC.isSelected = function(objP) {
 		var that = this.that,
 			rowData = that.getRowData(objP),
-			dataIndx = objP.dataIndx,
-			dataIndx = (dataIndx == null) ? that.colModel[objP.colIndx].dataIndx : dataIndx;
+			dataIndex = objP.dataIndex,
+			dataIndex = (dataIndex == null) ? that.colModel[objP.colIndex].dataIndex : dataIndex;
 		if (rowData == null) {
 			return null
 		}
 		if (rowData.pq_cellselect) {
-			if (rowData.pq_cellselect[dataIndx]) {
+			if (rowData.pq_cellselect[dataIndex]) {
 				return true
 			}
 		}
@@ -11069,7 +11112,7 @@
 			data = DM.data,
 			paging = PM.type,
 			remote = (paging == "remote") ? true : false,
-			offset = that.rowIndxOffset;
+			offset = that.rowIndexOffset;
 		if (!data) {
 			return
 		}
@@ -11077,13 +11120,13 @@
 			var rowData = data[i];
 			var pq_cellselect = rowData.pq_cellselect;
 			if (pq_cellselect) {
-				var rowIndx = (remote) ? (i + offset) : i;
-				for (var dataIndx in pq_cellselect) {
-					if (pq_cellselect[dataIndx]) {
+				var rowIndex = (remote) ? (i + offset) : i;
+				for (var dataIndex in pq_cellselect) {
+					if (pq_cellselect[dataIndex]) {
 						this.selection.push({
-							rowIndx: rowIndx,
+							rowIndex: rowIndex,
 							rowData: rowData,
-							dataIndx: dataIndx
+							dataIndex: dataIndex
 						})
 					}
 				}
@@ -11092,56 +11135,56 @@
 		this.isDirty = false
 	};
 	_pC.replace = function(obj) {
-		var rowIndx = obj.rowIndx,
-			colIndx = obj.colIndx,
-			offset = (obj.offset == null) ? this.that.getRowIndxOffset() : obj.offset,
-			rowIndxPage = rowIndx - offset,
+		var rowIndex = obj.rowIndex,
+			colIndex = obj.colIndex,
+			offset = (obj.offset == null) ? this.that.getRowIndexOffset() : obj.offset,
+			rowIndexPage = rowIndex - offset,
 			$td = obj.$td,
 			evt = obj.evt;
-		obj.rowIndxPage = rowIndxPage;
+		obj.rowIndexPage = rowIndexPage;
 		obj.offset = offset;
 		this.removeAll({
 			raiseEvent: true
 		});
 		this.add(obj)
 	};
-	_pC.inView = function(rowIndxPage, colIndx) {
+	_pC.inView = function(rowIndexPage, colIndex) {
 		var that = this.that,
 			options = this.options,
 			freezeRows = options.freezeRows,
 			freezeCols = options.freezeCols;
-		return ((rowIndxPage < freezeRows || rowIndxPage >= that.init && rowIndxPage <= that["final"]) && (colIndx < freezeCols || colIndx >= that.initH && colIndx <= that.finalH))
+		return ((rowIndexPage < freezeRows || rowIndexPage >= that.init && rowIndexPage <= that["final"]) && (colIndex < freezeCols || colIndex >= that.initH && colIndex <= that.finalH))
 	};
 	_pC._add = function(objP) {
 		var that = this.that,
-			rowIndx = objP.rowIndx,
-			rowIndxPage = objP.rowIndxPage,
+			rowIndex = objP.rowIndex,
+			rowIndexPage = objP.rowIndexPage,
 			rowData = objP.rowData,
-			offset = that.rowIndxOffset,
-			success, rowIndx = (rowIndx == null) ? (rowIndxPage + offset) : rowIndx,
-			rowIndxPage = (rowIndxPage == null) ? (rowIndx - offset) : rowIndxPage,
+			offset = that.rowIndexOffset,
+			success, rowIndex = (rowIndex == null) ? (rowIndexPage + offset) : rowIndex,
+			rowIndexPage = (rowIndexPage == null) ? (rowIndex - offset) : rowIndexPage,
 			rowData = (rowData == null) ? that.getRowData(objP) : rowData,
-			colIndx = objP.colIndx,
-			dataIndx = objP.dataIndx,
-			colIndx = (colIndx == null) ? that.getColIndx({
-				dataIndx: dataIndx
-			}) : colIndx,
-			column = that.colModel[colIndx],
-			dataIndx = (dataIndx == null) ? column.dataIndx : dataIndx,
+			colIndex = objP.colIndex,
+			dataIndex = objP.dataIndex,
+			colIndex = (colIndex == null) ? that.getColIndex({
+				dataIndex: dataIndex
+			}) : colIndex,
+			column = that.colModel[colIndex],
+			dataIndex = (dataIndex == null) ? column.dataIndex : dataIndex,
 			evt = objP.evt,
 			isSelected = this.isSelected({
 				rowData: rowData,
-				dataIndx: dataIndx
+				dataIndex: dataIndex
 			});
 		if (isSelected == null) {
 			return false
 		}
-		var inView = this.inView(rowIndxPage, colIndx);
+		var inView = this.inView(rowIndexPage, colIndex);
 		if (isSelected === false) {
 			if (inView) {
 				var $td = that.getCell({
-					rowIndxPage: rowIndxPage,
-					colIndx: colIndx
+					rowIndexPage: rowIndexPage,
+					colIndex: colIndex
 				});
 				if ($td) {
 					$td.addClass("pq-cell-select ui-state-highlight")
@@ -11149,14 +11192,14 @@
 			}
 			this._addToData({
 				rowData: rowData,
-				dataIndx: dataIndx
+				dataIndex: dataIndex
 			});
 			if (objP.trigger !== false) {
 				that._trigger("cellSelect", evt, {
-					rowIndx: rowIndx,
-					rowIndxPage: rowIndxPage,
-					colIndx: colIndx,
-					dataIndx: dataIndx,
+					rowIndex: rowIndex,
+					rowIndexPage: rowIndexPage,
+					colIndex: colIndex,
+					dataIndex: dataIndex,
 					column: column,
 					rowData: rowData
 				})
@@ -11164,15 +11207,15 @@
 			success = true
 		}
 		this.lastSelection = {
-			rowIndx: rowIndx,
-			dataIndx: dataIndx,
+			rowIndex: rowIndex,
+			dataIndex: dataIndex,
 			rowData: rowData
 		};
 		if (objP.focus !== false && inView) {
 			if (!$td || !$td.length) {
 				$td = that.getCell({
-					rowIndxPage: rowIndxPage,
-					dataIndx: dataIndx
+					rowIndexPage: rowIndexPage,
+					dataIndex: dataIndex
 				})
 			}
 			if ($td && $td.length) {
@@ -11181,52 +11224,52 @@
 				that._fixTableViewPort();
 				this.focusSelection = {
 					rowData: rowData,
-					rowIndx: rowIndx,
-					dataIndx: dataIndx
+					rowIndex: rowIndex,
+					dataIndex: dataIndex
 				}
 			}
 		}
 		if (objP.setFirst) {
 			this.firstSelection = {
-				rowIndx: rowIndx,
+				rowIndex: rowIndex,
 				rowData: rowData,
-				dataIndx: dataIndx
+				dataIndex: dataIndex
 			}
 		}
 		if (success) {
 			return {
-				rowIndx: rowIndx,
+				rowIndex: rowIndex,
 				rowData: rowData,
-				dataIndx: dataIndx,
-				colIndx: colIndx,
+				dataIndex: dataIndex,
+				colIndex: colIndex,
 				column: column
 			}
 		}
 	};
-	_pR.inView = function(rowIndxPage) {
+	_pR.inView = function(rowIndexPage) {
 		var that = this.that,
 			options = this.options,
 			freezeRows = options.freezeRows;
-		return ((rowIndxPage < freezeRows || rowIndxPage >= that.init && rowIndxPage <= that["final"]))
+		return ((rowIndexPage < freezeRows || rowIndexPage >= that.init && rowIndexPage <= that["final"]))
 	};
 	_pR._add = function(objP) {
 		var that = this.that,
-			success, rowIndx = objP.rowIndx,
-			rowIndxPage = objP.rowIndxPage,
-			offset = that.rowIndxOffset,
-			rowIndx = (rowIndx == null) ? (rowIndxPage + offset) : rowIndx,
-			rowIndxPage = (rowIndxPage == null) ? (rowIndx - offset) : rowIndxPage,
+			success, rowIndex = objP.rowIndex,
+			rowIndexPage = objP.rowIndexPage,
+			offset = that.rowIndexOffset,
+			rowIndex = (rowIndex == null) ? (rowIndexPage + offset) : rowIndex,
+			rowIndexPage = (rowIndexPage == null) ? (rowIndex - offset) : rowIndexPage,
 			rowData = (rowData == null) ? that.getRowData(objP) : rowData,
 			$tr = objP.$tr,
 			evt = objP.evt,
 			isSelected = this.isSelected({
 				rowData: rowData
 			});
-		objP.rowIndxPage = rowIndxPage;
+		objP.rowIndexPage = rowIndexPage;
 		if (isSelected == null) {
 			return false
 		}
-		var inView = this.inView(rowIndxPage);
+		var inView = this.inView(rowIndexPage);
 		if (isSelected === false) {
 			if (inView) {
 				var ret = this._boundRow(objP),
@@ -11235,8 +11278,8 @@
 			rowData.pq_rowselect = true;
 			if (objP.trigger !== false) {
 				that._trigger("rowSelect", evt, {
-					rowIndx: rowIndx,
-					rowIndxPage: rowIndxPage,
+					rowIndex: rowIndex,
+					rowIndexPage: rowIndexPage,
 					rowData: rowData,
 					$tr: $tr
 				})
@@ -11244,13 +11287,13 @@
 			success = true
 		}
 		this.lastSelection = {
-			rowIndx: rowIndx,
+			rowIndex: rowIndex,
 			rowData: rowData
 		};
 		if (objP.focus !== false && inView) {
 			if (!$tr || !$tr.length) {
 				$tr = that.getRow({
-					rowIndxPage: rowIndxPage
+					rowIndexPage: rowIndexPage
 				})
 			}
 			if ($tr) {
@@ -11260,19 +11303,19 @@
 				that._fixTableViewPort();
 				this.focusSelection = {
 					rowData: rowData,
-					rowIndx: rowIndx
+					rowIndex: rowIndex
 				}
 			}
 		}
 		if (objP.setFirst) {
 			this.firstSelection = {
-				rowIndx: rowIndx,
+				rowIndex: rowIndex,
 				rowData: rowData
 			}
 		}
 		if (success) {
 			return {
-				rowIndx: rowIndx,
+				rowIndex: rowIndex,
 				rowData: rowData
 			}
 		}
@@ -11325,29 +11368,29 @@
 	};
 	_pC._remove = function(objP) {
 		var that = this.that,
-			rowIndx = objP.rowIndx,
-			rowIndxPage = objP.rowIndxPage,
-			offset = that.rowIndxOffset,
-			rowIndx = (rowIndx == null) ? (rowIndxPage + offset) : rowIndx,
-			rowIndxPage = (rowIndxPage == null) ? (rowIndx - offset) : rowIndxPage,
+			rowIndex = objP.rowIndex,
+			rowIndexPage = objP.rowIndexPage,
+			offset = that.rowIndexOffset,
+			rowIndex = (rowIndex == null) ? (rowIndexPage + offset) : rowIndex,
+			rowIndexPage = (rowIndexPage == null) ? (rowIndex - offset) : rowIndexPage,
 			rowData = (rowData == null) ? that.getRowData(objP) : rowData,
-			colIndx = objP.colIndx,
-			dataIndx = objP.dataIndx,
-			colIndx = (colIndx == null) ? that.getColIndx({
-				dataIndx: dataIndx
-			}) : colIndx,
-			column = that.colModel[colIndx],
-			dataIndx = (dataIndx == null) ? column.dataIndx : dataIndx,
+			colIndex = objP.colIndex,
+			dataIndex = objP.dataIndex,
+			colIndex = (colIndex == null) ? that.getColIndex({
+				dataIndex: dataIndex
+			}) : colIndex,
+			column = that.colModel[colIndex],
+			dataIndex = (dataIndex == null) ? column.dataIndex : dataIndex,
 			evt = objP.evt,
 			isSelected = this.isSelected({
 				rowData: rowData,
-				dataIndx: dataIndx
+				dataIndex: dataIndex
 			});
 		if (isSelected) {
-			if (this.inView(rowIndxPage, colIndx)) {
+			if (this.inView(rowIndexPage, colIndex)) {
 				var $td = that.getCell({
-					rowIndxPage: rowIndxPage,
-					colIndx: colIndx
+					rowIndexPage: rowIndexPage,
+					colIndex: colIndex
 				});
 				if ($td) {
 					$td.removeClass("pq-cell-select ui-state-highlight");
@@ -11356,32 +11399,32 @@
 			}
 			this._removeFromData({
 				rowData: rowData,
-				dataIndx: dataIndx
+				dataIndex: dataIndex
 			});
 			if (objP.trigger !== false) {
 				that._trigger("cellUnSelect", evt, {
-					rowIndx: rowIndx,
-					colIndx: colIndx,
-					dataIndx: dataIndx,
+					rowIndex: rowIndex,
+					colIndex: colIndex,
+					dataIndex: dataIndex,
 					rowData: rowData
 				})
 			}
 			return {
-				rowIndx: rowIndx,
+				rowIndex: rowIndex,
 				rowData: rowData,
-				dataIndx: dataIndx,
-				colIndx: colIndx,
+				dataIndex: dataIndex,
+				colIndex: colIndex,
 				column: column
 			}
 		}
 	};
 	_pR._remove = function(objP) {
 		var that = this.that,
-			rowIndx = objP.rowIndx,
-			rowIndxPage = objP.rowIndxPage,
-			offset = that.rowIndxOffset,
-			rowIndx = (rowIndx == null) ? (rowIndxPage + offset) : rowIndx,
-			rowIndxPage = (rowIndxPage == null) ? (rowIndx - offset) : rowIndxPage,
+			rowIndex = objP.rowIndex,
+			rowIndexPage = objP.rowIndexPage,
+			offset = that.rowIndexOffset,
+			rowIndex = (rowIndex == null) ? (rowIndexPage + offset) : rowIndex,
+			rowIndexPage = (rowIndexPage == null) ? (rowIndex - offset) : rowIndexPage,
 			rowData = (rowData == null) ? that.getRowData(objP) : rowData,
 			$tr = objP.$tr,
 			evt = objP.evt,
@@ -11389,9 +11432,9 @@
 				rowData: rowData
 			});
 		if (isSelected) {
-			if (this.inView(rowIndxPage)) {
+			if (this.inView(rowIndexPage)) {
 				var $tr = that.getRow({
-					rowIndxPage: rowIndxPage
+					rowIndexPage: rowIndexPage
 				});
 				if ($tr) {
 					$tr.removeClass("pq-row-select ui-state-highlight");
@@ -11401,13 +11444,13 @@
 			rowData.pq_rowselect = false;
 			if (objP.trigger !== false) {
 				that._trigger("rowUnSelect", evt, {
-					rowIndx: rowIndx,
+					rowIndex: rowIndex,
 					rowData: rowData,
 					$tr: $tr
 				})
 			}
 			return {
-				rowIndx: rowIndx,
+				rowIndex: rowIndex,
 				rowData: rowData
 			}
 		}
@@ -11456,14 +11499,14 @@
 	};
 	_pC.indexOf = function(obj) {
 		this.refresh();
-		var rowIndx = obj.rowIndx,
+		var rowIndex = obj.rowIndex,
 			that = this.that,
-			dataIndx = (obj.dataIndx == null) ? that.colModel[obj.colIndx].dataIndx : obj.dataIndx;
-		obj.dataIndx = dataIndx;
+			dataIndex = (obj.dataIndex == null) ? that.colModel[obj.colIndex].dataIndex : obj.dataIndex;
+		obj.dataIndex = dataIndex;
 		var selectedCells = this.selection;
 		for (var i = 0; i < selectedCells.length; i++) {
 			var sCell = selectedCells[i];
-			if (sCell.rowIndx == rowIndx && sCell.dataIndx == dataIndx) {
+			if (sCell.rowIndex == rowIndex && sCell.dataIndex == dataIndex) {
 				return i
 			}
 		}
@@ -11473,21 +11516,21 @@
 		var that = this.that,
 			all = (objP && objP.all) ? true : false,
 			data = all ? this.options.dataModel.data : that.data,
-			offset = that.rowIndxOffset,
+			offset = that.rowIndexOffset,
 			CM = that.colModel,
 			CMLength = CM.length,
 			cells = [],
-			addCell = function(rowData, rowIndx) {
+			addCell = function(rowData, rowIndex) {
 				for (var j = 0; j < CMLength; j++) {
 					var column = CM[j];
 					if (column.hidden) {
 						continue
 					}
 					var cell = {
-						rowIndx: rowIndx,
+						rowIndex: rowIndex,
 						rowData: rowData,
-						colIndx: j,
-						dataIndx: column.dataIndx,
+						colIndex: j,
+						dataIndex: column.dataIndex,
 						focus: false
 					};
 					cells.push(cell)
@@ -11504,18 +11547,18 @@
 				remote = (paging == "remote") ? true : false;
 			for (var i = 0, len = data.length; i < len; i++) {
 				var rowData = data[i],
-					rowIndx = i;
+					rowIndex = i;
 				if (remote) {
-					rowIndx = i + offset
+					rowIndex = i + offset
 				}
-				addCell(rowData, rowIndx)
+				addCell(rowData, rowIndex)
 			}
 		} else {
 			for (var i = 0, len = data.length; i < len; i++) {
 				var rowData = data[i],
-					rowIndxPage = i,
-					rowIndx = rowIndxPage + offset;
-				addCell(rowData, rowIndx)
+					rowIndexPage = i,
+					rowIndex = rowIndexPage + offset;
+				addCell(rowData, rowIndex)
 			}
 		}
 		this.add({
@@ -11539,9 +11582,9 @@
 					focus: false
 				};
 				if (remote) {
-					obj.rowIndxPage = i
+					obj.rowIndexPage = i
 				} else {
-					obj.rowIndx = i
+					obj.rowIndex = i
 				}
 				rows.push(obj)
 			}
@@ -11549,7 +11592,7 @@
 			for (var i = 0, len = data.length; i < len; i++) {
 				var rowData = data[i];
 				rows.push({
-					rowIndxPage: i,
+					rowIndexPage: i,
 					rowData: rowData,
 					focus: false
 				})
@@ -11561,38 +11604,38 @@
 	};
 	_pC.selectRange = function(objP) {
 		var that = this.that,
-			initRowIndx = objP.initRowIndx,
-			initColIndx = objP.initColIndx,
-			finalRowIndx = objP.finalRowIndx,
-			finalColIndx = objP.finalColIndx,
+			initRowIndex = objP.initRowIndex,
+			initColIndex = objP.initColIndex,
+			finalRowIndex = objP.finalRowIndex,
+			finalColIndex = objP.finalColIndex,
 			cellSelection = this.getSelection(),
 			cellSelection2 = cellSelection.slice(0);
 		for (var i = 0; i < cellSelection2.length; i++) {
 			var cellS = cellSelection2[i],
-				row = cellS.rowIndx,
-				dataIndx = cellS.dataIndx,
-				col = that.getColIndx({
-					dataIndx: dataIndx
+				row = cellS.rowIndex,
+				dataIndex = cellS.dataIndex,
+				col = that.getColIndex({
+					dataIndex: dataIndex
 				});
-			if (row < initRowIndx || row > finalRowIndx) {
+			if (row < initRowIndex || row > finalRowIndex) {
 				this.remove({
-					rowIndx: row,
-					colIndx: col,
-					dataIndx: dataIndx
+					rowIndex: row,
+					colIndex: col,
+					dataIndex: dataIndex
 				})
 			} else {
-				if (row == initRowIndx && col < initColIndx) {
+				if (row == initRowIndex && col < initColIndex) {
 					this.remove({
-						rowIndx: row,
-						colIndx: col,
-						dataIndx: dataIndx
+						rowIndex: row,
+						colIndex: col,
+						dataIndex: dataIndex
 					})
 				} else {
-					if (row == finalRowIndx && col > finalColIndx) {
+					if (row == finalRowIndex && col > finalColIndex) {
 						this.remove({
-							rowIndx: row,
-							colIndx: col,
-							dataIndx: dataIndx
+							rowIndex: row,
+							colIndex: col,
+							dataIndex: dataIndex
 						})
 					}
 				}
@@ -11603,74 +11646,74 @@
 			if (column.hidden) {
 				continue
 			}
-			var dataIndx = column.dataIndx;
-			var row = initRowIndx;
+			var dataIndex = column.dataIndex;
+			var row = initRowIndex;
 			do {
-				if (row == initRowIndx && col < initColIndx) {} else {
-					if (row == finalRowIndx && col > finalColIndx) {
+				if (row == initRowIndex && col < initColIndex) {} else {
+					if (row == finalRowIndex && col > finalColIndex) {
 						break
 					} else {
 						this.add({
-							rowIndx: row,
-							colIndx: col,
-							dataIndx: dataIndx,
+							rowIndex: row,
+							colIndex: col,
+							dataIndex: dataIndex,
 							focus: false
 						})
 					}
 				}
 				row++
-			} while (row <= finalRowIndx)
+			} while (row <= finalRowIndex)
 		}
 	};
 	_pC.selectBlock = function(objP) {
 		var that = this.that,
-			initRowIndx = objP.initRowIndx,
-			initColIndx = objP.initColIndx,
-			finalRowIndx = objP.finalRowIndx,
-			finalColIndx = objP.finalColIndx,
+			initRowIndex = objP.initRowIndex,
+			initColIndex = objP.initColIndex,
+			finalRowIndex = objP.finalRowIndex,
+			finalColIndex = objP.finalColIndex,
 			cellSelection = this.getSelection(),
 			cellSelection2 = cellSelection.slice(0);
 		for (var i = 0; i < cellSelection2.length; i++) {
 			var cellS = cellSelection2[i],
-				row = cellS.rowIndx,
-				dataIndx = cellS.dataIndx,
-				col = that.getColIndx({
-					dataIndx: dataIndx
+				row = cellS.rowIndex,
+				dataIndex = cellS.dataIndex,
+				col = that.getColIndex({
+					dataIndex: dataIndex
 				});
-			if (col < initColIndx || col > finalColIndx) {
+			if (col < initColIndex || col > finalColIndex) {
 				this.remove({
-					rowIndx: row,
-					dataIndx: dataIndx,
-					colIndx: col
+					rowIndex: row,
+					dataIndex: dataIndex,
+					colIndex: col
 				})
 			} else {
-				if (row < initRowIndx || row > finalRowIndx) {
+				if (row < initRowIndex || row > finalRowIndex) {
 					this.remove({
-						rowIndx: row,
-						dataIndx: dataIndx,
-						colIndx: col
+						rowIndex: row,
+						dataIndex: dataIndex,
+						colIndex: col
 					})
 				}
 			}
 		}
 		var arrSel = [],
 			CM = that.colModel;
-		for (var col = initColIndx; col <= finalColIndx; col++) {
+		for (var col = initColIndex; col <= finalColIndex; col++) {
 			var column = CM[col];
-			var dataIndx = column.dataIndx;
+			var dataIndex = column.dataIndex;
 			if (column.hidden) {
 				continue
 			}
-			var row = initRowIndx;
+			var row = initRowIndex;
 			do {
 				arrSel.push({
-					rowIndx: row,
-					colIndx: col,
-					dataIndx: dataIndx,
+					rowIndex: row,
+					colIndex: col,
+					dataIndex: dataIndex,
 					focus: false
 				});
 				row++
-			} while (row <= finalRowIndx);
+			} while (row <= finalRowIndex);
 			this.add({
 				cells: arrSel
 			})
@@ -11678,12 +11721,12 @@
 	}
 })(jQuery);
 (function($) {
-	var cCheckBoxColumn = $.paramquery.cCheckBoxColumn = function(that, cbDataIndx) {
+	var cCheckBoxColumn = $.paramquery.cCheckBoxColumn = function(that, cbDataIndex) {
 		var self = this;
 		this.that = that;
 		this.options = that.options;
 		this.type = "checkBoxSelection";
-		this.cbDataIndx = cbDataIndx;
+		this.cbDataIndex = cbDataIndex;
 		var widgetEventPrefix = that.widgetEventPrefix.toLowerCase();
 		that.element.on(widgetEventPrefix + "dataavailable", function(evt, ui) {
 			if (self.belongs(evt)) {
@@ -11766,7 +11809,7 @@
 		}
 		var self = this,
 			$td = that.getCellHeader({
-				dataIndx: this.cbDataIndx
+				dataIndex: this.cbDataIndex
 			});
 		$td.html("<input type='checkbox'/>");
 		var $inp = this.$inp = $td.find("input").click(function(evt) {
@@ -11800,36 +11843,36 @@
 	_pCheckBC._onDataAvailable = function() {
 		var that = this.that,
 			data = this.options.dataModel.data,
-			dataIndx = this._findSelectionIndx();
-		if (dataIndx != null && data) {
+			dataIndex = this._findSelectionIndex();
+		if (dataIndex != null && data) {
 			for (var i = 0, len = data.length; i < len; i++) {
 				var rowData = data[i];
-				if (rowData[dataIndx]) {
+				if (rowData[dataIndex]) {
 					rowData.pq_rowselect = true
 				}
 			}
 		}
 	};
-	_pCheckBC._findSelectionIndx = function() {
-		if (this.cbDataIndx) {
-			return this.cbDataIndx
+	_pCheckBC._findSelectionIndex = function() {
+		if (this.cbDataIndex) {
+			return this.cbDataIndex
 		}
 	};
 	_pCheckBC.cellClick = function(evt, ui) {
 		var that = this.that,
-			rowIndx = ui.rowIndx,
+			rowIndex = ui.rowIndex,
 			rowData = ui.rowData,
 			column = ui.column,
 			type = this.type;
 		if (column && column.type === type) {
-			var dataIndx = column.dataIndx;
-			if (!rowData[dataIndx]) {
+			var dataIndex = column.dataIndex;
+			if (!rowData[dataIndex]) {
 				that.iRows.add({
-					rowIndx: rowIndx
+					rowIndex: rowIndex
 				})
 			} else {
 				that.iRows.remove({
-					rowIndx: rowIndx
+					rowIndex: rowIndex
 				})
 			}
 			evt.stopPropagation();
@@ -11840,24 +11883,24 @@
 		var that = this.that,
 			rows = ui.rows,
 			rowData = ui.rowData,
-			dataIndx = this._findSelectionIndx();
+			dataIndex = this._findSelectionIndex();
 		if (rows) {
 			for (var i = 0, len = rows.length; i < len; i++) {
 				var row = rows[i],
-					rowIndx = row.rowIndx,
+					rowIndex = row.rowIndex,
 					rowData = row.rowData;
-				rowData[dataIndx] = true;
+				rowData[dataIndex] = true;
 				that.refreshCell({
-					rowIndx: rowIndx,
-					dataIndx: dataIndx
+					rowIndex: rowIndex,
+					dataIndex: dataIndex
 				})
 			}
 		} else {
 			if (rowData) {
-				rowData[dataIndx] = true;
-				rowIndx = ui.rowIndx, that.refreshCell({
-					rowIndx: rowIndx,
-					dataIndx: dataIndx
+				rowData[dataIndex] = true;
+				rowIndex = ui.rowIndex, that.refreshCell({
+					rowIndex: rowIndex,
+					dataIndex: dataIndex
 				})
 			}
 		}
@@ -11867,24 +11910,24 @@
 		var that = this.that,
 			rows = ui.rows,
 			rowData = ui.rowData,
-			dataIndx = this._findSelectionIndx();
+			dataIndex = this._findSelectionIndex();
 		if (rows) {
 			for (var i = 0, len = rows.length; i < len; i++) {
 				var row = rows[i],
-					rowIndx = row.rowIndx,
+					rowIndex = row.rowIndex,
 					rowData = row.rowData;
-				rowData[dataIndx] = false;
+				rowData[dataIndex] = false;
 				that.refreshCell({
-					rowIndx: rowIndx,
-					dataIndx: dataIndx
+					rowIndex: rowIndex,
+					dataIndex: dataIndex
 				})
 			}
 		} else {
 			if (rowData) {
-				rowData[dataIndx] = false;
-				rowIndx = ui.rowIndx, that.refreshCell({
-					rowIndx: rowIndx,
-					dataIndx: dataIndx
+				rowData[dataIndex] = false;
+				rowIndex = ui.rowIndex, that.refreshCell({
+					rowIndex: rowIndex,
+					dataIndex: dataIndex
 				})
 			}
 		}
@@ -11892,25 +11935,25 @@
 	};
 	_pCheckBC.cellKeyDown = function(evt, ui) {
 		var that = this.that,
-			rowIndx = ui.rowIndx,
+			rowIndex = ui.rowIndex,
 			column = ui.column,
 			rowData = rowData,
 			type = this.type;
 		if (column && column.type === type) {
-			var dataIndx = column.dataIndx,
-				rowIndx = ui.rowIndx;
+			var dataIndex = column.dataIndex,
+				rowIndex = ui.rowIndex;
 			if (evt.keyCode == 13 || evt.keyCode == 32) {
-				if (!rowData[dataIndx]) {
+				if (!rowData[dataIndex]) {
 					that.selection({
 						type: "row",
 						method: "add",
-						rowIndx: rowIndx
+						rowIndex: rowIndex
 					})
 				} else {
 					that.selection({
 						type: "row",
 						method: "remove",
-						rowIndx: rowIndx
+						rowIndex: rowIndex
 					})
 				}
 				evt.stopPropagation();
@@ -11978,20 +12021,20 @@
 				if (column.hidden) {
 					continue
 				}
-				rowBuffer.push(rowData[column.dataIndx])
+				rowBuffer.push(rowData[column.dataIndex])
 			}
 			var str = rowBuffer.join("\t");
 			buffer.push(str)
 		}
 		selArr = that.iCells.getSelection();
 		var rowData = null,
-			rowIndx = null,
-			prevRowIndx = null,
+			rowIndex = null,
+			prevRowIndex = null,
 			rowBuffer = [];
 		for (var i = 0, len = selArr.length; i < len; i++) {
 			var sel = selArr[i],
-				rowIndx = sel.rowIndx;
-			if (rowIndx == prevRowIndx) {
+				rowIndex = sel.rowIndex;
+			if (rowIndex == prevRowIndex) {
 				continue
 			}
 			var rowData = that.getRowData(sel);
@@ -12000,18 +12043,18 @@
 				if (column.hidden) {
 					continue
 				}
-				var dataIndx = column.dataIndx;
+				var dataIndex = column.dataIndex;
 				if (that.iCells.isSelected({
 					rowData: rowData,
-					dataIndx: dataIndx
+					dataIndex: dataIndex
 				})) {
-					rowBuffer.push(rowData[dataIndx])
+					rowBuffer.push(rowData[dataIndex])
 				} else {}
 			}
 			var str = rowBuffer.join("\t");
 			rowBuffer = [];
 			buffer.push(str);
-			prevRowIndx = rowIndx
+			prevRowIndex = rowIndex
 		}
 		$text.val(buffer.join("\n"));
 		$text.select()

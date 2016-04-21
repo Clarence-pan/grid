@@ -1,0 +1,44 @@
+
+
+/*对pq-grid的修正*/
+.pq-grid-container select{
+    height: 1.5em;
+}
+.pq-grid {
+    margin: 5px !important;
+}
+
+.pq-grid-cell a{
+    color: #2d7200;
+}
+.pq-col-sort-icon{
+    display: none;
+}
+
+div.pq-toolbar{
+    text-align: right;
+}
+
+div.pq-grid{
+    width: 100% !important;
+    min-width: 400px !important;
+}
+
+div.pq-grid-inner{
+    width: 100% !important;
+    overflow: auto !important;
+}
+
+div.pq-grid-right
+{
+    float:left;
+    clear: both;
+    min-width: 100%;
+    background: #f6f6f6;
+}
+
+div.pq-grid-right table{
+    background: #ffffff;
+    border: 1px solid #d0d0d0;
+}
+

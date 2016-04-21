@@ -151,8 +151,7 @@ div.pq-header-outer{
 .pq-grid .pq-cont div.pq-cont-inner{
     position:relative;
     left:0px;
-    top:0px;	
-    cursor:default;	
+    top:0px;
     overflow:hidden;	
 }
 .pq-cont .pq-grid-norows{
@@ -670,3 +669,4 @@ div.pq-filter-dialog button.ui-button span{
 div.pq-filter-dialog *{
     margin:2px 4px;
 }
+
